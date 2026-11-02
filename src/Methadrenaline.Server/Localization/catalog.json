@@ -1,0 +1,4262 @@
+[
+  {
+    "source": "Voting for a mode in Discord\n{0} s",
+    "en": "Voting for a mode in Discord\n{0} s",
+    "uk": "Голосування за режим у Discord\n{0} с",
+    "ru": "Голосование за режим в Discord\n{0} с"
+  },
+  {
+    "source": "Vanilla (almost)",
+    "en": "Vanilla (almost)",
+    "uk": "Ваніль (майже)",
+    "ru": "Ваниль (почти)"
+  },
+  {
+    "source": "Perks",
+    "en": "Perks",
+    "uk": "Перки",
+    "ru": "Перки"
+  },
+  {
+    "source": "You will be pulled to Paravoz in {0} seconds!",
+    "en": "You will be pulled to Paravoz in {0} seconds!",
+    "uk": "Вас притягне до Паравоза через {0} секунд!",
+    "ru": "Вас притянет к паравозу через {0} секунд!"
+  },
+  {
+    "source": "Localization",
+    "en": "Localization",
+    "uk": "Локалізація",
+    "ru": "Локализация"
+  },
+  {
+    "source": "\n\n<color=#FF0000><b>WARNING: Picking this up will remove the perk of the same type.</b></color>",
+    "en": "\n\n<color=#FF0000><b>WARNING: Picking this up will remove the perk of the same type.</b></color>",
+    "uk": "\n\n<color=#FF0000><b>Увага: цей перк замінить твій перк того самого типу.</b></color>",
+    "ru": "\n\n<color=#FF0000><b>Внимание: этот перк заменит твой перк того же типа.</b></color>"
+  },
+  {
+    "source": "You have no perks.",
+    "en": "You have no perks.",
+    "uk": "У тебе немає перків.",
+    "ru": "У тебя нет перков."
+  },
+  {
+    "source": " \nBut you can no longer use medical items.",
+    "en": " \nBut you can no longer use medical items.",
+    "uk": " \nАле тепер ти не можеш користуватися медикаментами.",
+    "ru": " \nНо теперь ты не можешь пользоваться медикаментами."
+  },
+  {
+    "source": " (Phantom)",
+    "en": " (Phantom)",
+    "uk": " (Фантом)",
+    "ru": " (Фантом)"
+  },
+  {
+    "source": " (teleport on cooldown)",
+    "en": " (teleport on cooldown)",
+    "uk": " (телепортація ще не готова)",
+    "ru": " (телепортация ещё не готова)"
+  },
+  {
+    "source": " Your team receives this as well.",
+    "en": " Your team receives this as well.",
+    "uk": " Твоя команда теж отримує цей бонус.",
+    "ru": " Твоя команда тоже получает этот бонус."
+  },
+  {
+    "source": " more upgrade choices remain.",
+    "en": " more upgrade choices remain.",
+    "uk": " варіантів покращення ще залишилося.",
+    "ru": " вариантов улучшения ещё осталось."
+  },
+  {
+    "source": " perks, because of role incompatibility.",
+    "en": " perks, because of role incompatibility.",
+    "uk": " перків через несумісність із роллю.",
+    "ru": " перков из-за несовместимости с ролью."
+  },
+  {
+    "source": " | Cooldown: ",
+    "en": " | Cooldown: ",
+    "uk": " • Відновлення: ",
+    "ru": " • Перезарядка: "
+  },
+  {
+    "source": " | Level ",
+    "en": " | Level ",
+    "uk": " • Рівень ",
+    "ru": " • Уровень "
+  },
+  {
+    "source": " | Shop Level ",
+    "en": " | Shop Level ",
+    "uk": " • Рівень крамниці ",
+    "ru": " • Уровень магазина "
+  },
+  {
+    "source": " | Tracked Item: ",
+    "en": " | Tracked Item: ",
+    "uk": " • Відстежується: ",
+    "ru": " • Отслеживается: "
+  },
+  {
+    "source": "\"Help me,\" echoes from an empty hall.",
+    "en": "\"Help me,\" echoes from an empty hall.",
+    "uk": "«Допоможи», — лунає з порожнього коридору.",
+    "ru": "«Помоги», — доносится из пустого коридора."
+  },
+  {
+    "source": "'s Altar",
+    "en": "'s Altar",
+    "uk": " — вівтар",
+    "ru": " — алтарь"
+  },
+  {
+    "source": "'s Ghoul",
+    "en": "'s Ghoul",
+    "uk": " — упир",
+    "ru": " — вурдалак"
+  },
+  {
+    "source": "'s Golem",
+    "en": "'s Golem",
+    "uk": " — голем",
+    "ru": " — голем"
+  },
+  {
+    "source": "'s Pylon",
+    "en": "'s Pylon",
+    "uk": " — пілон",
+    "ru": " — пилон"
+  },
+  {
+    "source": "'s Rock Golem",
+    "en": "'s Rock Golem",
+    "uk": " — кам'яний голем",
+    "ru": " — каменный голем"
+  },
+  {
+    "source": "'s Thorn Shooter",
+    "en": "'s Thorn Shooter",
+    "uk": " — стрілець шипами",
+    "ru": " — стрелок шипами"
+  },
+  {
+    "source": "<align=\"left\">\n\n\n{0}'s Perks\n",
+    "en": "<align=\"left\">\n\n\n{0}'s Perks\n",
+    "uk": "<align=\"left\">\n\n\nПерки гравця {0}\n",
+    "ru": "<align=\"left\">\n\n\nПерки игрока {0}\n",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "<align=\"left\">Chosen: ",
+    "en": "<align=\"left\">Chosen: ",
+    "uk": "<align=\"left\">Обрано: ",
+    "ru": "<align=\"left\">Выбрано: "
+  },
+  {
+    "source": "<align=\"left\">Current Perks: \n",
+    "en": "<align=\"left\">Current Perks: \n",
+    "uk": "<align=\"left\">Твої перки: \n",
+    "ru": "<align=\"left\">Твои перки: \n"
+  },
+  {
+    "source": "<align=\"left\">Failed to choose upgrade.</align>",
+    "en": "<align=\"left\">Failed to choose upgrade.</align>",
+    "uk": "<align=\"left\">Не вдалося обрати покращення.</align>",
+    "ru": "<align=\"left\">Не удалось выбрать улучшение.</align>"
+  },
+  {
+    "source": "<align=\"left\">No upgrades available.</align>",
+    "en": "<align=\"left\">No upgrades available.</align>",
+    "uk": "<align=\"left\">Поки немає покращень.</align>",
+    "ru": "<align=\"left\">Пока нет улучшений.</align>"
+  },
+  {
+    "source": "<color=#00FF00><b>Upgrades available!</b></color>\nPress \"~\" and type \".su\" (for more detail) to see available choices, type \".c <number>\" to choose an upgrade. \nOR bind a key in <b>Server Specific Settings</b>",
+    "en": "<color=#00FF00><b>Upgrades ready!</b></color>\nOpen the console (~): .su shows your choices, .c <number> picks one.\nOr set shortcuts in <b>Server Specific Settings</b>.",
+    "uk": "<color=#00FF00><b>Є нові покращення!</b></color>\nВідкрий консоль клавішею «~»: «.su» покаже варіанти, «.c <number>» обере покращення за номером.\nАбо признач клавіші в <b>налаштуваннях сервера</b>.",
+    "ru": "<color=#00FF00><b>Есть новые улучшения!</b></color>\nОткрой консоль клавишей «~»: «.su» покажет варианты, «.c <number>» выберет улучшение по номеру.\nИли назначь клавиши в <b>настройках сервера</b>."
+  },
+  {
+    "source": "<color=#00FF00>You will be teleported!</color>",
+    "en": "<color=#00FF00>You will be teleported!</color>",
+    "uk": "<color=#00FF00>Тебе телепортує!</color>",
+    "ru": "<color=#00FF00>Тебя телепортирует!</color>"
+  },
+  {
+    "source": "<color=#FF0000>On cooldown, you will <b>NOT</b> be teleported!</color>",
+    "en": "<color=#FF0000>On cooldown, you will <b>NOT</b> be teleported!</color>",
+    "uk": "<color=#FF0000>Ще не готово — телепортації <b>НЕ БУДЕ</b>!</color>",
+    "ru": "<color=#FF0000>Ещё не готово — телепортации <b>НЕ БУДЕТ</b>!</color>"
+  },
+  {
+    "source": "A clock ticks in reverse. It's inside your chest.",
+    "en": "A clock ticks in reverse. It's inside your chest.",
+    "uk": "Годинник цокає задом наперед. У тебе в грудях.",
+    "ru": "Часы тикают в обратную сторону. У тебя в груди."
+  },
+  {
+    "source": "A hand reaches for your pulse—but doesn’t feel human.",
+    "en": "A hand reaches for your pulse—but doesn’t feel human.",
+    "uk": "Чиясь рука шукає твій пульс. На людську вона не схожа.",
+    "ru": "Чья-то рука ищет твой пульс. На человеческую она не похожа."
+  },
+  {
+    "source": "A memory surfaces—but it belongs to someone else.",
+    "en": "A memory surfaces—but it belongs to someone else.",
+    "uk": "Спливає спогад. Але він не твій.",
+    "ru": "Всплывает воспоминание. Но оно не твоё."
+  },
+  {
+    "source": "A scream hides behind your breath, waiting to escape.",
+    "en": "A scream hides behind your breath, waiting to escape.",
+    "uk": "За кожним видихом ховається крик, готовий вирватися.",
+    "ru": "За каждым выдохом прячется крик, готовый вырваться."
+  },
+  {
+    "source": "A taste like static clings to the back of your tongue.",
+    "en": "A taste like static clings to the back of your tongue.",
+    "uk": "На язиці лишається присмак радіоперешкод.",
+    "ru": "На языке остаётся привкус радиопомех."
+  },
+  {
+    "source": "Abuse your zombies!",
+    "en": "Abuse your zombies!",
+    "uk": "Вичави зі своїх зомбі все!",
+    "ru": "Выжми из своих зомби всё!"
+  },
+  {
+    "source": "Acquired Perk ({0}/{1}): {2}\n{3}\n\nPress \"~\" and type \".sp\" (for more detail) \nOR bind a key in <b>Server Specific Settings</b> to see what perks you have!",
+    "en": "New perk ({0}/{1}): {2}\n{3}\n\nOpen the console (~) and type .sp to see your perks.\nOr set a shortcut in <b>Server Specific Settings</b>.",
+    "uk": "Новий перк ({0}/{1}): {2}\n{3}\n\nВведи «.sp» у консолі («~»), щоб переглянути свої перки.\nАбо признач клавішу в <b>налаштуваннях сервера</b>.",
+    "ru": "Новый перк ({0}/{1}): {2}\n{3}\n\nВведи «.sp» в консоли («~»), чтобы посмотреть свои перки.\nИли назначь клавишу в <b>настройках сервера</b>."
+  },
+  {
+    "source": "Added Zombie: ",
+    "en": "Added Zombie: ",
+    "uk": "Зомбі додано: ",
+    "ru": "Зомби добавлен: "
+  },
+  {
+    "source": "Added ammo...",
+    "en": "Added ammo...",
+    "uk": "Боєприпаси поповнено.",
+    "ru": "Боеприпасы пополнены."
+  },
+  {
+    "source": "Added perk: ",
+    "en": "Added perk: ",
+    "uk": "Перк додано: ",
+    "ru": "Перк добавлен: "
+  },
+  {
+    "source": "Adds a perk to you or a player.",
+    "en": "Adds a perk to you or a player.",
+    "uk": "Додати перк собі або іншому гравцю.",
+    "ru": "Добавить перк себе или другому игроку."
+  },
+  {
+    "source": "Adds various interesting and fun mechanics to the game! ",
+    "en": "Adds various interesting and fun mechanics to the game! ",
+    "uk": "Додає в гру незвичайні та веселі механіки! ",
+    "ru": "Добавляет в игру необычные и весёлые механики! "
+  },
+  {
+    "source": "Advanced Perk Slot Upgrade",
+    "en": "Advanced Perk Slot Upgrade",
+    "uk": "Розширені слоти перків",
+    "ru": "Расширенные слоты перков"
+  },
+  {
+    "source": "Aiming down sights for at least {0} seconds will \nincrease your damage by x{1}, but you cannot move.",
+    "en": "Aim down sights for at least {0}s to deal {1}x damage.\nYou cannot move while the boost is active.",
+    "uk": "Цілься щонайменше {0} с, щоб завдавати в {1} раза більше шкоди.\nПід час цього ти не можеш рухатися.",
+    "ru": "Целься не меньше {0} с, чтобы наносить в {1} раза больше урона.\nВо время этого ты не можешь двигаться."
+  },
+  {
+    "source": "Air displaces behind you. There was no breeze.",
+    "en": "Air displaces behind you. There was no breeze.",
+    "uk": "Позаду ворухнулося повітря. Але протягу не було.",
+    "ru": "Позади шевельнулся воздух. Но сквозняка не было."
+  },
+  {
+    "source": "All available perks: \n",
+    "en": "All available perks: \n",
+    "uk": "Усі доступні перки: \n",
+    "ru": "Все доступные перки: \n"
+  },
+  {
+    "source": "All scores: \n",
+    "en": "All scores: \n",
+    "uk": "Очки всіх гравців: \n",
+    "ru": "Очки всех игроков: \n"
+  },
+  {
+    "source": "Allow Perk Spawning",
+    "en": "Allow Perk Spawning",
+    "uk": "Поява перків",
+    "ru": "Появление перков"
+  },
+  {
+    "source": "Allow SCP Upgrades",
+    "en": "Allow SCP Upgrades",
+    "uk": "Покращення SCP",
+    "ru": "Улучшения SCP"
+  },
+  {
+    "source": "Allows you to cast {0} spells.\nDrop the keycard to change spell, inspect to cast.",
+    "en": "Cast spells from the {0} class.\nDrop the keycard to switch spells; inspect it to cast.",
+    "uk": "Дозволяє використовувати закляття класу «{0}».\nВикинь картку, щоб змінити закляття. Оглянь її, щоб застосувати.",
+    "ru": "Позволяет использовать заклинания класса «{0}».\nВыброси карточку, чтобы сменить заклинание. Осмотри её, чтобы применить."
+  },
+  {
+    "source": "An unknown voice commands you to slaughter.",
+    "en": "An unknown voice commands you to slaughter.",
+    "uk": "Незнайомий голос наказує тобі вбивати.",
+    "ru": "Незнакомый голос приказывает тебе убивать."
+  },
+  {
+    "source": "Arcane Golem",
+    "en": "Arcane Golem",
+    "uk": "Арканний голем",
+    "ru": "Арканный голем"
+  },
+  {
+    "source": "Armory Kit",
+    "en": "Armory Kit",
+    "uk": "Збройовий набір",
+    "ru": "Оружейный набор"
+  },
+  {
+    "source": "Army Builder",
+    "en": "Army Builder",
+    "uk": "Армія мерців",
+    "ru": "Армия мертвецов"
+  },
+  {
+    "source": "Attacker: ",
+    "en": "Attacker: ",
+    "uk": "Нападник: ",
+    "ru": "Атакующий: "
+  },
+  {
+    "source": "Baller",
+    "en": "Baller",
+    "uk": "Майстер м'яча",
+    "ru": "Мастер мяча"
+  },
+  {
+    "source": "Baller.\nSneak to move the ball towards you.",
+    "en": "Play ball.\nHold sneak to pull the ball towards you.",
+    "uk": "Граємо в м'яч.\nЗатисни тихий крок, щоб притягнути його до себе.",
+    "ru": "Играем в мяч.\nЗажми тихий шаг, чтобы притянуть его к себе."
+  },
+  {
+    "source": "Become the undying.",
+    "en": "Become the undying.",
+    "uk": "Стань невмирущим.",
+    "ru": "Стань бессмертным."
+  },
+  {
+    "source": "Blast Resistant",
+    "en": "Blast Resistant",
+    "uk": "Вибухостійкість",
+    "ru": "Взрывостойкость"
+  },
+  {
+    "source": "Bleeding",
+    "en": "Bleeding",
+    "uk": "Кровотеча",
+    "ru": "Кровотечение"
+  },
+  {
+    "source": "Bloodlust fills your veins.",
+    "en": "Bloodlust fills your veins.",
+    "uk": "Спрага крові заповнює твої вени.",
+    "ru": "Жажда крови наполняет твои вены."
+  },
+  {
+    "source": "Bolt of Darkness",
+    "en": "Bolt of Darkness",
+    "uk": "Стріла темряви",
+    "ru": "Стрела тьмы"
+  },
+  {
+    "source": "Bomb Duck",
+    "en": "Bomb Duck",
+    "uk": "Качка-бомба",
+    "ru": "Утка-бомба"
+  },
+  {
+    "source": "Bomb Hen",
+    "en": "Bomb Hen",
+    "uk": "Курка-бомба",
+    "ru": "Курица-бомба"
+  },
+  {
+    "source": "Bomba",
+    "en": "Bomba",
+    "uk": "Бомба",
+    "ru": "Бомба"
+  },
+  {
+    "source": "Boom!",
+    "en": "Boom!",
+    "uk": "Бабах!",
+    "ru": "Бабах!"
+  },
+  {
+    "source": "Breathing becomes deliberate. Forgetting to inhale feels... dangerous.",
+    "en": "Breathing becomes deliberate. Forgetting to inhale feels... dangerous.",
+    "uk": "Доводиться думати про кожен вдих. Забути вдихнути здається... небезпечним.",
+    "ru": "Приходится думать о каждом вдохе. Забыть вдохнуть кажется... опасным."
+  },
+  {
+    "source": "Bully",
+    "en": "Bully",
+    "uk": "Задирака",
+    "ru": "Задира"
+  },
+  {
+    "source": "Burns people when you damage them. \nYou also get burned when you get damaged.",
+    "en": "Your hits set enemies on fire.\nTaking damage also sets you on fire.",
+    "uk": "Твої удари підпалюють ворогів.\nАле коли б'ють тебе, ти теж гориш.",
+    "ru": "Твои удары поджигают врагов.\nНо когда бьют тебя, ты тоже горишь."
+  },
+  {
+    "source": "CASTER BATTLE MODE\nHas been activated.",
+    "en": "CASTER BATTLE MODE\nHas been activated.",
+    "uk": "БИТВА МАГІВ\nРежим увімкнено.",
+    "ru": "БИТВА МАГОВ\nРежим включён."
+  },
+  {
+    "source": "Cannot create teleport point in this room!",
+    "en": "Cannot create teleport point in this room!",
+    "uk": "У цій кімнаті не можна створити точку телепортації!",
+    "ru": "В этой комнате нельзя создать точку телепортации!"
+  },
+  {
+    "source": "Casted ",
+    "en": "Casted ",
+    "uk": "Застосовано: ",
+    "ru": "Применено: "
+  },
+  {
+    "source": "Casting ",
+    "en": "Casting ",
+    "uk": "Чаклуємо: ",
+    "ru": "Колдуем: "
+  },
+  {
+    "source": "Changed config option: ",
+    "en": "Changed config option: ",
+    "uk": "Налаштування змінено: ",
+    "ru": "Настройка изменена: "
+  },
+  {
+    "source": "Choices: \n",
+    "en": "Choices: \n",
+    "uk": "Варіанти: \n",
+    "ru": "Варианты: \n"
+  },
+  {
+    "source": "Choose Upgrade 1",
+    "en": "Choose Upgrade 1",
+    "uk": "Обрати покращення 1",
+    "ru": "Выбрать улучшение 1"
+  },
+  {
+    "source": "Choose Upgrade 2",
+    "en": "Choose Upgrade 2",
+    "uk": "Обрати покращення 2",
+    "ru": "Выбрать улучшение 2"
+  },
+  {
+    "source": "Choose Upgrade 3",
+    "en": "Choose Upgrade 3",
+    "uk": "Обрати покращення 3",
+    "ru": "Выбрать улучшение 3"
+  },
+  {
+    "source": "Chooses an upgrade.",
+    "en": "Chooses an upgrade.",
+    "uk": "Обрати покращення.",
+    "ru": "Выбрать улучшение."
+  },
+  {
+    "source": "Chooses upgrade 1.",
+    "en": "Chooses upgrade 1.",
+    "uk": "Обрати перше покращення.",
+    "ru": "Выбрать первое улучшение."
+  },
+  {
+    "source": "Chooses upgrade 2.",
+    "en": "Chooses upgrade 2.",
+    "uk": "Обрати друге покращення.",
+    "ru": "Выбрать второе улучшение."
+  },
+  {
+    "source": "Chooses upgrade 3.",
+    "en": "Chooses upgrade 3.",
+    "uk": "Обрати третє покращення.",
+    "ru": "Выбрать третье улучшение."
+  },
+  {
+    "source": "Claim an entrance checkpoint to trade items. \nRestocks when you are in the room.",
+    "en": "Claim an entrance checkpoint to trade items. \nRestocks when you are in the room.",
+    "uk": "Займи КПП у вхідній зоні, щоб обмінювати предмети.\nЗапаси поповнюються, поки ти в цій кімнаті.",
+    "ru": "Займи КПП во входной зоне, чтобы обменивать предметы.\nЗапасы пополняются, пока ты в этой комнате."
+  },
+  {
+    "source": "Claimed checkpoint! Stay in the room to restock your shop.",
+    "en": "Claimed checkpoint! Stay in the room to restock your shop.",
+    "uk": "КПП твій! Залишайся в кімнаті, щоб поповнити запаси.",
+    "ru": "КПП твой! Оставайся в комнате, чтобы пополнить запасы."
+  },
+  {
+    "source": "Claiming checkpoint in: ",
+    "en": "Claiming checkpoint in: ",
+    "uk": "До захоплення КПП: ",
+    "ru": "До захвата КПП: "
+  },
+  {
+    "source": "Couldn't find the upgrade path!",
+    "en": "Couldn't find the upgrade path!",
+    "uk": "Не вдалося знайти гілку покращень!",
+    "ru": "Не удалось найти ветку улучшений!"
+  },
+  {
+    "source": "Crouching for {0}s will grant you a speed boost for {1}s after standing up.",
+    "en": "Hold sneak for {0}s, then release it to gain a {1}s speed boost.",
+    "uk": "Утримуй тихий крок {0} с, а потім відпусти — отримаєш прискорення на {1} с.",
+    "ru": "Удерживай тихий шаг {0} с, а затем отпусти — получишь ускорение на {1} с."
+  },
+  {
+    "source": "Current score: {0}",
+    "en": "Current score: {0}",
+    "uk": "Твої очки: {0}",
+    "ru": "Твои очки: {0}"
+  },
+  {
+    "source": "Curse of Pain",
+    "en": "Curse of Pain",
+    "uk": "Прокляття болю",
+    "ru": "Проклятие боли"
+  },
+  {
+    "source": "Damage Boosted!",
+    "en": "Damage Boosted!",
+    "uk": "Шкоду підвищено!",
+    "ru": "Урон повышен!"
+  },
+  {
+    "source": "Damage everyone that has the amnesia effect by {0} HP/s.",
+    "en": "Damage everyone that has the amnesia effect by {0} HP/s.",
+    "uk": "Завдає {0} HP шкоди за секунду всім з ефектом амнезії.",
+    "ru": "Наносит {0} HP урона в секунду всем с эффектом амнезии."
+  },
+  {
+    "source": "Damages humans around you by {0} HP.",
+    "en": "Damages humans around you by {0} HP.",
+    "uk": "Завдає {0} HP шкоди людям поруч.",
+    "ru": "Наносит {0} HP урона людям рядом."
+  },
+  {
+    "source": "Deal bonus damage when headshotting a human, \ntorso and limb shots damage reduced. \nSCP damage unchanged.",
+    "en": "Deal bonus damage when headshotting a human, \ntorso and limb shots damage reduced. \nSCP damage unchanged.",
+    "uk": "Постріли в голову людини завдають більше шкоди,\nа в тулуб і кінцівки — менше.\nШкода по SCP не змінюється.",
+    "ru": "Выстрелы в голову человека наносят больше урона,\nа в туловище и конечности — меньше.\nУрон по SCP не меняется."
+  },
+  {
+    "source": "Decays various things.",
+    "en": "Decays various things.",
+    "uk": "Змушує все навколо розкладатися.",
+    "ru": "Заставляет всё вокруг разлагаться."
+  },
+  {
+    "source": "Defensive Speed",
+    "en": "Defensive Speed",
+    "uk": "Захисне прискорення",
+    "ru": "Защитное ускорение"
+  },
+  {
+    "source": "Detonator",
+    "en": "Detonator",
+    "uk": "Детонатор",
+    "ru": "Детонатор"
+  },
+  {
+    "source": "Diseased",
+    "en": "Diseased",
+    "uk": "Заражений",
+    "ru": "Заражённый"
+  },
+  {
+    "source": "Door Technician",
+    "en": "Door Technician",
+    "uk": "Майстер дверей",
+    "ru": "Мастер дверей"
+  },
+  {
+    "source": "Doubled your gravity.",
+    "en": "Doubled your gravity.",
+    "uk": "Гравітація стала вдвічі сильнішою.",
+    "ru": "Гравитация стала вдвое сильнее."
+  },
+  {
+    "source": "Dropped perk: ",
+    "en": "Dropped perk: ",
+    "uk": "Перк скинуто: ",
+    "ru": "Перк сброшен: "
+  },
+  {
+    "source": "Drops a perk.",
+    "en": "Drops a perk.",
+    "uk": "Скинути перк.",
+    "ru": "Сбросить перк."
+  },
+  {
+    "source": "Druid",
+    "en": "Druid",
+    "uk": "Друїд",
+    "ru": "Друид"
+  },
+  {
+    "source": "Efficient Reanimation",
+    "en": "Efficient Reanimation",
+    "uk": "Ефективне воскресіння",
+    "ru": "Эффективное воскрешение"
+  },
+  {
+    "source": "Elemental Bolt",
+    "en": "Elemental Bolt",
+    "uk": "Стихійна стріла",
+    "ru": "Стихийная стрела"
+  },
+  {
+    "source": "Enables or disables the natual gaining of upgrades for SCPs.",
+    "en": "Enables or disables the natual gaining of upgrades for SCPs.",
+    "uk": "Увімкнути або вимкнути звичайне отримання покращень для SCP.",
+    "ru": "Включить или выключить обычное получение улучшений для SCP."
+  },
+  {
+    "source": "Enables or disables the natural spawning of perks (big coins).",
+    "en": "Enables or disables the natural spawning of perks (big coins).",
+    "uk": "Увімкнути або вимкнути появу перків на карті (великих монет).",
+    "ru": "Включить или выключить появление перков на карте (больших монет)."
+  },
+  {
+    "source": "Endless Decay",
+    "en": "Endless Decay",
+    "uk": "Нескінченний розпад",
+    "ru": "Бесконечный распад"
+  },
+  {
+    "source": "Endurance",
+    "en": "Endurance",
+    "uk": "Витривалість",
+    "ru": "Выносливость"
+  },
+  {
+    "source": "Equipped ",
+    "en": "Equipped ",
+    "uk": "У руках: ",
+    "ru": "В руках: "
+  },
+  {
+    "source": "Equipped the NAUGHTY GUN.\nSends people to the NAUGHTY ROOM.\nCannot be reloaded or unloaded.",
+    "en": "You have the NAUGHTY GUN.\nHits send players to the NAUGHTY ROOM.\nYou cannot reload it or remove its ammo.",
+    "uk": "У тебе ПУШКА ПОКАРАННЯ.\nВлучання відправляє жертву в КІМНАТУ ПОКАРАННЯ.\nПерезарядити її чи вийняти набої не можна.",
+    "ru": "У тебя ПУШКА НАКАЗАНИЯ.\nПопадание отправляет жертву в КОМНАТУ НАКАЗАНИЯ.\nПерезарядить её или вынуть патроны нельзя."
+  },
+  {
+    "source": "Equipped your pizza.",
+    "en": "Equipped your pizza.",
+    "uk": "Ти тримаєш свою піцу.",
+    "ru": "Ты держишь свою пиццу."
+  },
+  {
+    "source": "Equipped {0}'s pizza.",
+    "en": "Equipped {0}'s pizza.",
+    "uk": "У тебе піца гравця {0}.",
+    "ru": "У тебя пицца игрока {0}.",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Every breath smells like soil after a fresh grave.",
+    "en": "Every breath smells like soil after a fresh grave.",
+    "uk": "Кожен вдих пахне землею зі свіжої могили.",
+    "ru": "Каждый вдох пахнет землёй со свежей могилы."
+  },
+  {
+    "source": "Every firearm you pick up turns into a revolver. \nKills with the revolver grant you AHP and 1 ammo in the chamber.\n2x damage when damaging SCPs with the Revolver.",
+    "en": "Every firearm you pick up turns into a revolver. \nKills with the revolver grant you AHP and 1 ammo in the chamber.\n2x damage when damaging SCPs with the Revolver.",
+    "uk": "Будь-яка підібрана вогнепальна зброя стає револьвером.\nВбивство з нього дає AHP і один набій у барабан.\nРевольвер завдає SCP подвійної шкоди.",
+    "ru": "Любое подобранное огнестрельное оружие становится револьвером.\nУбийство из него даёт AHP и один патрон в барабан.\nРевольвер наносит SCP двойной урон."
+  },
+  {
+    "source": "Every kill increases your speed.",
+    "en": "Every kill increases your speed.",
+    "uk": "Кожне вбивство збільшує твою швидкість.",
+    "ru": "Каждое убийство увеличивает твою скорость."
+  },
+  {
+    "source": "Every light source is just slightly wrong in color temperature.",
+    "en": "Every light source is just slightly wrong in color temperature.",
+    "uk": "У всіх ламп якийсь трохи неправильний відтінок світла.",
+    "ru": "У всех ламп какой-то чуть неправильный оттенок света."
+  },
+  {
+    "source": "Every muscle wants to lock, but it’s not your call.",
+    "en": "Every muscle wants to lock, but it’s not your call.",
+    "uk": "Кожен м'яз хоче завмерти. Але вирішуєш не ти.",
+    "ru": "Каждая мышца хочет замереть. Но решаешь не ты."
+  },
+  {
+    "source": "Every spectator currently watching you will heal you {0} HP/s.\nDoesn't work in pocket dimension.",
+    "en": "Each spectator watching you heals you for {0} HP/s.\nDoes not work in the pocket dimension.",
+    "uk": "Кожен глядач, що стежить за тобою, відновлює тобі {0} HP/с.\nУ кишеньковому вимірі це не працює.",
+    "ru": "Каждый зритель, следящий за тобой, восстанавливает тебе {0} HP/с.\nВ карманном измерении это не работает."
+  },
+  {
+    "source": "Every surface wants to swallow you. Some already have.",
+    "en": "Every surface wants to swallow you. Some already have.",
+    "uk": "Будь-яка поверхня хоче тебе поглинути. Деяким уже вдалося.",
+    "ru": "Любая поверхность хочет тебя поглотить. Некоторым уже удалось."
+  },
+  {
+    "source": "Every third hit, slow your target for {0}s.",
+    "en": "Every third hit, slow your target for {0}s.",
+    "uk": "Кожен третій удар сповільнює ціль на {0} с.",
+    "ru": "Каждый третий удар замедляет цель на {0} с."
+  },
+  {
+    "source": "Every {0} shots creates an explosive projectile.",
+    "en": "Every {0} shots creates an explosive projectile.",
+    "uk": "Кожен {0}-й постріл запускає вибуховий снаряд.",
+    "ru": "Каждый {0}-й выстрел запускает взрывной снаряд."
+  },
+  {
+    "source": "Exhibitionist",
+    "en": "Exhibitionist",
+    "uk": "Ексгібіціоніст",
+    "ru": "Эксгибиционист"
+  },
+  {
+    "source": "Failed to refresh, no space in inventory.",
+    "en": "Failed to refresh, no space in inventory.",
+    "uk": "Не вдалося оновити закляття: інвентар заповнений.",
+    "ru": "Не удалось обновить заклинания: инвентарь заполнен."
+  },
+  {
+    "source": "Failed to restock, player is not in shop room.",
+    "en": "Failed to restock, player is not in shop room.",
+    "uk": "Запаси не поповнено: ти поза кімнатою крамниці.",
+    "ru": "Запасы не пополнены: ты вне комнаты магазина."
+  },
+  {
+    "source": "Fast Hands",
+    "en": "Fast Hands",
+    "uk": "Спритні руки",
+    "ru": "Ловкие руки"
+  },
+  {
+    "source": "Faster and faster.",
+    "en": "Faster and faster.",
+    "uk": "Щоразу швидше.",
+    "ru": "С каждым разом быстрее."
+  },
+  {
+    "source": "Fire Arrow",
+    "en": "Fire Arrow",
+    "uk": "Вогняна стріла",
+    "ru": "Огненная стрела"
+  },
+  {
+    "source": "Fireball",
+    "en": "Fireball",
+    "uk": "Вогняна куля",
+    "ru": "Огненный шар"
+  },
+  {
+    "source": "Flash enemies around you. ",
+    "en": "Flash enemies around you. ",
+    "uk": "Засліплює ворогів поруч. ",
+    "ru": "Ослепляет врагов рядом. "
+  },
+  {
+    "source": "Flesh Decay",
+    "en": "Flesh Decay",
+    "uk": "Розпад плоті",
+    "ru": "Распад плоти"
+  },
+  {
+    "source": "Flip a coin to gamble... With your life.",
+    "en": "Flip a coin to gamble... With your life.",
+    "uk": "Підкинь монету і зіграй... на власне життя.",
+    "ru": "Подбрось монету и сыграй... на собственную жизнь."
+  },
+  {
+    "source": "Focuses on mitigating damage.",
+    "en": "Focuses on mitigating damage.",
+    "uk": "Гілка для зменшення отриманої шкоди.",
+    "ru": "Ветка для снижения получаемого урона."
+  },
+  {
+    "source": "Focuses on mobility and information gathering.",
+    "en": "Focuses on mobility and information gathering.",
+    "uk": "Гілка для мобільності та розвідки.",
+    "ru": "Ветка для мобильности и разведки."
+  },
+  {
+    "source": "Focuses on speed.",
+    "en": "Focuses on speed.",
+    "uk": "Гілка для швидкості.",
+    "ru": "Ветка для скорости."
+  },
+  {
+    "source": "Focuses on zombie buffs.",
+    "en": "Focuses on zombie buffs.",
+    "uk": "Гілка для посилення зомбі.",
+    "ru": "Ветка для усиления зомби."
+  },
+  {
+    "source": "For each human you have in the pocket dimension, +{0} HS every second.",
+    "en": "Each human in your pocket dimension restores {0} Hume Shield per second.",
+    "uk": "Кожна людина в кишеньковому вимірі дає +{0} HS щосекунди.",
+    "ru": "Каждый человек в карманном измерении даёт +{0} HS ежесекундно."
+  },
+  {
+    "source": "Furnace",
+    "en": "Furnace",
+    "uk": "Піч",
+    "ru": "Печь"
+  },
+  {
+    "source": "Gained Kill, Speed Level: ",
+    "en": "Gained Kill, Speed Level: ",
+    "uk": "Є вбивство! Рівень швидкості: ",
+    "ru": "Есть убийство! Уровень скорости: "
+  },
+  {
+    "source": "Gambler",
+    "en": "Gambler",
+    "uk": "Азартний гравець",
+    "ru": "Азартный игрок"
+  },
+  {
+    "source": "Gave you a random item.",
+    "en": "Gave you a random item.",
+    "uk": "Ти отримуєш випадковий предмет.",
+    "ru": "Ты получаешь случайный предмет."
+  },
+  {
+    "source": "Get a slot upgrade.",
+    "en": "Get a slot upgrade.",
+    "uk": "Додає слот для перків.",
+    "ru": "Добавляет слот для перков."
+  },
+  {
+    "source": "Ghostly",
+    "en": "Ghostly",
+    "uk": "Примарний",
+    "ru": "Призрачный"
+  },
+  {
+    "source": "Gives you +{0} perk slots, takes up {1} slots.",
+    "en": "Adds {0} perk slots, but uses {1} slots itself.",
+    "uk": "Додає {0} слотів для перків, але сам займає {1}.",
+    "ru": "Добавляет {0} слотов для перков, но сам занимает {1}."
+  },
+  {
+    "source": "Gives you +{0} perk slots, takes up {1} slots.\nGuaranteed loss of <color=red><b>ALL PERKS</b></color> when dying. \n{2}% chance of dropping each removed perk, always drops itself.",
+    "en": "Adds {0} perk slots, but uses {1} slots itself.\nDying always removes <color=red><b>ALL YOUR PERKS</b></color>.\nEach removed perk has a {2}% chance to drop. This perk always drops.",
+    "uk": "Додає {0} слотів для перків, але сам займає {1}.\nПісля смерті ти точно втрачаєш <color=red><b>УСІ ПЕРКИ</b></color>.\nКожен знятий перк має {2}% шанс випасти. Цей перк випадає завжди.",
+    "ru": "Добавляет {0} слотов для перков, но сам занимает {1}.\nПосле смерти ты точно теряешь <color=red><b>ВСЕ ПЕРКИ</b></color>.\nУ каждого снятого перка {2}% шанс выпасть. Этот перк выпадает всегда."
+  },
+  {
+    "source": "Gives you a naughty gun that recharges.\nShooting someone with this gun will send them to the\n<i>NAUGHTY ROOM</i>",
+    "en": "Gives you a naughty gun that recharges.\nShooting someone with this gun will send them to the\n<i>NAUGHTY ROOM</i>",
+    "uk": "Дає пушку покарання, яка сама відновлюється.\nВлучання відправляє жертву в\n<i>КІМНАТУ ПОКАРАННЯ</i>.",
+    "ru": "Даёт пушку наказания, которая сама восстанавливается.\nПопадание отправляет жертву в\n<i>КОМНАТУ НАКАЗАНИЯ</i>."
+  },
+  {
+    "source": "Gives you a pizza.",
+    "en": "Gives you a pizza.",
+    "uk": "Дає тобі піцу.",
+    "ru": "Даёт тебе пиццу."
+  },
+  {
+    "source": "Gives you a random perk every upgrade. \nThis upgrade path takes up 0 slots.",
+    "en": "Each upgrade gives you a random perk.\nThis upgrade path uses no slots.",
+    "uk": "Кожне покращення дає випадковий перк.\nЦя гілка не займає слотів.",
+    "ru": "Каждое улучшение даёт случайный перк.\nЭта ветка не занимает слотов."
+  },
+  {
+    "source": "Gives you a random perk.",
+    "en": "Gives you a random perk.",
+    "uk": "Дає випадковий перк.",
+    "ru": "Даёт случайный перк."
+  },
+  {
+    "source": "God Mode",
+    "en": "God Mode",
+    "uk": "Режим бога",
+    "ru": "Режим бога"
+  },
+  {
+    "source": "Good luck.",
+    "en": "Good luck.",
+    "uk": "Удачі.",
+    "ru": "Удачи."
+  },
+  {
+    "source": "Grief not your own tightens around your ribs.",
+    "en": "Grief not your own tightens around your ribs.",
+    "uk": "Чужий смуток стискає твої ребра.",
+    "ru": "Чужая печаль сдавливает твои рёбра."
+  },
+  {
+    "source": "Gun Game",
+    "en": "Gun Game",
+    "uk": "Збройова гонка",
+    "ru": "Гонка вооружений"
+  },
+  {
+    "source": "Gun Melter",
+    "en": "Gun Melter",
+    "uk": "Плавильник набоїв",
+    "ru": "Плавильщик патронов"
+  },
+  {
+    "source": "Halved your gravity",
+    "en": "Halved your gravity",
+    "uk": "Гравітація стала вдвічі слабшою.",
+    "ru": "Гравитация стала вдвое слабее."
+  },
+  {
+    "source": "Headtapper",
+    "en": "Headtapper",
+    "uk": "Мисливець за головами",
+    "ru": "Охотник за головами"
+  },
+  {
+    "source": "Heal {0}% of damage dealt to enemies.",
+    "en": "Heal {0}% of damage dealt to enemies.",
+    "uk": "Відновлює HP у розмірі {0}% шкоди, завданої ворогам.",
+    "ru": "Восстанавливает HP в размере {0}% урона, нанесённого врагам."
+  },
+  {
+    "source": "Healed <b>{0}</b>: (<color=#{1}>{2}</color>/<color=green>{3}</color>)",
+    "en": "Healed <b>{0}</b>: (<color=#{1}>{2}</color>/<color=green>{3}</color>)",
+    "uk": "Вилікувано <b>{0}</b>: (<color=#{1}>{2}</color>/<color=green>{3}</color>)",
+    "ru": "Вылечен <b>{0}</b>: (<color=#{1}>{2}</color>/<color=green>{3}</color>)",
+    "verbatim": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "source": "Healed you.",
+    "en": "Healed you.",
+    "uk": "Твоє здоров'я відновлено.",
+    "ru": "Твоё здоровье восстановлено."
+  },
+  {
+    "source": "Healing Pylon",
+    "en": "Healing Pylon",
+    "uk": "Цілющий пілон",
+    "ru": "Лечебный пилон"
+  },
+  {
+    "source": "Hey buddy, need a hand?",
+    "en": "Hey buddy, need a hand?",
+    "uk": "Гей, друже, допомогти?",
+    "ru": "Эй, дружище, помочь?"
+  },
+  {
+    "source": "Hit and Run",
+    "en": "Hit and Run",
+    "uk": "Вдарив — тікай",
+    "ru": "Ударил — беги"
+  },
+  {
+    "source": "Hitting a human will cause {0} damage over {1}s.",
+    "en": "Hitting a human will cause {0} damage over {1}s.",
+    "uk": "Влучання в людину завдає ще {0} шкоди за {1} с.",
+    "ru": "Попадание в человека наносит ещё {0} урона за {1} с."
+  },
+  {
+    "source": "I guess you caught the virus...",
+    "en": "I guess you caught the virus...",
+    "uk": "Здається, ти підхопив вірус...",
+    "ru": "Кажется, ты подхватил вирус..."
+  },
+  {
+    "source": "I really like deez balls...",
+    "en": "I really like deez balls...",
+    "uk": "Обожнюю ці кульки...",
+    "ru": "Обожаю эти шарики..."
+  },
+  {
+    "source": "Ice Bolt",
+    "en": "Ice Bolt",
+    "uk": "Крижана стріла",
+    "ru": "Ледяная стрела"
+  },
+  {
+    "source": "Infector",
+    "en": "Infector",
+    "uk": "Рознощик зарази",
+    "ru": "Разносчик заразы"
+  },
+  {
+    "source": "Invalid index.",
+    "en": "Invalid index.",
+    "uk": "Такого номера немає.",
+    "ru": "Такого номера нет."
+  },
+  {
+    "source": "Invisible For: ",
+    "en": "Invisible For: ",
+    "uk": "Невидимість ще: ",
+    "ru": "Невидимость ещё: "
+  },
+  {
+    "source": "Lay an explosive egg (it can also kill you). ",
+    "en": "Lay an explosive egg (it can also kill you). ",
+    "uk": "Відклади вибухове яйце. Воно може вбити й тебе. ",
+    "ru": "Отложи взрывное яйцо. Оно может убить и тебя. "
+  },
+  {
+    "source": "Let's gamble again.",
+    "en": "Let's gamble again.",
+    "uk": "Зіграємо ще раз.",
+    "ru": "Сыграем ещё раз."
+  },
+  {
+    "source": "Life Consumption",
+    "en": "Life Consumption",
+    "uk": "Поглинання життя",
+    "ru": "Поглощение жизни"
+  },
+  {
+    "source": "Light Arrow",
+    "en": "Light Arrow",
+    "uk": "Стріла світла",
+    "ru": "Стрела света"
+  },
+  {
+    "source": "Limb Break",
+    "en": "Limb Break",
+    "uk": "Перелом",
+    "ru": "Перелом"
+  },
+  {
+    "source": "Lock Picker",
+    "en": "Lock Picker",
+    "uk": "Зломщик",
+    "ru": "Взломщик"
+  },
+  {
+    "source": "Lost Zombie: ",
+    "en": "Lost Zombie: ",
+    "uk": "Втрачено зомбі: ",
+    "ru": "Потерян зомби: "
+  },
+  {
+    "source": "MAX",
+    "en": "MAX",
+    "uk": "МАКС.",
+    "ru": "МАКС."
+  },
+  {
+    "source": "Magic Missile",
+    "en": "Magic Missile",
+    "uk": "Магічний снаряд",
+    "ru": "Магический снаряд"
+  },
+  {
+    "source": "Marathoner",
+    "en": "Marathoner",
+    "uk": "Марафонець",
+    "ru": "Марафонец"
+  },
+  {
+    "source": "Mass Operation",
+    "en": "Mass Operation",
+    "uk": "Масове воскресіння",
+    "ru": "Массовое воскрешение"
+  },
+  {
+    "source": "Max out your microphone to power up!\nPlease do this responsibly.",
+    "en": "Max out your microphone to power up!\nPlease do this responsibly.",
+    "uk": "Кричи в мікрофон, щоб стати сильнішим!\nАле бережи вуха інших гравців.",
+    "ru": "Кричи в микрофон, чтобы стать сильнее!\nНо береги уши других игроков."
+  },
+  {
+    "source": "Medic",
+    "en": "Medic",
+    "uk": "Медик",
+    "ru": "Медик"
+  },
+  {
+    "source": "Melts {0} bullets from every human's gun around you.",
+    "en": "Melts {0} bullets from every human's gun around you.",
+    "uk": "Плавить {0} набоїв у зброї кожної людини поруч.",
+    "ru": "Плавит {0} патронов в оружии каждого человека рядом."
+  },
+  {
+    "source": "Micro Missiles",
+    "en": "Micro Missiles",
+    "uk": "Мікроракети",
+    "ru": "Микроракеты"
+  },
+  {
+    "source": "Mitosis",
+    "en": "Mitosis",
+    "uk": "Мітоз",
+    "ru": "Митоз"
+  },
+  {
+    "source": "More attacks.",
+    "en": "More attacks.",
+    "uk": "Ще більше атак.",
+    "ru": "Ещё больше атак."
+  },
+  {
+    "source": "Naughty Hunter",
+    "en": "Naughty Hunter",
+    "uk": "Мисливець-каратель",
+    "ru": "Охотник-каратель"
+  },
+  {
+    "source": "Ninjutsu",
+    "en": "Ninjutsu",
+    "uk": "Ніндзюцу",
+    "ru": "Ниндзюцу"
+  },
+  {
+    "source": "No permission! ",
+    "en": "No permission! ",
+    "uk": "Недостатньо прав! ",
+    "ru": "Недостаточно прав! "
+  },
+  {
+    "source": "No shop found, please claim a shop.",
+    "en": "No shop found, please claim a shop.",
+    "uk": "Крамниці немає. Спочатку займи КПП.",
+    "ru": "Магазина нет. Сначала займи КПП."
+  },
+  {
+    "source": "No upgrades available.",
+    "en": "No upgrades available.",
+    "uk": "Поки немає покращень.",
+    "ru": "Пока нет улучшений."
+  },
+  {
+    "source": "Open any door, even locked ones.",
+    "en": "Open any door, even locked ones.",
+    "uk": "Відчиняє будь-які двері, навіть замкнені.",
+    "ru": "Открывает любые двери, даже запертые."
+  },
+  {
+    "source": "Orb of Nature",
+    "en": "Orb of Nature",
+    "uk": "Сфера природи",
+    "ru": "Сфера природы"
+  },
+  {
+    "source": "Out of Blood.",
+    "en": "Out of Blood.",
+    "uk": "Кров закінчилася.",
+    "ru": "Кровь закончилась."
+  },
+  {
+    "source": "Overlord",
+    "en": "Overlord",
+    "uk": "Повелитель мерців",
+    "ru": "Повелитель мертвецов"
+  },
+  {
+    "source": "Perk Slot Upgrade",
+    "en": "Perk Slot Upgrade",
+    "uk": "Додаткові слоти перків",
+    "ru": "Дополнительные слоты перков"
+  },
+  {
+    "source": "Phantom",
+    "en": "Phantom",
+    "uk": "Фантом",
+    "ru": "Фантом"
+  },
+  {
+    "source": "Phantom destroyed! ",
+    "en": "Phantom destroyed! ",
+    "uk": "Фантом знищений! ",
+    "ru": "Фантом уничтожен! "
+  },
+  {
+    "source": "Phase through doors, you get more transparent the lower your health is.\nStanding still will make you invisible.",
+    "en": "Phase through doors, you get more transparent the lower your health is.\nStanding still will make you invisible.",
+    "uk": "Проходь крізь двері. Що менше HP — то ти прозоріший.\nЗавмри, щоб стати невидимим.",
+    "ru": "Проходи сквозь двери. Чем меньше HP — тем ты прозрачнее.\nЗамри, чтобы стать невидимым."
+  },
+  {
+    "source": "Phoenix",
+    "en": "Phoenix",
+    "uk": "Фенікс",
+    "ru": "Феникс"
+  },
+  {
+    "source": "Picking Up Perk: {0}\n{1}{2}",
+    "en": "Picking Up Perk: {0}\n{1}{2}",
+    "uk": "Підбираєш перк: {0}\n{1}{2}",
+    "ru": "Подбираешь перк: {0}\n{1}{2}"
+  },
+  {
+    "source": "Pizza Man",
+    "en": "Pizza Man",
+    "uk": "Піцайоло",
+    "ru": "Пиццайоло"
+  },
+  {
+    "source": "Player {0}",
+    "en": "Player {0}",
+    "uk": "Гравець {0}",
+    "ru": "Игрок {0}",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Please input a number!",
+    "en": "Please input a number!",
+    "uk": "Введи номер!",
+    "ru": "Введи номер!"
+  },
+  {
+    "source": "Please provide a valid value! (true/false)",
+    "en": "Please provide a valid value! (true/false)",
+    "uk": "Вкажи правильне значення: true або false.",
+    "ru": "Укажи правильное значение: true или false."
+  },
+  {
+    "source": "Poison Cloud",
+    "en": "Poison Cloud",
+    "uk": "Отруйна хмара",
+    "ru": "Ядовитое облако"
+  },
+  {
+    "source": "Progress changed! \nPress \"~\" and type \".sp\" (for more detail) \nOR bind a key in <b>Server Specific Settings</b> to check.",
+    "en": "Perk upgraded!\nOpen the console (~) and type .sp to see what changed.\nOr set a shortcut in <b>Server Specific Settings</b>.",
+    "uk": "Перк покращено!\nВведи «.sp» у консолі («~»), щоб переглянути зміни.\nАбо признач клавішу в <b>налаштуваннях сервера</b>.",
+    "ru": "Перк улучшен!\nВведи «.sp» в консоли («~»), чтобы посмотреть изменения.\nИли назначь клавишу в <b>настройках сервера</b>."
+  },
+  {
+    "source": "Provides obscure, but useful information regarding enemies.",
+    "en": "Provides obscure, but useful information regarding enemies.",
+    "uk": "Дає загадкові, але корисні підказки про ворогів.",
+    "ru": "Даёт загадочные, но полезные подсказки о врагах."
+  },
+  {
+    "source": "Provides team bonuses.",
+    "en": "Provides team bonuses.",
+    "uk": "Дає бонуси команді.",
+    "ru": "Даёт бонусы команде."
+  },
+  {
+    "source": "Push people when you are near them.",
+    "en": "Push people when you are near them.",
+    "uk": "Відштовхує людей, коли ти поруч.",
+    "ru": "Отталкивает людей, когда ты рядом."
+  },
+  {
+    "source": "Race Car",
+    "en": "Race Car",
+    "uk": "Болід",
+    "ru": "Болид"
+  },
+  {
+    "source": "Raise",
+    "en": "Raise",
+    "uk": "Підвищення",
+    "ru": "Повышение"
+  },
+  {
+    "source": "Random Perk ({0})",
+    "en": "Random Perk ({0})",
+    "uk": "Випадковий перк ({0})",
+    "ru": "Случайный перк ({0})"
+  },
+  {
+    "source": "Random Perks",
+    "en": "Random Perks",
+    "uk": "Випадкові перки",
+    "ru": "Случайные перки"
+  },
+  {
+    "source": "Randomizes your weapon on kill.",
+    "en": "Randomizes your weapon on kill.",
+    "uk": "Кожне вбивство змінює твою зброю на випадкову.",
+    "ru": "Каждое убийство меняет твоё оружие на случайное."
+  },
+  {
+    "source": "Ray of Darkness",
+    "en": "Ray of Darkness",
+    "uk": "Промінь темряви",
+    "ru": "Луч тьмы"
+  },
+  {
+    "source": "Ready Up",
+    "en": "Ready Up",
+    "uk": "Напоготові",
+    "ru": "Наготове"
+  },
+  {
+    "source": "Ready!",
+    "en": "Ready!",
+    "uk": "Готово!",
+    "ru": "Готово!"
+  },
+  {
+    "source": "Reaper",
+    "en": "Reaper",
+    "uk": "Жнець",
+    "ru": "Жнец"
+  },
+  {
+    "source": "Receive a candy. ",
+    "en": "Receive a candy. ",
+    "uk": "Дає цукерку. ",
+    "ru": "Даёт конфету. "
+  },
+  {
+    "source": "Receive a grenade. ",
+    "en": "Receive a grenade. ",
+    "uk": "Дає гранату. ",
+    "ru": "Даёт гранату. "
+  },
+  {
+    "source": "Recharged!",
+    "en": "Recharged!",
+    "uk": "Знову готово!",
+    "ru": "Снова готово!"
+  },
+  {
+    "source": "Regenerates your stamina by {0}% every {1} seconds.",
+    "en": "Regenerates your stamina by {0}% every {1} seconds.",
+    "uk": "Відновлює {0}% витривалості кожні {1} с.",
+    "ru": "Восстанавливает {0}% выносливости каждые {1} с."
+  },
+  {
+    "source": "Regeneration",
+    "en": "Regeneration",
+    "uk": "Регенерація",
+    "ru": "Регенерация"
+  },
+  {
+    "source": "Reload and unload weapons faster.",
+    "en": "Reload weapons and remove their ammo faster.",
+    "uk": "Швидше перезаряджаєш зброю та виймаєш набої.",
+    "ru": "Быстрее перезаряжаешь оружие и вынимаешь патроны."
+  },
+  {
+    "source": "Reloading no longer requires ammo.",
+    "en": "Reloading no longer requires ammo.",
+    "uk": "Для перезаряджання більше не потрібні запасні набої.",
+    "ru": "Для перезарядки больше не нужны запасные патроны."
+  },
+  {
+    "source": "Removed ",
+    "en": "Removed ",
+    "uk": "Знято: ",
+    "ru": "Снято: "
+  },
+  {
+    "source": "Removed Perk: {0}\n\nPress \"~\" and type \".sp\" (for more detail) \nOR bind a key in <b>Server Specific Settings</b> to see what perks you have!",
+    "en": "Perk removed: {0}\n\nOpen the console (~) and type .sp to see your perks.\nOr set a shortcut in <b>Server Specific Settings</b>.",
+    "uk": "Перк знято: {0}\n\nВведи «.sp» у консолі («~»), щоб переглянути свої перки.\nАбо признач клавішу в <b>налаштуваннях сервера</b>.",
+    "ru": "Перк снят: {0}\n\nВведи «.sp» в консоли («~»), чтобы посмотреть свои перки.\nИли назначь клавишу в <b>настройках сервера</b>."
+  },
+  {
+    "source": "Repair every door near you.",
+    "en": "Repair every door near you.",
+    "uk": "Лагодить усі двері поруч.",
+    "ru": "Чинит все двери рядом."
+  },
+  {
+    "source": "Replenish your stamina on kill.",
+    "en": "Replenish your stamina on kill.",
+    "uk": "Вбивство повністю відновлює витривалість.",
+    "ru": "Убийство полностью восстанавливает выносливость."
+  },
+  {
+    "source": "Resilience",
+    "en": "Resilience",
+    "uk": "Стійкість",
+    "ru": "Стойкость"
+  },
+  {
+    "source": "Restocking...",
+    "en": "Restocking...",
+    "uk": "Поповнюємо запаси...",
+    "ru": "Пополняем запасы..."
+  },
+  {
+    "source": "Resupplier",
+    "en": "Resupplier",
+    "uk": "Постачальник",
+    "ru": "Снабженец"
+  },
+  {
+    "source": "Revived zombies no longer receive max health debuffs, \nall zombies have {0} max HP.\nZombies also heal on kill.",
+    "en": "Revived zombies no longer lose maximum health.\nAll zombies have {0} maximum HP.\nKills also heal zombies.",
+    "uk": "Повторно підняті зомбі більше не втрачають максимальне HP.\nУ всіх зомбі {0} максимального HP.\nВбивства також лікують зомбі.",
+    "ru": "Повторно поднятые зомби больше не теряют максимальное HP.\nУ всех зомби {0} максимального HP.\nУбийства также лечат зомби."
+  },
+  {
+    "source": "Reviving a dead human also revives every available dead human in a {0}m radius around it.",
+    "en": "Reviving a human also revives every eligible body within {0}m.",
+    "uk": "Воскресіння людини також піднімає всіх доступних мерців у радіусі {0} м.",
+    "ru": "Воскрешение человека также поднимает всех доступных мертвецов в радиусе {0} м."
+  },
+  {
+    "source": "Rocketeer",
+    "en": "Rocketeer",
+    "uk": "Ракетник",
+    "ru": "Ракетчик"
+  },
+  {
+    "source": "Rust spreads in your memory like mold on old meat.",
+    "en": "Rust spreads in your memory like mold on old meat.",
+    "uk": "Іржа повзе твоєю пам'яттю, мов пліснява старим м'ясом.",
+    "ru": "Ржавчина ползёт по твоей памяти, словно плесень по старому мясу."
+  },
+  {
+    "source": "SCP Team Leveled Up! \nCurrent Level: ",
+    "en": "SCP Team Leveled Up! \nCurrent Level: ",
+    "uk": "Команда SCP стала сильнішою!\nПоточний рівень: ",
+    "ru": "Команда SCP стала сильнее!\nТекущий уровень: "
+  },
+  {
+    "source": "Saiyan",
+    "en": "Saiyan",
+    "uk": "Саян",
+    "ru": "Сайян"
+  },
+  {
+    "source": "Saves you from death once per life. Get AHP and cardiac arrest on save.",
+    "en": "Saves you from death once per life. Grants temporary health (AHP), but also causes cardiac arrest.",
+    "uk": "Раз за життя рятує від смерті, дає AHP, але спричиняє зупинку серця.",
+    "ru": "Раз за жизнь спасает от смерти, даёт AHP, но вызывает остановку сердца."
+  },
+  {
+    "source": "Scouter",
+    "en": "Scouter",
+    "uk": "Скаут",
+    "ru": "Скаут"
+  },
+  {
+    "source": "See Perks",
+    "en": "See Perks",
+    "uk": "Мої перки",
+    "ru": "Мои перки"
+  },
+  {
+    "source": "See Upgrades",
+    "en": "See Upgrades",
+    "uk": "Доступні покращення",
+    "ru": "Доступные улучшения"
+  },
+  {
+    "source": "Set a teleport point after using an item. \nTeleport to the point after using an item of the same type. \nNo item types will be tracked when a teleport point exists.",
+    "en": "Using an item sets a teleport point.\nUse another item of the same type to teleport back.\nOther item types are not tracked while a point exists.",
+    "uk": "Використання предмета створює точку телепортації.\nВикористай предмет того самого типу ще раз, щоб повернутися.\nПоки точка існує, інші типи предметів не відстежуються.",
+    "ru": "Использование предмета создаёт точку телепортации.\nИспользуй предмет того же типа ещё раз, чтобы вернуться.\nПока точка существует, другие типы предметов не отслеживаются."
+  },
+  {
+    "source": "Shared Consumption",
+    "en": "Shared Consumption",
+    "uk": "Спільне поглинання",
+    "ru": "Общее поглощение"
+  },
+  {
+    "source": "Sharpshooter",
+    "en": "Sharpshooter",
+    "uk": "Влучний стрілець",
+    "ru": "Меткий стрелок"
+  },
+  {
+    "source": "Shooting a teammate will heal them by {0} HP.",
+    "en": "Shooting a teammate will heal them by {0} HP.",
+    "uk": "Постріл у союзника відновлює йому {0} HP.",
+    "ru": "Выстрел в союзника восстанавливает ему {0} HP."
+  },
+  {
+    "source": "Shop is now Level ",
+    "en": "Shop is now Level ",
+    "uk": "Рівень крамниці тепер: ",
+    "ru": "Уровень магазина теперь: "
+  },
+  {
+    "source": "Shopkeeper",
+    "en": "Shopkeeper",
+    "uk": "Крамар",
+    "ru": "Лавочник"
+  },
+  {
+    "source": "Shows all perks.",
+    "en": "Shows all perks.",
+    "uk": "Показати всі перки.",
+    "ru": "Показать все перки."
+  },
+  {
+    "source": "Shows everyone's scores.",
+    "en": "Shows everyone's scores.",
+    "uk": "Показати очки всіх гравців.",
+    "ru": "Показать очки всех игроков."
+  },
+  {
+    "source": "Shows you all the perks that you have.",
+    "en": "Shows you all the perks that you have.",
+    "uk": "Показати всі твої перки.",
+    "ru": "Показать все твои перки."
+  },
+  {
+    "source": "Shows you all the upgrade options that you have.",
+    "en": "Shows you all the upgrade options that you have.",
+    "uk": "Показати всі твої варіанти покращень.",
+    "ru": "Показать все твои варианты улучшений."
+  },
+  {
+    "source": "Shows you your available upgrades.",
+    "en": "Shows you your available upgrades.",
+    "uk": "Показати доступні покращення.",
+    "ru": "Показать доступные улучшения."
+  },
+  {
+    "source": "Shows you your current score.",
+    "en": "Shows you your current score.",
+    "uk": "Показати твої очки.",
+    "ru": "Показать твои очки."
+  },
+  {
+    "source": "Shows you your perks.",
+    "en": "Shows you your perks.",
+    "uk": "Показати твої перки.",
+    "ru": "Показать твои перки."
+  },
+  {
+    "source": "Siphon",
+    "en": "Siphon",
+    "uk": "Висмоктування",
+    "ru": "Высасывание"
+  },
+  {
+    "source": "Siphons {0} HP from nearby zombies when activating <i>The Doctor's Call</i>.",
+    "en": "Using <i>The Doctor's Call</i> drains {0} HP from nearby zombies.",
+    "uk": "Забирає {0} HP у зомбі поруч, коли ти використовуєш <i>Поклик Доктора</i>.",
+    "ru": "Забирает {0} HP у зомби рядом, когда ты используешь <i>Зов Доктора</i>."
+  },
+  {
+    "source": "Sixth Sense",
+    "en": "Sixth Sense",
+    "uk": "Шосте чуття",
+    "ru": "Шестое чувство"
+  },
+  {
+    "source": "Slaughter seems to be the only way to prove your existance.",
+    "en": "Slaughter seems to be the only way to prove your existance.",
+    "uk": "Здається, лише вбивства доводять, що ти існуєш.",
+    "ru": "Кажется, только убийства доказывают, что ты существуешь."
+  },
+  {
+    "source": "Slot Upgrade",
+    "en": "Slot Upgrade",
+    "uk": "Додатковий слот",
+    "ru": "Дополнительный слот"
+  },
+  {
+    "source": "Someone else is breathing through your lungs.",
+    "en": "Someone else is breathing through your lungs.",
+    "uk": "Хтось інший дихає твоїми легенями.",
+    "ru": "Кто-то другой дышит твоими лёгкими."
+  },
+  {
+    "source": "Something mimics your footsteps one beat behind.",
+    "en": "Something mimics your footsteps one beat behind.",
+    "uk": "Щось повторює твої кроки, відстаючи на мить.",
+    "ru": "Что-то повторяет твои шаги, отставая на мгновение."
+  },
+  {
+    "source": "Something skitters across your mind—too quick to name, too loud to forget.",
+    "en": "Something skitters across your mind—too quick to name, too loud to forget.",
+    "uk": "Щось промайнуло у твоїй голові — надто швидко, щоб впізнати, надто гучно, щоб забути.",
+    "ru": "Что-то промелькнуло у тебя в голове — слишком быстро, чтобы узнать, слишком громко, чтобы забыть."
+  },
+  {
+    "source": "Something skitters beneath your skin. It's wearing your voice.",
+    "en": "Something skitters beneath your skin. It's wearing your voice.",
+    "uk": "Щось повзає під твоєю шкірою. І говорить твоїм голосом.",
+    "ru": "Что-то ползает под твоей кожей. И говорит твоим голосом."
+  },
+  {
+    "source": "Something tugs beneath your skin, charting infection.",
+    "en": "Something tugs beneath your skin, charting infection.",
+    "uk": "Щось тягнеться під твоєю шкірою, прокладаючи шлях заразі.",
+    "ru": "Что-то тянется под твоей кожей, прокладывая путь заразе."
+  },
+  {
+    "source": "Sorcerer",
+    "en": "Sorcerer",
+    "uk": "Чарівник",
+    "ru": "Чародей"
+  },
+  {
+    "source": "Soulbound",
+    "en": "Soulbound",
+    "uk": "Зв'язок душ",
+    "ru": "Связь душ"
+  },
+  {
+    "source": "Spawn a teammate with your inventory when you use a healing item at max health. \nLimited to {0}.",
+    "en": "Spawn a teammate with your inventory when you use a healing item at max health. \nLimited to {0}.",
+    "uk": "Використай лікувальний предмет із повним HP — і союзник відродиться з твоїм інвентарем.\nЛіміт: {0}.",
+    "ru": "Используй лечебный предмет с полным HP — и союзник возродится с твоим инвентарём.\nЛимит: {0}."
+  },
+  {
+    "source": "Spawns a phantom 173 when you start breakneck speeds.",
+    "en": "Spawns a phantom 173 when you start breakneck speeds.",
+    "uk": "Створює фантом SCP-173, коли ти починаєш прискорення.",
+    "ru": "Создаёт фантом SCP-173, когда ты начинаешь ускорение."
+  },
+  {
+    "source": "Speed boost available!",
+    "en": "Speed boost available!",
+    "uk": "Прискорення готове!",
+    "ru": "Ускорение готово!"
+  },
+  {
+    "source": "Speedster",
+    "en": "Speedster",
+    "uk": "Спринтер",
+    "ru": "Спринтер"
+  },
+  {
+    "source": "Spells refreshed!",
+    "en": "Spells refreshed!",
+    "uk": "Закляття знову готові!",
+    "ru": "Заклинания снова готовы!"
+  },
+  {
+    "source": "Spread rabies.",
+    "en": "Spread rabies.",
+    "uk": "Рознось сказ.",
+    "ru": "Разноси бешенство."
+  },
+  {
+    "source": "Streamer",
+    "en": "Streamer",
+    "uk": "Стример",
+    "ru": "Стример"
+  },
+  {
+    "source": "Summon Altar",
+    "en": "Summon Altar",
+    "uk": "Призвати вівтар",
+    "ru": "Призвать алтарь"
+  },
+  {
+    "source": "Summon Arcane Golem",
+    "en": "Summon Arcane Golem",
+    "uk": "Призвати арканного голема",
+    "ru": "Призвать арканного голема"
+  },
+  {
+    "source": "Summon Pylon",
+    "en": "Summon Pylon",
+    "uk": "Призвати пілон",
+    "ru": "Призвать пилон"
+  },
+  {
+    "source": "Summon Rock Golem",
+    "en": "Summon Rock Golem",
+    "uk": "Призвати кам'яного голема",
+    "ru": "Призвать каменного голема"
+  },
+  {
+    "source": "Summon Thorn Shooter",
+    "en": "Summon Thorn Shooter",
+    "uk": "Призвати стрільця шипами",
+    "ru": "Призвать стрелка шипами"
+  },
+  {
+    "source": "Super {0}",
+    "en": "Super {0}",
+    "uk": "Супер: {0}",
+    "ru": "Супер: {0}"
+  },
+  {
+    "source": "Survival is only wishful thinking.",
+    "en": "Survival is only wishful thinking.",
+    "uk": "Вижити — лише марна надія.",
+    "ru": "Выжить — лишь напрасная надежда."
+  },
+  {
+    "source": "Tactical Retreat",
+    "en": "Tactical Retreat",
+    "uk": "Тактичний відступ",
+    "ru": "Тактическое отступление"
+  },
+  {
+    "source": "Take reduced damage when in breakneck speeds.",
+    "en": "Take reduced damage when in breakneck speeds.",
+    "uk": "Під час прискорення ти отримуєш менше шкоди.",
+    "ru": "Во время ускорения ты получаешь меньше урона."
+  },
+  {
+    "source": "Take {0}% less damage from explosions.",
+    "en": "Take {0}% less damage from explosions.",
+    "uk": "Вибухи завдають тобі на {0}% менше шкоди.",
+    "ru": "Взрывы наносят тебе на {0}% меньше урона."
+  },
+  {
+    "source": "Tank",
+    "en": "Tank",
+    "uk": "Танк",
+    "ru": "Танк"
+  },
+  {
+    "source": "Team Player",
+    "en": "Team Player",
+    "uk": "Командний гравець",
+    "ru": "Командный игрок"
+  },
+  {
+    "source": "Tears sting your eyes for reasons your mind denies.",
+    "en": "Tears sting your eyes for reasons your mind denies.",
+    "uk": "Очі щипає від сліз. Розум відмовляється пояснювати чому.",
+    "ru": "Глаза щиплет от слёз. Разум отказывается объяснять почему."
+  },
+  {
+    "source": "Telefragger",
+    "en": "Telefragger",
+    "uk": "Телефрагер",
+    "ru": "Телефрагер"
+  },
+  {
+    "source": "Teleport point has been created{0}!",
+    "en": "Teleport point has been created{0}!",
+    "uk": "Точку телепортації створено{0}!",
+    "ru": "Точка телепортации создана{0}!"
+  },
+  {
+    "source": "Teleported! Teleport point destroyed.",
+    "en": "Teleported! Teleport point destroyed.",
+    "uk": "Телепортація! Точка зникла.",
+    "ru": "Телепортация! Точка исчезла."
+  },
+  {
+    "source": "Teleports you back to your latest tantrum location when taking heavy damage after hume shield breaks. ",
+    "en": "Teleports you back to your latest tantrum location when taking heavy damage after hume shield breaks. ",
+    "uk": "Сильний удар після втрати щита Юма повертає тебе до місця останнього «Істеричного нападу». ",
+    "ru": "Сильный удар после потери щита Юма возвращает тебя к месту последнего «Истерического припадка». "
+  },
+  {
+    "source": "Teleports you to the person you kill. \nSpawn a short fused, short duration flashbang.",
+    "en": "Teleports you to the person you kill. \nSpawn a short fused, short duration flashbang.",
+    "uk": "Телепортує тебе до вбитого тобою гравця\nі створює світлошумову гранату, яка швидко спрацьовує.",
+    "ru": "Телепортирует тебя к убитому тобой игроку\nи создаёт светошумовую гранату, которая быстро срабатывает."
+  },
+  {
+    "source": "Thanks for those eyes.",
+    "en": "Thanks for those eyes.",
+    "uk": "Дякую за очі.",
+    "ru": "Спасибо за глаза."
+  },
+  {
+    "source": "The air crackles like old bone. Breathing feels optional—and wrong.",
+    "en": "The air crackles like old bone. Breathing feels optional—and wrong.",
+    "uk": "Повітря тріщить, наче старі кістки. Здається, дихати вже не обов'язково. І це неправильно.",
+    "ru": "Воздух трещит, словно старые кости. Кажется, дышать уже не обязательно. И это неправильно."
+  },
+  {
+    "source": "The best perk.",
+    "en": "The best perk.",
+    "uk": "Найкращий перк.",
+    "ru": "Лучший перк."
+  },
+  {
+    "source": "The floor bends like wet paper under your weight.",
+    "en": "The floor bends like wet paper under your weight.",
+    "uk": "Підлога прогинається під тобою, наче мокрий папір.",
+    "ru": "Пол прогибается под тобой, словно мокрая бумага."
+  },
+  {
+    "source": "The floor feels softer. Or deeper.",
+    "en": "The floor feels softer. Or deeper.",
+    "uk": "Підлога стала м'якшою. Чи глибшою.",
+    "ru": "Пол стал мягче. Или глубже."
+  },
+  {
+    "source": "The humans' futile struggle is what excites you.",
+    "en": "The humans' futile struggle is what excites you.",
+    "uk": "Марна боротьба людей тебе тішить.",
+    "ru": "Напрасная борьба людей тебя радует."
+  },
+  {
+    "source": "The killing is not pointless, it is necessary.",
+    "en": "The killing is not pointless, it is necessary.",
+    "uk": "Вбивства не безглузді. Вони необхідні.",
+    "ru": "Убийства не бессмысленны. Они необходимы."
+  },
+  {
+    "source": "The lights dim, but the bulbs don't flicker.",
+    "en": "The lights dim, but the bulbs don't flicker.",
+    "uk": "Світла меншає, хоча лампи не блимають.",
+    "ru": "Света становится меньше, хотя лампы не мигают."
+  },
+  {
+    "source": "The scent of rot perfumes your thoughts.",
+    "en": "The scent of rot perfumes your thoughts.",
+    "uk": "Запах гнилі заповнює твої думки.",
+    "ru": "Запах гнили наполняет твои мысли."
+  },
+  {
+    "source": "The sound of your own voice calls you from the dark.",
+    "en": "The sound of your own voice calls you from the dark.",
+    "uk": "Твій власний голос кличе тебе з темряви.",
+    "ru": "Твой собственный голос зовёт тебя из темноты."
+  },
+  {
+    "source": "The ventilation hum becomes a melody—one you shouldn't recognize.",
+    "en": "The ventilation hum becomes a melody—one you shouldn't recognize.",
+    "uk": "Гул вентиляції складається в мелодію. Ти не повинен її знати.",
+    "ru": "Гул вентиляции складывается в мелодию. Ты не должен её знать."
+  },
+  {
+    "source": "The walls breathe with a rhythm not your own.",
+    "en": "The walls breathe with a rhythm not your own.",
+    "uk": "Стіни дихають. Їхній ритм не збігається з твоїм.",
+    "ru": "Стены дышат. Их ритм не совпадает с твоим."
+  },
+  {
+    "source": "The walls shift when you're not looking. Or was it only an illusion?",
+    "en": "The walls shift when you're not looking. Or was it only an illusion?",
+    "uk": "Стіни рухаються, коли ти не дивишся. Чи це лише здається?",
+    "ru": "Стены двигаются, когда ты не смотришь. Или это только кажется?"
+  },
+  {
+    "source": "The walls weep dark stains where no pipe could reach.",
+    "en": "The walls weep dark stains where no pipe could reach.",
+    "uk": "На стінах проступають темні патьоки. Тут немає жодних труб.",
+    "ru": "На стенах проступают тёмные потёки. Здесь нет никаких труб."
+  },
+  {
+    "source": "There are pathways here, one of them might be an exit...",
+    "en": "There are pathways here, one of them might be an exit...",
+    "uk": "Тут є проходи. Може, один із них — вихід...",
+    "ru": "Здесь есть проходы. Может, один из них — выход..."
+  },
+  {
+    "source": "Thorn Shooter",
+    "en": "Thorn Shooter",
+    "uk": "Стрілець шипами",
+    "ru": "Стрелок шипами"
+  },
+  {
+    "source": "Thorn Shot",
+    "en": "Thorn Shot",
+    "uk": "Постріл шипом",
+    "ru": "Выстрел шипом"
+  },
+  {
+    "source": "Thorn Volley",
+    "en": "Thorn Volley",
+    "uk": "Залп шипами",
+    "ru": "Залп шипами"
+  },
+  {
+    "source": "Throwing a grenade will turn it into a rocket projectile. \nRockets have reduced SCP damage.",
+    "en": "Throwing a grenade will turn it into a rocket projectile. \nRockets have reduced SCP damage.",
+    "uk": "Кинута граната перетворюється на ракету.\nРакети завдають SCP менше шкоди.",
+    "ru": "Брошенная граната превращается в ракету.\nРакеты наносят SCP меньше урона."
+  },
+  {
+    "source": "Time loops—but it never repeats the same way twice.",
+    "en": "Time loops—but it never repeats the same way twice.",
+    "uk": "Час зациклився. Але жоден оберт не повторює попередній.",
+    "ru": "Время зациклилось. Но ни один оборот не повторяет предыдущий."
+  },
+  {
+    "source": "Time until boost: ",
+    "en": "Time until boost: ",
+    "uk": "До прискорення: ",
+    "ru": "До ускорения: "
+  },
+  {
+    "source": "Traded ",
+    "en": "Traded ",
+    "uk": "Обміняно: ",
+    "ru": "Обменяно: "
+  },
+  {
+    "source": "Trading ",
+    "en": "Trading ",
+    "uk": "Обмін: ",
+    "ru": "Обмен: "
+  },
+  {
+    "source": "Trailblazer",
+    "en": "Trailblazer",
+    "uk": "Першопроходець",
+    "ru": "Первопроходец"
+  },
+  {
+    "source": "Trick Or Treater",
+    "en": "Trick Or Treater",
+    "uk": "Солодощі або смерть",
+    "ru": "Сладость или смерть"
+  },
+  {
+    "source": "Triggered!",
+    "en": "Triggered!",
+    "uk": "Спрацювало!",
+    "ru": "Сработало!"
+  },
+  {
+    "source": "Turns you invisible at <{0} HP for {1}s.",
+    "en": "Become invisible for {1}s when you fall below {0} HP.",
+    "uk": "Якщо в тебе менш ніж {0} HP, стаєш невидимим на {1} с.",
+    "ru": "Если у тебя меньше {0} HP, становишься невидимым на {1} с."
+  },
+  {
+    "source": "Turret",
+    "en": "Turret",
+    "uk": "Турель",
+    "ru": "Турель"
+  },
+  {
+    "source": "Unknown perk! ",
+    "en": "Unknown perk! ",
+    "uk": "Невідомий перк! ",
+    "ru": "Неизвестный перк! "
+  },
+  {
+    "source": "Upgrade chosen: ",
+    "en": "Upgrade chosen: ",
+    "uk": "Обрано покращення: ",
+    "ru": "Выбрано улучшение: "
+  },
+  {
+    "source": "Upgraded perk: ",
+    "en": "Upgraded perk: ",
+    "uk": "Перк покращено: ",
+    "ru": "Перк улучшен: "
+  },
+  {
+    "source": "Upgrades an upgrade path for you or a player.",
+    "en": "Upgrades an upgrade path for you or a player.",
+    "uk": "Покращити гілку для себе або іншого гравця.",
+    "ru": "Улучшить ветку для себя или другого игрока."
+  },
+  {
+    "source": "Upon killing a player that has the Burn effect, \ndrop a short fused grenade at their location.",
+    "en": "Upon killing a player that has the Burn effect, \ndrop a short fused grenade at their location.",
+    "uk": "Коли ти вбиваєш гравця з ефектом горіння,\nна його місці з'являється граната, яка швидко вибухає.",
+    "ru": "Когда ты убиваешь игрока с эффектом горения,\nна его месте появляется граната, которая быстро взрывается."
+  },
+  {
+    "source": "Vampire",
+    "en": "Vampire",
+    "uk": "Вампір",
+    "ru": "Вампир"
+  },
+  {
+    "source": "Walls drip with memories that aren't yours.",
+    "en": "Walls drip with memories that aren't yours.",
+    "uk": "Зі стін стікають чужі спогади.",
+    "ru": "Со стен стекают чужие воспоминания."
+  },
+  {
+    "source": "Warhead Detonated! Tantrum teleport destroyed.",
+    "en": "Warhead Detonated! Tantrum teleport destroyed.",
+    "uk": "Боєголовка вибухнула! Точку повернення до «Істеричного нападу» втрачено.",
+    "ru": "Боеголовка взорвалась! Точка возврата к «Истерическому припадку» потеряна."
+  },
+  {
+    "source": "Warhead detonated! Teleport point destroyed.",
+    "en": "Warhead detonated! Teleport point destroyed.",
+    "uk": "Боєголовка вибухнула! Точку телепортації втрачено.",
+    "ru": "Боеголовка взорвалась! Точка телепортации потеряна."
+  },
+  {
+    "source": "Warlock",
+    "en": "Warlock",
+    "uk": "Чорнокнижник",
+    "ru": "Чернокнижник"
+  },
+  {
+    "source": "What a level up! ",
+    "en": "What a level up! ",
+    "uk": "Оце покращення! ",
+    "ru": "Вот это улучшение! "
+  },
+  {
+    "source": "What doesn't kill you makes you stronger.\nTaking damage increases your max health.\nResets on death.",
+    "en": "What does not kill you makes you stronger.\nTaking damage increases your maximum HP.\nThe bonus resets on death.",
+    "uk": "Що не вбиває — робить сильнішим.\nОтримана шкода підвищує твоє максимальне HP.\nПісля смерті бонус зникає.",
+    "ru": "Что не убивает — делает сильнее.\nПолученный урон повышает твоё максимальное HP.\nПосле смерти бонус исчезает."
+  },
+  {
+    "source": "When killing a player, gain a speed boost.",
+    "en": "When killing a player, gain a speed boost.",
+    "uk": "Кожне вбивство дає прискорення.",
+    "ru": "Каждое убийство даёт ускорение."
+  },
+  {
+    "source": "When you have >{0}% HP, heal {1} HP/s.",
+    "en": "When you have >{0}% HP, heal {1} HP/s.",
+    "uk": "Якщо в тебе понад {0}% HP, відновлює {1} HP/с.",
+    "ru": "Если у тебя больше {0}% HP, восстанавливает {1} HP/с."
+  },
+  {
+    "source": "When you take damage and your Hume Shield is 0, damage is spread across the zombies near you. \nWhen zombies die, you gain Hume Shield.",
+    "en": "While your Hume Shield is empty, damage is shared with nearby zombies.\nTheir deaths restore your Hume Shield.",
+    "uk": "Якщо щит Юма вичерпано, отримана шкода розподіляється між зомбі поруч.\nЗагибель зомбі відновлює твій щит Юма.",
+    "ru": "Если щит Юма исчерпан, полученный урон распределяется между зомби рядом.\nГибель зомби восстанавливает твой щит Юма."
+  },
+  {
+    "source": "Wizard",
+    "en": "Wizard",
+    "uk": "Маг",
+    "ru": "Маг"
+  },
+  {
+    "source": "You are the danger.",
+    "en": "You are the danger.",
+    "uk": "Небезпека — це ти.",
+    "ru": "Опасность — это ты."
+  },
+  {
+    "source": "You blink—and something is closer.",
+    "en": "You blink—and something is closer.",
+    "uk": "Ти кліпаєш. Щось стало ближчим.",
+    "ru": "Ты моргаешь. Что-то стало ближе."
+  },
+  {
+    "source": "You cannot use medical items!",
+    "en": "You cannot use medical items!",
+    "uk": "Ти не можеш користуватися медикаментами!",
+    "ru": "Ты не можешь пользоваться медикаментами!"
+  },
+  {
+    "source": "You crave for the sight of a human.",
+    "en": "You crave for the sight of a human.",
+    "uk": "Тобі нестерпно хочеться побачити людину.",
+    "ru": "Тебе нестерпимо хочется увидеть человека."
+  },
+  {
+    "source": "You don't feel anything but hunger.",
+    "en": "You don't feel anything but hunger.",
+    "uk": "Нічого, крім голоду, ти не відчуваєш.",
+    "ru": "Ничего, кроме голода, ты не чувствуешь."
+  },
+  {
+    "source": "You don't feel your own breathing.",
+    "en": "You don't feel your own breathing.",
+    "uk": "Ти не відчуваєш власного дихання.",
+    "ru": "Ты не чувствуешь собственного дыхания."
+  },
+  {
+    "source": "You don't remember your face quite right.",
+    "en": "You don't remember your face quite right.",
+    "uk": "Ти вже не зовсім пам'ятаєш своє обличчя.",
+    "ru": "Ты уже не совсем помнишь своё лицо."
+  },
+  {
+    "source": "You drop a short fused grenade upon death.\nThis grenade deals less damage to SCPs.",
+    "en": "You drop a short fused grenade upon death.\nThis grenade deals less damage to SCPs.",
+    "uk": "Після смерті лишаєш гранату, яка швидко вибухає.\nВона завдає SCP менше шкоди.",
+    "ru": "После смерти оставляешь гранату, которая быстро взрывается.\nОна наносит SCP меньше урона."
+  },
+  {
+    "source": "You feel like the next person you see might not be a real person.",
+    "en": "You feel like the next person you see might not be a real person.",
+    "uk": "Здається, наступний зустрічний може виявитися не людиною.",
+    "ru": "Кажется, следующий встречный может оказаться не человеком."
+  },
+  {
+    "source": "You feel watched the moment you turn your back.",
+    "en": "You feel watched the moment you turn your back.",
+    "uk": "Варто відвернутися — і відчуваєш на собі погляд.",
+    "ru": "Стоит отвернуться — и чувствуешь на себе взгляд."
+  },
+  {
+    "source": "You feel you're being studied by something that doesn't blink.",
+    "en": "You feel you're being studied by something that doesn't blink.",
+    "uk": "Тебе вивчає щось, що ніколи не кліпає.",
+    "ru": "Тебя изучает что-то, что никогда не моргает."
+  },
+  {
+    "source": "You got...",
+    "en": "You got...",
+    "uk": "Тобі випало...",
+    "ru": "Тебе выпало..."
+  },
+  {
+    "source": "You have lost your shop. ",
+    "en": "You have lost your shop. ",
+    "uk": "Ти втрачаєш свою крамницю. ",
+    "ru": "Ты теряешь свой магазин. "
+  },
+  {
+    "source": "You hear chewing—wet, deliberate, close.",
+    "en": "You hear chewing—wet, deliberate, close.",
+    "uk": "Поруч щось жує. Мокро, неквапно.",
+    "ru": "Рядом что-то жуёт. Мокро, неторопливо."
+  },
+  {
+    "source": "You hear imaginary footsteps trailing you.",
+    "en": "You hear imaginary footsteps trailing you.",
+    "uk": "Позаду лунають уявні кроки.",
+    "ru": "Позади слышатся воображаемые шаги."
+  },
+  {
+    "source": "You hear your voice whisper—but your mouth is shut.",
+    "en": "You hear your voice whisper—but your mouth is shut.",
+    "uk": "Ти чуєш власний шепіт. Але твій рот закритий.",
+    "ru": "Ты слышишь собственный шёпот. Но твой рот закрыт."
+  },
+  {
+    "source": "You must hold an item to trade.",
+    "en": "You must hold an item to trade.",
+    "uk": "Для обміну візьми предмет у руки.",
+    "ru": "Для обмена возьми предмет в руки."
+  },
+  {
+    "source": "You remember dying, but not the body you died in.",
+    "en": "You remember dying, but not the body you died in.",
+    "uk": "Ти пам'ятаєш свою смерть. Але не тіло, в якому помираєш.",
+    "ru": "Ты помнишь свою смерть. Но не тело, в котором умираешь."
+  },
+  {
+    "source": "You saw something. You don't remember. But it saw you.",
+    "en": "You saw something. You don't remember. But it saw you.",
+    "uk": "Ти щось бачив. Не пам'ятаєш що. Але воно тебе помітило.",
+    "ru": "Ты что-то видел. Не помнишь что. Но оно тебя заметило."
+  },
+  {
+    "source": "You smell alcohol and ash where there is no fire.",
+    "en": "You smell alcohol and ash where there is no fire.",
+    "uk": "Пахне спиртом і попелом. Вогню ніде немає.",
+    "ru": "Пахнет спиртом и пеплом. Огня нигде нет."
+  },
+  {
+    "source": "You swore that you saw something jump across your vision.",
+    "en": "You swore that you saw something jump across your vision.",
+    "uk": "Ти точно бачив, як щось промайнуло перед очима.",
+    "ru": "Ты точно видел, как что-то промелькнуло перед глазами."
+  },
+  {
+    "source": "You try to blink something out of your vision—but your eyes were already closed.",
+    "en": "You try to blink something out of your vision—but your eyes were already closed.",
+    "uk": "Ти намагаєшся проморгатися. Але очі вже були заплющені.",
+    "ru": "Ты пытаешься проморгаться. Но глаза уже были закрыты."
+  },
+  {
+    "source": "You try to scream, but your mouth is filled with rust.",
+    "en": "You try to scream, but your mouth is filled with rust.",
+    "uk": "Хочеш закричати, але рот заповнений іржею.",
+    "ru": "Хочешь закричать, но рот заполнен ржавчиной."
+  },
+  {
+    "source": "You will receive a raise.",
+    "en": "You will receive a raise.",
+    "uk": "Ти отримаєш підвищення.",
+    "ru": "Ты получишь повышение."
+  },
+  {
+    "source": "You've been infected!",
+    "en": "You've been infected!",
+    "uk": "Тебе заражено!",
+    "ru": "Ты заражён!"
+  },
+  {
+    "source": "You've been sent to the NAUGHTY ROOM.\n{0}s Left.",
+    "en": "You are in the NAUGHTY ROOM.\n{0}s left.",
+    "uk": "Ти в КІМНАТІ ПОКАРАННЯ.\nЗалишилося {0} с.",
+    "ru": "Ты в КОМНАТЕ НАКАЗАНИЯ.\nОсталось {0} с."
+  },
+  {
+    "source": "You've eaten your own pizza.",
+    "en": "You've eaten your own pizza.",
+    "uk": "Ти з'їв свою піцу.",
+    "ru": "Ты съел свою пиццу."
+  },
+  {
+    "source": "You've eaten {0}'s pizza.",
+    "en": "You've eaten {0}'s pizza.",
+    "uk": "Ти з'їв піцу гравця {0}.",
+    "ru": "Ты съел пиццу игрока {0}.",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "You've hit your perk limit!",
+    "en": "You've hit your perk limit!",
+    "uk": "Усі слоти для перків зайняті!",
+    "ru": "Все слоты для перков заняты!"
+  },
+  {
+    "source": "Your blood feels thick—like it’s learning to clot.",
+    "en": "Your blood feels thick—like it’s learning to clot.",
+    "uk": "Кров густішає, ніби вчиться згортатися.",
+    "ru": "Кровь густеет, словно учится сворачиваться."
+  },
+  {
+    "source": "Your breath fogs—but the air is warm.",
+    "en": "Your breath fogs—but the air is warm.",
+    "uk": "Твоє дихання перетворюється на пару. Але тут тепло.",
+    "ru": "Твоё дыхание превращается в пар. Но здесь тепло."
+  },
+  {
+    "source": "Your footsteps echo with a delay too long to be real.",
+    "en": "Your footsteps echo with a delay too long to be real.",
+    "uk": "Відлуння твоїх кроків запізнюється надто сильно.",
+    "ru": "Эхо твоих шагов запаздывает слишком сильно."
+  },
+  {
+    "source": "Your grenades don't damage you. ",
+    "en": "Your grenades don't damage you. ",
+    "uk": "Твої гранати не завдають тобі шкоди. ",
+    "ru": "Твои гранаты не наносят тебе урона. "
+  },
+  {
+    "source": "Your heartbeat skips—then races to catch up with itself.",
+    "en": "Your heartbeat skips—then races to catch up with itself.",
+    "uk": "Серце пропускає удар, а потім шалено надолужує.",
+    "ru": "Сердце пропускает удар, а потом бешено наверстывает."
+  },
+  {
+    "source": "Your joints ache with a pain that feels... borrowed.",
+    "en": "Your joints ache with a pain that feels... borrowed.",
+    "uk": "Суглоби ниють. Ніби цей біль... чужий.",
+    "ru": "Суставы ноют. Будто эта боль... чужая."
+  },
+  {
+    "source": "Your limbs respond a half-second late.",
+    "en": "Your limbs respond a half-second late.",
+    "uk": "Кінцівки слухаються із затримкою в пів секунди.",
+    "ru": "Конечности слушаются с задержкой в полсекунды."
+  },
+  {
+    "source": "Your name doesn't sound right when you think it.",
+    "en": "Your name doesn't sound right when you think it.",
+    "uk": "Власне ім'я в думках звучить якось неправильно.",
+    "ru": "Собственное имя в мыслях звучит как-то неправильно."
+  },
+  {
+    "source": "Your shadow twitches a half-beat behind you.",
+    "en": "Your shadow twitches a half-beat behind you.",
+    "uk": "Твоя тінь сіпається, відстаючи на мить.",
+    "ru": "Твоя тень дёргается, отставая на мгновение."
+  },
+  {
+    "source": "Your spine tenses like it expects a snap.",
+    "en": "Your spine tenses like it expects a snap.",
+    "uk": "Хребет напружується, наче чекає хрускоту.",
+    "ru": "Позвоночник напрягается, словно ждёт хруста."
+  },
+  {
+    "source": "Your teeth itches.",
+    "en": "Your teeth itches.",
+    "uk": "У тебе сверблять зуби.",
+    "ru": "У тебя чешутся зубы."
+  },
+  {
+    "source": "Your thoughts begin to echo, as if someone else is rehearsing them.",
+    "en": "Your thoughts begin to echo, as if someone else is rehearsing them.",
+    "uk": "Твої думки відлунюють, ніби хтось репетирує їх слідом за тобою.",
+    "ru": "Твои мысли отдаются эхом, словно кто-то репетирует их следом за тобой."
+  },
+  {
+    "source": "Zombies have a chance of {0}% of infecting a human upon kill.",
+    "en": "Zombies have a chance of {0}% of infecting a human upon kill.",
+    "uk": "Коли зомбі вбиває людину, має {0}% шанс її заразити.",
+    "ru": "Когда зомби убивает человека, у него {0}% шанс её заразить."
+  },
+  {
+    "source": "{0}\nCooldown: {1}s.",
+    "en": "{0}\nCooldown: {1}s.",
+    "uk": "{0}\nВідновлення: {1} с.",
+    "ru": "{0}\nПерезарядка: {1} с."
+  },
+  {
+    "source": "{0} \nHowever, max HP is decreased by {1}%.",
+    "en": "{0} \nHowever, max HP is decreased by {1}%.",
+    "uk": "{0} \nАле максимальне HP зменшується на {1}%.",
+    "ru": "{0} \nНо максимальное HP уменьшается на {1}%."
+  },
+  {
+    "source": "{0} Cancel to abort.",
+    "en": "{0} Cancel to abort.",
+    "uk": "{0} Скасуй, щоб перервати.",
+    "ru": "{0} Отмени, чтобы прервать."
+  },
+  {
+    "source": "{0} cannot be obtained by your role!",
+    "en": "{0} cannot be obtained by your role!",
+    "uk": "Перк {0} недоступний твоїй ролі!",
+    "ru": "Перк {0} недоступен твоей роли!"
+  },
+  {
+    "source": "{0} conflicts with {1}!",
+    "en": "{0} conflicts with {1}!",
+    "uk": "Перк {0} несумісний із {1}!",
+    "ru": "Перк {0} несовместим с {1}!"
+  },
+  {
+    "source": "{0} has eaten your pizza.",
+    "en": "{0} has eaten your pizza.",
+    "uk": "Гравець {0} з'їв твою піцу.",
+    "ru": "Игрок {0} съел твою пиццу.",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Heads",
+    "en": "Heads",
+    "uk": "Орел",
+    "ru": "Орёл"
+  },
+  {
+    "source": "Tails",
+    "en": "Tails",
+    "uk": "Решка",
+    "ru": "Решка"
+  },
+  {
+    "source": "Ducks.",
+    "en": "Ducks.",
+    "uk": "Качки. Багато качок.",
+    "ru": "Утки. Много уток."
+  },
+  {
+    "source": "Unboosted.",
+    "en": "Unboosted.",
+    "uk": "Посилення скінчилося.",
+    "ru": "Усиление закончилось."
+  },
+  {
+    "source": "METHADRENALINE · Language / Мова / Язык",
+    "en": "METHADRENALINE · Language / Мова / Язык",
+    "uk": "METHADRENALINE · Language / Мова / Язык",
+    "ru": "METHADRENALINE · Language / Мова / Язык"
+  },
+  {
+    "source": "Language for perks, messages and server settings. Saved on this client.",
+    "en": "Language for perks, messages and server settings. Saved on this client.",
+    "uk": "Мова перків, повідомлень і налаштувань сервера. Зберігається на цьому клієнті.",
+    "ru": "Язык перков, сообщений и настроек сервера. Сохраняется на этом клиенте."
+  },
+  {
+    "source": "Proximity Chat",
+    "en": "Proximity Chat",
+    "uk": "Голосовий чат поруч",
+    "ru": "Голосовой чат рядом"
+  },
+  {
+    "source": "Proximity Volume Personalization",
+    "en": "Proximity Volume Personalization",
+    "uk": "Гучність окремих гравців",
+    "ru": "Громкость отдельных игроков"
+  },
+  {
+    "source": "Toggle SCP Proximity Chat",
+    "en": "Toggle SCP Proximity Chat",
+    "uk": "Перемикати локальний чат SCP",
+    "ru": "Переключать локальный чат SCP"
+  },
+  {
+    "source": "Enable/disable using Proximity Chat while you're an SCP.",
+    "en": "Enable/disable using Proximity Chat while you're an SCP.",
+    "uk": "Увімкни або вимкни свій голосовий чат поруч, коли граєш за SCP.",
+    "ru": "Включи или выключи свой голосовой чат рядом, когда играешь за SCP."
+  },
+  {
+    "source": "Input Method",
+    "en": "Input Method",
+    "uk": "Спосіб увімкнення",
+    "ru": "Способ включения"
+  },
+  {
+    "source": "Choose whether to toggle Proximity Chat by pressing the key once, or to hold the key to use Proximity Chat.",
+    "en": "Choose whether to toggle Proximity Chat by pressing the key once, or to hold the key to use Proximity Chat.",
+    "uk": "Обери: натиснути клавішу один раз для перемикання або утримувати її, поки говориш поруч.",
+    "ru": "Выбери: нажать клавишу один раз для переключения или удерживать её, пока говоришь рядом."
+  },
+  {
+    "source": "Toggle",
+    "en": "Toggle",
+    "uk": "Натискання",
+    "ru": "Нажатие"
+  },
+  {
+    "source": "Hold",
+    "en": "Hold",
+    "uk": "Утримання",
+    "ru": "Удержание"
+  },
+  {
+    "source": "Others' Proximity Chat",
+    "en": "Others' Proximity Chat",
+    "uk": "Локальний чат інших SCP",
+    "ru": "Локальный чат других SCP"
+  },
+  {
+    "source": "Enable/disable hearing others' SCP Proximity Chat.",
+    "en": "Enable/disable hearing others' SCP Proximity Chat.",
+    "uk": "Обери, чи чути інших SCP, коли вони говорять поруч.",
+    "ru": "Выбери, слышать ли других SCP, когда они говорят рядом."
+  },
+  {
+    "source": "Audible",
+    "en": "Audible",
+    "uk": "Чути",
+    "ru": "Слышно"
+  },
+  {
+    "source": "Muted",
+    "en": "Muted",
+    "uk": "Вимкнено",
+    "ru": "Выключено"
+  },
+  {
+    "source": "Personalization Visibility",
+    "en": "Personalization Visibility",
+    "uk": "Індивідуальні налаштування",
+    "ru": "Индивидуальные настройки"
+  },
+  {
+    "source": "Shown",
+    "en": "Shown",
+    "uk": "Показувати",
+    "ru": "Показывать"
+  },
+  {
+    "source": "Hidden",
+    "en": "Hidden",
+    "uk": "Приховати",
+    "ru": "Скрыть"
+  },
+  {
+    "source": "Master Volume",
+    "en": "Master Volume",
+    "uk": "Загальна гучність",
+    "ru": "Общая громкость"
+  },
+  {
+    "source": "Overall volume of SCP Proximity Chat.",
+    "en": "Overall volume of SCP Proximity Chat.",
+    "uk": "Загальна гучність локального голосового чату SCP.",
+    "ru": "Общая громкость локального голосового чата SCP."
+  },
+  {
+    "source": "Volume for: ",
+    "en": "Volume for: ",
+    "uk": "Гучність гравця: ",
+    "ru": "Громкость игрока: "
+  },
+  {
+    "source": "SCP Proximity Chat available.",
+    "en": "SCP Proximity Chat available.",
+    "uk": "Можна говорити з гравцями поруч.",
+    "ru": "Можно говорить с игроками рядом."
+  },
+  {
+    "source": "Press {0} to toggle.",
+    "en": "Press {0} to toggle.",
+    "uk": "Натисни {0}, щоб перемкнути.",
+    "ru": "Нажми {0}, чтобы переключить."
+  },
+  {
+    "source": "Press ",
+    "en": "Press ",
+    "uk": "Натисни ",
+    "ru": "Нажми "
+  },
+  {
+    "source": " to toggle.",
+    "en": " to toggle.",
+    "uk": " для перемикання.",
+    "ru": " для переключения."
+  },
+  {
+    "source": "Watching you: ({0})",
+    "en": "Watching you: ({0})",
+    "uk": "За тобою стежать: ({0})",
+    "ru": "За тобой наблюдают: ({0})"
+  },
+  {
+    "source": "За тобой смотрят: ({0})",
+    "en": "Watching you: ({0})",
+    "uk": "За тобою стежать: ({0})",
+    "ru": "За тобой наблюдают: ({0})"
+  },
+  {
+    "source": "Generators:",
+    "en": "Generators:",
+    "uk": "Генератори:",
+    "ru": "Генераторы:"
+  },
+  {
+    "source": "Warhead:",
+    "en": "Warhead:",
+    "uk": "Боєголовка:",
+    "ru": "Боеголовка:"
+  },
+  {
+    "source": "Боеголовка:",
+    "en": "Warhead:",
+    "uk": "Боєголовка:",
+    "ru": "Боеголовка:"
+  },
+  {
+    "source": "Armed",
+    "en": "Armed",
+    "uk": "Готова",
+    "ru": "Готова"
+  },
+  {
+    "source": "Not Armed",
+    "en": "Not Armed",
+    "uk": "Не готова",
+    "ru": "Не готова"
+  },
+  {
+    "source": "In Progress",
+    "en": "In Progress",
+    "uk": "Відлік",
+    "ru": "Отсчёт"
+  },
+  {
+    "source": "Detonated",
+    "en": "Detonated",
+    "uk": "Вибухнула",
+    "ru": "Взорвана"
+  },
+  {
+    "source": "Time:",
+    "en": "Time:",
+    "uk": "Час:",
+    "ru": "Время:"
+  },
+  {
+    "source": "Round Time:",
+    "en": "Round Time:",
+    "uk": "Час раунду:",
+    "ru": "Время раунда:"
+  },
+  {
+    "source": "Nick:",
+    "en": "Nick:",
+    "uk": "Нік:",
+    "ru": "Ник:"
+  },
+  {
+    "source": "Role:",
+    "en": "Role:",
+    "uk": "Роль:",
+    "ru": "Роль:"
+  },
+  {
+    "source": "Kills:",
+    "en": "Kills:",
+    "uk": "Вбивства:",
+    "ru": "Убийства:"
+  },
+  {
+    "source": "Spectating:",
+    "en": "Spectating:",
+    "uk": "Спостерігаєш за:",
+    "ru": "Наблюдаешь за:"
+  },
+  {
+    "source": "Players:",
+    "en": "Players:",
+    "uk": "Гравці:",
+    "ru": "Игроки:"
+  },
+  {
+    "source": "Spectators:",
+    "en": "Spectators:",
+    "uk": "Глядачі:",
+    "ru": "Зрители:"
+  },
+  {
+    "source": "Tutorial",
+    "en": "Tutorial",
+    "uk": "Навчальна роль",
+    "ru": "Учебная роль"
+  },
+  {
+    "source": "Class-D",
+    "en": "Class-D",
+    "uk": "D-клас",
+    "ru": "D-класс"
+  },
+  {
+    "source": "Scientist",
+    "en": "Scientist",
+    "uk": "Науковець",
+    "ru": "Учёный"
+  },
+  {
+    "source": "Facility Guard",
+    "en": "Facility Guard",
+    "uk": "Охоронець комплексу",
+    "ru": "Охранник комплекса"
+  },
+  {
+    "source": "Film Maker",
+    "en": "Film Maker",
+    "uk": "Оператор",
+    "ru": "Оператор"
+  },
+  {
+    "source": "Overwatch",
+    "en": "Overwatch",
+    "uk": "Спостерігач",
+    "ru": "Наблюдатель"
+  },
+  {
+    "source": "MTF Private",
+    "en": "MTF Private",
+    "uk": "Рядовий МОГ",
+    "ru": "Рядовой МОГ"
+  },
+  {
+    "source": "MTF Sergeant",
+    "en": "MTF Sergeant",
+    "uk": "Сержант МОГ",
+    "ru": "Сержант МОГ"
+  },
+  {
+    "source": "MTF Specialist",
+    "en": "MTF Specialist",
+    "uk": "Спеціаліст МОГ",
+    "ru": "Специалист МОГ"
+  },
+  {
+    "source": "MTF Captain",
+    "en": "MTF Captain",
+    "uk": "Капітан МОГ",
+    "ru": "Капитан МОГ"
+  },
+  {
+    "source": "CI Conscript",
+    "en": "CI Conscript",
+    "uk": "Новобранець ПХ",
+    "ru": "Новобранец ПХ"
+  },
+  {
+    "source": "CI Rifleman",
+    "en": "CI Rifleman",
+    "uk": "Стрілець ПХ",
+    "ru": "Стрелок ПХ"
+  },
+  {
+    "source": "CI Repressor",
+    "en": "CI Repressor",
+    "uk": "Кулеметник ПХ",
+    "ru": "Пулемётчик ПХ"
+  },
+  {
+    "source": "CI Marauder",
+    "en": "CI Marauder",
+    "uk": "Мародер ПХ",
+    "ru": "Мародёр ПХ"
+  },
+  {
+    "source": "Revolver",
+    "en": "Revolver",
+    "uk": "Револьвер",
+    "ru": "Револьвер"
+  },
+  {
+    "source": "Shotgun",
+    "en": "Shotgun",
+    "uk": "Дробовик",
+    "ru": "Дробовик"
+  },
+  {
+    "source": "Server Specific Settings",
+    "en": "Server Specific Settings",
+    "uk": "налаштування сервера",
+    "ru": "настройки сервера"
+  },
+  {
+    "source": "Traded {0} for {1}",
+    "en": "Traded {0} for {1}",
+    "uk": "Обміняно {0} на {1}",
+    "ru": "Обменяно {0} на {1}"
+  },
+  {
+    "source": "Trading {0} for {1}",
+    "en": "Trading {0} for {1}",
+    "uk": "Обмін: {0} на {1}",
+    "ru": "Обмен: {0} на {1}"
+  },
+  {
+    "source": "Removed {0} perks, because of role incompatibility.",
+    "en": "Removed {0} perks, because of role incompatibility.",
+    "uk": "Знято {0} перків: вони несумісні з твоєю роллю.",
+    "ru": "Снято {0} перков: они несовместимы с твоей ролью."
+  },
+  {
+    "source": "Cooldown: {0}s.",
+    "en": "Cooldown: {0}s.",
+    "uk": "Відновлення: {0} с.",
+    "ru": "Перезарядка: {0} с."
+  },
+  {
+    "source": "Cooldown:",
+    "en": "Cooldown:",
+    "uk": "Відновлення:",
+    "ru": "Перезарядка:"
+  },
+  {
+    "source": "Current Perks:",
+    "en": "Current Perks:",
+    "uk": "Твої перки:",
+    "ru": "Твои перки:"
+  },
+  {
+    "source": "Current Level:",
+    "en": "Current Level:",
+    "uk": "Поточний рівень:",
+    "ru": "Текущий уровень:"
+  },
+  {
+    "source": "Chosen:",
+    "en": "Chosen:",
+    "uk": "Обрано:",
+    "ru": "Выбрано:"
+  },
+  {
+    "source": "FacilityManagement permission required.",
+    "en": "FacilityManagement permission required.",
+    "uk": "Потрібне право FacilityManagement.",
+    "ru": "Нужно право FacilityManagement."
+  },
+  {
+    "source": "METHADRENALINE is disabled.",
+    "en": "METHADRENALINE is disabled.",
+    "uk": "Плагін METHADRENALINE вимкнено.",
+    "ru": "Плагин METHADRENALINE выключен."
+  },
+  {
+    "source": "Localization is disabled.",
+    "en": "Localization is disabled.",
+    "uk": "Локалізацію вимкнено.",
+    "ru": "Локализация выключена."
+  },
+  {
+    "source": "SwiftKraft's Arcade Mode",
+    "en": "SwiftKraft's Arcade Mode",
+    "uk": "Аркадний режим SwiftKraft",
+    "ru": "Аркадный режим SwiftKraft"
+  },
+  {
+    "source": "Swift Arcade Mode",
+    "en": "Swift Arcade Mode",
+    "uk": "Аркадний режим Swift",
+    "ru": "Аркадный режим Swift"
+  },
+  {
+    "source": "SCPSL Arcade Mode",
+    "en": "SCPSL Arcade Mode",
+    "uk": "Аркадний режим SCP: SL",
+    "ru": "Аркадный режим SCP: SL"
+  },
+  {
+    "source": "Watching you:",
+    "en": "Watching you:",
+    "uk": "За тобою стежать:",
+    "ru": "За тобой наблюдают:"
+  },
+  {
+    "source": "\"{0}\" is not a valid argument! The value should be a {1} type.",
+    "en": "\"{0}\" is not a valid argument! The value should be a {1} type.",
+    "uk": "«{0}» — неправильний аргумент. Потрібне значення типу {1}.",
+    "ru": "«{0}» — неверный аргумент. Нужно значение типа {1}.",
+    "verbatim": [
+      0,
+      1
+    ]
+  },
+  {
+    "source": "<color=green>(loaded, saved)</color>",
+    "en": "<color=green>(loaded, saved)</color>",
+    "uk": "<color=green>(завантажено, збережено)</color>",
+    "ru": "<color=green>(загружено, сохранено)</color>"
+  },
+  {
+    "source": "<color=green><b>List of maps:</b></color>",
+    "en": "<color=green><b>List of maps:</b></color>",
+    "uk": "<color=green><b>Карти:</b></color>",
+    "ru": "<color=green><b>Карты:</b></color>"
+  },
+  {
+    "source": "<color=green>CREATE</color>\n<color=yellow>{0}</color>",
+    "en": "<color=green>CREATE</color>\n<color=yellow>{0}</color>",
+    "uk": "<color=green>СТВОРИТИ</color>\n<color=yellow>{0}</color>",
+    "ru": "<color=green>СОЗДАТЬ</color>\n<color=yellow>{0}</color>"
+  },
+  {
+    "source": "<color=orange><b>List of schematics:</b></color>",
+    "en": "<color=orange><b>List of schematics:</b></color>",
+    "uk": "<color=orange><b>Схеми:</b></color>",
+    "ru": "<color=orange><b>Схемы:</b></color>"
+  },
+  {
+    "source": "<color=red>(loaded, not saved)</color>",
+    "en": "<color=red>(loaded, not saved)</color>",
+    "uk": "<color=red>(завантажено, не збережено)</color>",
+    "ru": "<color=red>(загружено, не сохранено)</color>"
+  },
+  {
+    "source": "<color=red>DELETE</color>\n<color=yellow>{0}</color>",
+    "en": "<color=red>DELETE</color>\n<color=yellow>{0}</color>",
+    "uk": "<color=red>ВИДАЛИТИ</color>\n<color=yellow>{0}</color>",
+    "ru": "<color=red>УДАЛИТЬ</color>\n<color=yellow>{0}</color>"
+  },
+  {
+    "source": "<color=yellow>SELECT</color>\n<color=yellow>{0}</color>",
+    "en": "<color=yellow>SELECT</color>\n<color=yellow>{0}</color>",
+    "uk": "<color=yellow>ОБРАТИ</color>\n<color=yellow>{0}</color>",
+    "ru": "<color=yellow>ВЫБРАТЬ</color>\n<color=yellow>{0}</color>"
+  },
+  {
+    "source": "<size=50%>MapName: {0}</size>",
+    "en": "<size=50%>MapName: {0}</size>",
+    "uk": "<size=50%>Карта: {0}</size>",
+    "ru": "<size=50%>Карта: {0}</size>"
+  },
+  {
+    "source": "Allows modifying properties of the selected object.",
+    "en": "Allows modifying properties of the selected object.",
+    "uk": "Змінити властивості обраного об'єкта.",
+    "ru": "Изменить свойства выбранного объекта."
+  },
+  {
+    "source": "Brings an object to player's position.",
+    "en": "Brings an object to player's position.",
+    "uk": "Перенести об'єкт до гравця.",
+    "ru": "Перенести объект к игроку."
+  },
+  {
+    "source": "Couldn't find a valid surface on which the object could be spawned!",
+    "en": "Couldn't find a valid surface on which the object could be spawned!",
+    "uk": "Не вдалося знайти поверхню для розміщення об'єкта!",
+    "ru": "Не удалось найти поверхность для размещения объекта!"
+  },
+  {
+    "source": "Creates a selected object at the point you are looking at.",
+    "en": "Creates a selected object at the point you are looking at.",
+    "uk": "Створити обраний об'єкт у точці, куди ти дивишся.",
+    "ru": "Создать выбранный объект в точке, куда ты смотришь."
+  },
+  {
+    "source": "Custom Text",
+    "en": "Custom Text",
+    "uk": "Власний текст",
+    "ru": "Свой текст"
+  },
+  {
+    "source": "Deletes the object which you are looking at.",
+    "en": "Deletes the object which you are looking at.",
+    "uk": "Видалити об'єкт, на який ти дивишся.",
+    "ru": "Удалить объект, на который ты смотришь."
+  },
+  {
+    "source": "ERROR: Check server console",
+    "en": "ERROR: Check server console",
+    "uk": "ПОМИЛКА: подробиці в консолі сервера.",
+    "ru": "ОШИБКА: подробности в консоли сервера."
+  },
+  {
+    "source": "Failed to load map data: File {0}.yml does not exist!",
+    "en": "Failed to load map data: File {0}.yml does not exist!",
+    "uk": "Не вдалося завантажити карту: файла {0}.yml немає!",
+    "ru": "Не удалось загрузить карту: файла {0}.yml нет!",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Failed to load map data: File {0}.yml has YAML errors!\n{1}",
+    "en": "Failed to load map data: File {0}.yml has YAML errors!\n{1}",
+    "uk": "Не вдалося завантажити карту: помилки YAML у {0}.yml!\n{1}",
+    "ru": "Не удалось загрузить карту: ошибки YAML в {0}.yml!\n{1}",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Failed to load schematic data: Directory {0} does not exist!",
+    "en": "Failed to load schematic data: Directory {0} does not exist!",
+    "uk": "Не вдалося завантажити схему: папки {0} немає!",
+    "ru": "Не удалось загрузить схему: папки {0} нет!",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Failed to load schematic data: File {0}.json does not exist!",
+    "en": "Failed to load schematic data: File {0}.json does not exist!",
+    "uk": "Не вдалося завантажити схему: файла {0}.json немає!",
+    "ru": "Не удалось загрузить схему: файла {0}.json нет!",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Failed to load schematic data: File {0}.json has JSON errors!\n{1}",
+    "en": "Failed to load schematic data: File {0}.json has JSON errors!\n{1}",
+    "uk": "Не вдалося завантажити схему: помилки JSON у {0}.json!\n{1}",
+    "ru": "Не удалось загрузить схему: ошибки JSON в {0}.json!\n{1}",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Grabs an object.",
+    "en": "Grabs an object.",
+    "uk": "Взяти об'єкт для переміщення.",
+    "ru": "Взять объект для перемещения."
+  },
+  {
+    "source": "Indicators have been shown!",
+    "en": "Indicators have been shown!",
+    "uk": "Індикатори показано!",
+    "ru": "Индикаторы показаны!"
+  },
+  {
+    "source": "Invalid arguments! Use add/remove.",
+    "en": "Invalid arguments! Use add/remove.",
+    "uk": "Неправильні аргументи. Використай add або remove.",
+    "ru": "Неверные аргументы. Используй add или remove."
+  },
+  {
+    "source": "Invalid arguments. Usage: mp create <object> <posX> <posY> <posZ>",
+    "en": "Invalid arguments. Usage: mp create <object> <posX> <posY> <posZ>",
+    "uk": "Неправильні аргументи. Формат: mp create <object> <posX> <posY> <posZ>",
+    "ru": "Неверные аргументы. Формат: mp create <object> <posX> <posY> <posZ>"
+  },
+  {
+    "source": "Invalid arguments. Usage: mp create <object> optionally: <posX> <posY> <posZ>",
+    "en": "Invalid arguments. Usage: mp create <object> optionally: <posX> <posY> <posZ>",
+    "uk": "Неправильні аргументи. Формат: mp create <object>, за бажанням додай <posX> <posY> <posZ>",
+    "ru": "Неверные аргументы. Формат: mp create <object>, по желанию добавь <posX> <posY> <posZ>"
+  },
+  {
+    "source": "Invalid values.",
+    "en": "Invalid values.",
+    "uk": "Неправильні значення.",
+    "ru": "Неверные значения."
+  },
+  {
+    "source": "List of all spawnable objects:",
+    "en": "List of all spawnable objects:",
+    "uk": "Об'єкти, які можна створити:",
+    "ru": "Объекты, которые можно создать:"
+  },
+  {
+    "source": "Loads a map",
+    "en": "Loads a map",
+    "uk": "Завантажити карту.",
+    "ru": "Загрузить карту."
+  },
+  {
+    "source": "Map named {0} does not exist or is invalid!",
+    "en": "Map named {0} does not exist or is invalid!",
+    "uk": "Карти {0} немає або вона містить помилки!",
+    "ru": "Карты {0} нет или она содержит ошибки!",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Map named {0} has been successfully saved!",
+    "en": "Map named {0} has been successfully saved!",
+    "uk": "Карту {0} збережено!",
+    "ru": "Карта {0} сохранена!",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "MapName: {0}",
+    "en": "MapName: {0}",
+    "uk": "Карта: {0}",
+    "ru": "Карта: {0}",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Merges two or more maps into one.",
+    "en": "Merges two or more maps into one.",
+    "uk": "Об'єднати дві чи більше карт в одну.",
+    "ru": "Объединить две или больше карт в одну."
+  },
+  {
+    "source": "Modifies object's posistion.",
+    "en": "Modifies object's posistion.",
+    "uk": "Змінити позицію об'єкта.",
+    "ru": "Изменить позицию объекта."
+  },
+  {
+    "source": "Modifies object's rotation.",
+    "en": "Modifies object's rotation.",
+    "uk": "Змінити поворот об'єкта.",
+    "ru": "Изменить поворот объекта."
+  },
+  {
+    "source": "Modifies object's scale.",
+    "en": "Modifies object's scale.",
+    "uk": "Змінити розмір об'єкта.",
+    "ru": "Изменить размер объекта."
+  },
+  {
+    "source": "Not enough arguments!",
+    "en": "Not enough arguments!",
+    "uk": "Бракує аргументів!",
+    "ru": "Не хватает аргументов!"
+  },
+  {
+    "source": "Object properties:",
+    "en": "Object properties:",
+    "uk": "Властивості об'єкта:",
+    "ru": "Свойства объекта:"
+  },
+  {
+    "source": "Please enter a valid subcommand:",
+    "en": "Please enter a valid subcommand:",
+    "uk": "Введи одну з доступних підкоманд:",
+    "ru": "Введи одну из доступных подкоманд:"
+  },
+  {
+    "source": "Please select schematic in options",
+    "en": "Please select schematic in options",
+    "uk": "Спочатку обери схему в налаштуваннях.",
+    "ru": "Сначала выбери схему в настройках."
+  },
+  {
+    "source": "Removed all indicators!",
+    "en": "Removed all indicators!",
+    "uk": "Усі індикатори прибрано!",
+    "ru": "Все индикаторы убраны!"
+  },
+  {
+    "source": "Saves a map",
+    "en": "Saves a map",
+    "uk": "Зберегти карту.",
+    "ru": "Сохранить карту."
+  },
+  {
+    "source": "Schematic Name",
+    "en": "Schematic Name",
+    "uk": "Назва схеми",
+    "ru": "Название схемы"
+  },
+  {
+    "source": "Selects the object which you are looking at.",
+    "en": "Selects the object which you are looking at.",
+    "uk": "Обрати об'єкт, на який ти дивишся.",
+    "ru": "Выбрать объект, на который ты смотришь."
+  },
+  {
+    "source": "Shows indicators for invisible objects.",
+    "en": "Shows indicators for invisible objects.",
+    "uk": "Показати індикатори невидимих об'єктів.",
+    "ru": "Показать индикаторы невидимых объектов."
+  },
+  {
+    "source": "Shows the list of all available maps.",
+    "en": "Shows the list of all available maps.",
+    "uk": "Показати всі доступні карти.",
+    "ru": "Показать все доступные карты."
+  },
+  {
+    "source": "The MapEditorReborn parent command",
+    "en": "The MapEditorReborn parent command",
+    "uk": "Основна команда редактора карт.",
+    "ru": "Основная команда редактора карт."
+  },
+  {
+    "source": "There isn't any object property that contains \"{0}\" in it's name!",
+    "en": "There isn't any object property that contains \"{0}\" in it's name!",
+    "uk": "Немає властивостей об'єкта, назва яких містить «{0}»!",
+    "ru": "Нет свойств объекта, в названии которых есть «{0}»!",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "This ID is already used by an other object!",
+    "en": "This ID is already used by an other object!",
+    "uk": "Цей ID вже належить іншому об'єкту!",
+    "ru": "Этот ID уже принадлежит другому объекту!"
+  },
+  {
+    "source": "This command can't be run from the server console.",
+    "en": "This command can't be run from the server console.",
+    "uk": "Цю команду не можна виконати з консолі сервера.",
+    "ru": "Эту команду нельзя выполнить из консоли сервера."
+  },
+  {
+    "source": "This map name is reserved for internal use!",
+    "en": "This map name is reserved for internal use!",
+    "uk": "Цю назву карти зарезервовано для внутрішніх потреб!",
+    "ru": "Это название карты зарезервировано для внутренних нужд!"
+  },
+  {
+    "source": "This object is already a part of this map!",
+    "en": "This object is already a part of this map!",
+    "uk": "Цей об'єкт уже належить цій карті!",
+    "ru": "Этот объект уже принадлежит этой карте!"
+  },
+  {
+    "source": "To spawn a custom schematic, please use it's file name as an argument.",
+    "en": "To spawn a custom schematic, please use it's file name as an argument.",
+    "uk": "Щоб створити власну схему, вкажи назву її файла.",
+    "ru": "Чтобы создать свою схему, укажи название её файла."
+  },
+  {
+    "source": "Tool gun for spawning and editing objects.",
+    "en": "Tool gun for spawning and editing objects.",
+    "uk": "Інструмент для створення та редагування об'єктів.",
+    "ru": "Инструмент для создания и редактирования объектов."
+  },
+  {
+    "source": "Unable to find object with ID of {0}!",
+    "en": "Unable to find object with ID of {0}!",
+    "uk": "Об'єкт з ID {0} не знайдено!",
+    "ru": "Объект с ID {0} не найден!",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Unknown action: {0}",
+    "en": "Unknown action: {0}",
+    "uk": "Невідома дія: {0}",
+    "ru": "Неизвестное действие: {0}",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Unload {0} map!",
+    "en": "Unload {0} map!",
+    "uk": "Карту {0} вивантажено!",
+    "ru": "Карта {0} выгружена!",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Unloaded all maps!",
+    "en": "Unloaded all maps!",
+    "uk": "Усі карти вивантажено!",
+    "ru": "Все карты выгружены!"
+  },
+  {
+    "source": "Unloads a map",
+    "en": "Unloads a map",
+    "uk": "Вивантажити карту.",
+    "ru": "Выгрузить карту."
+  },
+  {
+    "source": "You don't have permission to execute this command. Required permission: mpr.position",
+    "en": "You don't have permission to execute this command. Required permission: mpr.position",
+    "uk": "Недостатньо прав. Потрібне право: mpr.position",
+    "ru": "Недостаточно прав. Нужно право: mpr.position"
+  },
+  {
+    "source": "You don't have permission to execute this command. Required permission: mpr.rotation",
+    "en": "You don't have permission to execute this command. Required permission: mpr.rotation",
+    "uk": "Недостатньо прав. Потрібне право: mpr.rotation",
+    "ru": "Недостаточно прав. Нужно право: mpr.rotation"
+  },
+  {
+    "source": "You don't have permission to execute this command. Required permission: mpr.scale",
+    "en": "You don't have permission to execute this command. Required permission: mpr.scale",
+    "uk": "Недостатньо прав. Потрібне право: mpr.scale",
+    "ru": "Недостаточно прав. Нужно право: mpr.scale"
+  },
+  {
+    "source": "You don't have permission to execute this command. Required permission: mpr.{0}",
+    "en": "You don't have permission to execute this command. Required permission: mpr.{0}",
+    "uk": "Недостатньо прав. Потрібне право: mpr.{0}",
+    "ru": "Недостаточно прав. Нужно право: mpr.{0}",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "You have a full inventory!",
+    "en": "You have a full inventory!",
+    "uk": "Інвентар заповнений!",
+    "ru": "Инвентарь заполнен!"
+  },
+  {
+    "source": "You haven't selected any object!",
+    "en": "You haven't selected any object!",
+    "uk": "Ти ще не обрав об'єкт!",
+    "ru": "Ты ещё не выбрал объект!"
+  },
+  {
+    "source": "You need to provide a map name!",
+    "en": "You need to provide a map name!",
+    "uk": "Вкажи назву карти!",
+    "ru": "Укажи название карты!"
+  },
+  {
+    "source": "You need to provide a string value!",
+    "en": "You need to provide a string value!",
+    "uk": "Потрібне текстове значення!",
+    "ru": "Нужно текстовое значение!"
+  },
+  {
+    "source": "You need to provide a {0} value!",
+    "en": "You need to provide a {0} value!",
+    "uk": "Потрібне значення типу {0}!",
+    "ru": "Нужно значение типа {0}!",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "You need to select an object first!",
+    "en": "You need to select an object first!",
+    "uk": "Спочатку обери об'єкт!",
+    "ru": "Сначала выбери объект!"
+  },
+  {
+    "source": "You no longer have a Tool Gun!",
+    "en": "You no longer have a Tool Gun!",
+    "uk": "Інструмент редактора прибрано!",
+    "ru": "Инструмент редактора убран!"
+  },
+  {
+    "source": "You now have the Tool Gun!",
+    "en": "You now have the Tool Gun!",
+    "uk": "Ти отримуєш інструмент редактора!",
+    "ru": "Ты получаешь инструмент редактора!"
+  },
+  {
+    "source": "You've successfully deleted the object!",
+    "en": "You've successfully deleted the object!",
+    "uk": "Об'єкт видалено!",
+    "ru": "Объект удалён!"
+  },
+  {
+    "source": "You've successfully merged {0} maps into one!",
+    "en": "You've successfully merged {0} maps into one!",
+    "uk": "Об'єднано карт: {0}!",
+    "ru": "Объединено карт: {0}!"
+  },
+  {
+    "source": "You've successfully modified the object!",
+    "en": "You've successfully modified the object!",
+    "uk": "Об'єкт змінено!",
+    "ru": "Объект изменён!"
+  },
+  {
+    "source": "You've successfully modified the object's ID!",
+    "en": "You've successfully modified the object's ID!",
+    "uk": "ID об'єкта змінено!",
+    "ru": "ID объекта изменён!"
+  },
+  {
+    "source": "You've successfully modified the object's map!",
+    "en": "You've successfully modified the object's map!",
+    "uk": "Об'єкт перенесено на іншу карту!",
+    "ru": "Объект перенесён на другую карту!"
+  },
+  {
+    "source": "You've successfully selected the object!",
+    "en": "You've successfully selected the object!",
+    "uk": "Об'єкт обрано!",
+    "ru": "Объект выбран!"
+  },
+  {
+    "source": "You've successfully unselected the object!",
+    "en": "You've successfully unselected the object!",
+    "uk": "Вибір об'єкта скасовано!",
+    "ru": "Выбор объекта отменён!"
+  },
+  {
+    "source": "{0} has been successfully spawned!",
+    "en": "{0} has been successfully spawned!",
+    "uk": "Об'єкт {0} створено!",
+    "ru": "Объект {0} создан!",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "{0} map has been loaded!",
+    "en": "{0} map has been loaded!",
+    "uk": "Карту {0} завантажено!",
+    "ru": "Карта {0} загружена!",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Access is denied. Use the \"chmodFFmpeg\" command to make it executable.",
+    "en": "Access is denied. Use the \"chmodFFmpeg\" command to make it executable.",
+    "uk": "Доступ заборонено. Команда «chmodFFmpeg» зробить файл виконуваним.",
+    "ru": "Доступ запрещён. Команда «chmodFFmpeg» сделает файл исполняемым."
+  },
+  {
+    "source": "Access to the executable was denied.",
+    "en": "Access to the executable was denied.",
+    "uk": "Доступ до виконуваного файла заборонено.",
+    "ru": "Доступ к исполняемому файлу запрещён."
+  },
+  {
+    "source": "DJ#Board is not set up!",
+    "en": "DJ#Board is not set up!",
+    "uk": "DJ#Аудіопульт ще не налаштований!",
+    "ru": "DJ#Аудиопульт ещё не настроен!"
+  },
+  {
+    "source": "Board is not set up!",
+    "en": "Board is not set up!",
+    "uk": "Аудіопульт ще не налаштований!",
+    "ru": "Аудиопульт ещё не настроен!"
+  },
+  {
+    "source": "DJ#Failed to create audio stream!",
+    "en": "DJ#Failed to create audio stream!",
+    "uk": "DJ#Не вдалося створити аудіопотік!",
+    "ru": "DJ#Не удалось создать аудиопоток!"
+  },
+  {
+    "source": "Failed to create audio stream!",
+    "en": "Failed to create audio stream!",
+    "uk": "Не вдалося створити аудіопотік!",
+    "ru": "Не удалось создать аудиопоток!"
+  },
+  {
+    "source": "DJ#File does not exist!",
+    "en": "DJ#File does not exist!",
+    "uk": "DJ#Файла немає!",
+    "ru": "DJ#Файла нет!"
+  },
+  {
+    "source": "File does not exist!",
+    "en": "File does not exist!",
+    "uk": "Файла немає!",
+    "ru": "Файла нет!"
+  },
+  {
+    "source": "FFmpeg encountered an error: {0}",
+    "en": "FFmpeg encountered an error: {0}",
+    "uk": "Помилка FFmpeg: {0}",
+    "ru": "Ошибка FFmpeg: {0}"
+  },
+  {
+    "source": "FFmpeg failed to start: {0}",
+    "en": "FFmpeg failed to start: {0}",
+    "uk": "Не вдалося запустити FFmpeg: {0}",
+    "ru": "Не удалось запустить FFmpeg: {0}"
+  },
+  {
+    "source": "FFmpeg installation failed due to a network error:\n{0}",
+    "en": "FFmpeg installation failed due to a network error:\n{0}",
+    "uk": "Не вдалося встановити FFmpeg через помилку мережі:\n{0}",
+    "ru": "Не удалось установить FFmpeg из-за ошибки сети:\n{0}"
+  },
+  {
+    "source": "FFmpeg installation failed:\n{0}",
+    "en": "FFmpeg installation failed:\n{0}",
+    "uk": "Не вдалося встановити FFmpeg:\n{0}",
+    "ru": "Не удалось установить FFmpeg:\n{0}"
+  },
+  {
+    "source": "FFmpeg installed successfully",
+    "en": "FFmpeg installed successfully",
+    "uk": "FFmpeg встановлено.",
+    "ru": "FFmpeg установлен."
+  },
+  {
+    "source": "FFmpeg is already installed.",
+    "en": "FFmpeg is already installed.",
+    "uk": "FFmpeg вже встановлений.",
+    "ru": "FFmpeg уже установлен."
+  },
+  {
+    "source": "FFmpeg not found. Check your configuration, or use the \"installFFmpeg\" command to install FFmpeg.",
+    "en": "FFmpeg not found. Check your configuration, or use the \"installFFmpeg\" command to install FFmpeg.",
+    "uk": "FFmpeg не знайдено. Перевір налаштування або виконай «installFFmpeg».",
+    "ru": "FFmpeg не найден. Проверь настройки или выполни «installFFmpeg»."
+  },
+  {
+    "source": "FFmpeg was not found.",
+    "en": "FFmpeg was not found.",
+    "uk": "FFmpeg не знайдено.",
+    "ru": "FFmpeg не найден."
+  },
+  {
+    "source": "Failed to play {0}",
+    "en": "Failed to play {0}",
+    "uk": "Не вдалося відтворити {0}",
+    "ru": "Не удалось воспроизвести {0}",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Grab Slider",
+    "en": "Grab Slider",
+    "uk": "Повзунок захоплення",
+    "ru": "Ползунок захвата"
+  },
+  {
+    "source": "Input must be specified",
+    "en": "Input must be specified",
+    "uk": "Потрібно вказати джерело.",
+    "ru": "Нужно указать источник."
+  },
+  {
+    "source": "Input must not include quotation marks",
+    "en": "Input must not include quotation marks",
+    "uk": "Джерело не має містити лапок.",
+    "ru": "Источник не должен содержать кавычек."
+  },
+  {
+    "source": "Installation is already in progress.",
+    "en": "Installation is already in progress.",
+    "uk": "Встановлення вже триває.",
+    "ru": "Установка уже идёт."
+  },
+  {
+    "source": "Installation started.",
+    "en": "Installation started.",
+    "uk": "Встановлення розпочато.",
+    "ru": "Установка началась."
+  },
+  {
+    "source": "Installs FFmpeg",
+    "en": "Installs FFmpeg",
+    "uk": "Встановити FFmpeg.",
+    "ru": "Установить FFmpeg."
+  },
+  {
+    "source": "Makes FFmpeg executable (Linux only)",
+    "en": "Makes FFmpeg executable (Linux only)",
+    "uk": "Дозволити запуск FFmpeg (лише Linux).",
+    "ru": "Разрешить запуск FFmpeg (только Linux)."
+  },
+  {
+    "source": "Output must be specified",
+    "en": "Output must be specified",
+    "uk": "Потрібно вказати вихідний файл.",
+    "ru": "Нужно указать выходной файл."
+  },
+  {
+    "source": "Output must not include quotation marks",
+    "en": "Output must not include quotation marks",
+    "uk": "Шлях до вихідного файла не має містити лапок.",
+    "ru": "Путь к выходному файлу не должен содержать кавычек."
+  },
+  {
+    "source": "Successfully made FFmpeg executable.",
+    "en": "Successfully made FFmpeg executable.",
+    "uk": "Запуск FFmpeg дозволено.",
+    "ru": "Запуск FFmpeg разрешён."
+  },
+  {
+    "source": "The configured FFmpeg installation cannot be found! {0}",
+    "en": "The configured FFmpeg installation cannot be found! {0}",
+    "uk": "Не вдалося знайти FFmpeg за вказаним шляхом! {0}",
+    "ru": "Не удалось найти FFmpeg по указанному пути! {0}",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "The configured FFmpeg installation cannot be launched because access is denied. Use the \"chmodFFmpeg\" command to make it executable.",
+    "en": "The configured FFmpeg installation cannot be launched because access is denied. Use the \"chmodFFmpeg\" command to make it executable.",
+    "uk": "Запуск FFmpeg за вказаним шляхом заборонено. Виконай «chmodFFmpeg».",
+    "ru": "Запуск FFmpeg по указанному пути запрещён. Выполни «chmodFFmpeg»."
+  },
+  {
+    "source": "The configured FFmpeg installation does not exist or is not a file that can be made executable.",
+    "en": "The configured FFmpeg installation does not exist or is not a file that can be made executable.",
+    "uk": "За вказаним шляхом немає файла FFmpeg, якому можна дозволити запуск.",
+    "ru": "По указанному пути нет файла FFmpeg, которому можно разрешить запуск."
+  },
+  {
+    "source": "The configured FFmpeg installation doesn't exist or isn't an FFmpeg executable! {0}",
+    "en": "The configured FFmpeg installation doesn't exist or isn't an FFmpeg executable! {0}",
+    "uk": "За вказаним шляхом немає робочого FFmpeg! {0}",
+    "ru": "По указанному пути нет рабочего FFmpeg! {0}",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "The operation was canceled.",
+    "en": "The operation was canceled.",
+    "uk": "Операцію скасовано.",
+    "ru": "Операция отменена."
+  },
+  {
+    "source": "The specified file was not found. File: {0}",
+    "en": "The specified file was not found. File: {0}",
+    "uk": "Файл не знайдено: {0}",
+    "ru": "Файл не найден: {0}",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "The specified input source was invalid. Input: {0}",
+    "en": "The specified input source was invalid. Input: {0}",
+    "uk": "Неправильне джерело: {0}",
+    "ru": "Неверный источник: {0}",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "This command is only available on Linux.",
+    "en": "This command is only available on Linux.",
+    "uk": "Ця команда доступна лише в Linux.",
+    "ru": "Эта команда доступна только в Linux."
+  },
+  {
+    "source": "Use the \"installFFmpeg\" command to install FFmpeg.",
+    "en": "Use the \"installFFmpeg\" command to install FFmpeg.",
+    "uk": "Виконай «installFFmpeg», щоб встановити FFmpeg.",
+    "ru": "Выполни «installFFmpeg», чтобы установить FFmpeg."
+  },
+  {
+    "source": "Use the DJ command",
+    "en": "Use the DJ command",
+    "uk": "Використай команду DJ.",
+    "ru": "Используй команду DJ."
+  },
+  {
+    "source": "Use {0} instead.",
+    "en": "Use {0} instead.",
+    "uk": "Замість цього використай {0}.",
+    "ru": "Вместо этого используй {0}."
+  },
+  {
+    "source": "Proximity Chat disabled.",
+    "en": "Proximity Chat disabled.",
+    "uk": "Голосовий чат поруч вимкнено.",
+    "ru": "Голосовой чат рядом выключен."
+  },
+  {
+    "source": "Proximity Chat enabled.",
+    "en": "Proximity Chat enabled.",
+    "uk": "Голосовий чат поруч увімкнено.",
+    "ru": "Голосовой чат рядом включён."
+  },
+  {
+    "source": "Volume for: {0}",
+    "en": "Volume for: {0}",
+    "uk": "Гучність гравця: {0}",
+    "ru": "Громкость игрока: {0}"
+  },
+  {
+    "source": "<size=28><b>{0}</b></size>\n{1}",
+    "en": "<size=28><b>{0}</b></size>\n{1}",
+    "uk": "<size=28><b>{0}</b></size>\n{1}",
+    "ru": "<size=28><b>{0}</b></size>\n{1}"
+  },
+  {
+    "source": "<size=36>{0}\n</size><size=24>{1}</size>",
+    "en": "<size=36>{0}\n</size><size=24>{1}</size>",
+    "uk": "<size=36>{0}\n</size><size=24>{1}</size>",
+    "ru": "<size=36>{0}\n</size><size=24>{1}</size>"
+  },
+  {
+    "source": "<align=\"left\">{0}</align>",
+    "en": "<align=\"left\">{0}</align>",
+    "uk": "<align=\"left\">{0}</align>",
+    "ru": "<align=\"left\">{0}</align>"
+  },
+  {
+    "source": "Usage:",
+    "en": "Usage:",
+    "uk": "Формат:",
+    "ru": "Формат:"
+  },
+  {
+    "source": "(unloaded)",
+    "en": "(unloaded)",
+    "uk": "(не завантажено)",
+    "ru": "(не загружено)"
+  },
+  {
+    "source": "Grabbed",
+    "en": "Grabbed",
+    "uk": "Об'єкт у руках",
+    "ru": "Объект в руках"
+  },
+  {
+    "source": "Ungrabbed",
+    "en": "Ungrabbed",
+    "uk": "Об'єкт відпущено",
+    "ru": "Объект отпущен"
+  },
+  {
+    "source": "MapName:",
+    "en": "MapName:",
+    "uk": "Карта:",
+    "ru": "Карта:"
+  },
+  {
+    "source": "List of maps:",
+    "en": "List of maps:",
+    "uk": "Карти:",
+    "ru": "Карты:"
+  },
+  {
+    "source": "List of schematics:",
+    "en": "List of schematics:",
+    "uk": "Схеми:",
+    "ru": "Схемы:"
+  },
+  {
+    "source": "CREATE",
+    "en": "CREATE",
+    "uk": "СТВОРИТИ",
+    "ru": "СОЗДАТЬ"
+  },
+  {
+    "source": "DELETE",
+    "en": "DELETE",
+    "uk": "ВИДАЛИТИ",
+    "ru": "УДАЛИТЬ"
+  },
+  {
+    "source": "SELECT",
+    "en": "SELECT",
+    "uk": "ОБРАТИ",
+    "ru": "ВЫБРАТЬ"
+  },
+  {
+    "source": "A facility event is already active or the director is disabled.",
+    "en": "A facility event is already active or the director is disabled.",
+    "uk": "Подія вже триває або систему подій вимкнено.",
+    "ru": "Событие уже идёт или система событий выключена."
+  },
+  {
+    "source": "Chaos requires an eligible active round and an unused round budget.",
+    "en": "Chaos requires an eligible active round and an unused round budget.",
+    "uk": "Хаос доступний під час раунду, якщо виконані умови й залишилися події на цей раунд.",
+    "ru": "Хаос доступен во время раунда, если выполнены условия и остались события на этот раунд."
+  },
+  {
+    "source": "Chaos bundle failed and was rolled back: ",
+    "en": "Chaos bundle failed and was rolled back: ",
+    "uk": "Хаос не запустився, зміни скасовано: ",
+    "ru": "Хаос не запустился, изменения отменены: "
+  },
+  {
+    "source": "Started chaos bundle; ",
+    "en": "Started chaos bundle; ",
+    "uk": "Хаос розпочато; ",
+    "ru": "Хаос начался; "
+  },
+  {
+    "source": "The director is disabled.",
+    "en": "The director is disabled.",
+    "uk": "Систему подій вимкнено.",
+    "ru": "Система событий выключена."
+  },
+  {
+    "source": "Event limit reached, duplicate event, or conflicting gravity event.",
+    "en": "Event limit reached, duplicate event, or conflicting gravity event.",
+    "uk": "Досягнуто ліміту подій, така подія вже триває або конфліктують ефекти гравітації.",
+    "ru": "Достигнут лимит событий, такое событие уже идёт или конфликтуют эффекты гравитации."
+  },
+  {
+    "source": "Events require an active round and a resumed director.",
+    "en": "Events require an active round and a resumed director.",
+    "uk": "Потрібен активний раунд і ввімкнена система подій.",
+    "ru": "Нужен активный раунд и включённая система событий."
+  },
+  {
+    "source": "Events are suspended during warhead evacuation.",
+    "en": "Events are suspended during warhead evacuation.",
+    "uk": "Під час евакуації перед вибухом боєголовки події призупинені.",
+    "ru": "Во время эвакуации перед взрывом боеголовки события приостановлены."
+  },
+  {
+    "source": "No occupied indoor area is available.",
+    "en": "No occupied indoor area is available.",
+    "uk": "Усередині комплексу немає гравців для цієї події.",
+    "ru": "Внутри комплекса нет игроков для этого события."
+  },
+  {
+    "source": "Event failed; its mutations were rolled back. Other events are unchanged.",
+    "en": "Event failed; its mutations were rolled back. Other events are unchanged.",
+    "uk": "Подія завершилася з помилкою, її зміни скасовано. Інші події тривають.",
+    "ru": "Событие завершилось с ошибкой, его изменения отменены. Другие события продолжаются."
+  },
+  {
+    "source": "Events: ",
+    "en": "Events: ",
+    "uk": "Події: ",
+    "ru": "События: "
+  },
+  {
+    "source": "Facility events: status, event <name>, stop, pause, resume, diagnose, localization.",
+    "en": "Facility events: status, event <name>, stop, pause, resume, diagnose, localization.",
+    "uk": "Події комплексу: status, event <name>, stop, pause, resume, diagnose, localization.",
+    "ru": "События комплекса: status, event <name>, stop, pause, resume, diagnose, localization."
+  },
+  {
+    "source": "Medkit",
+    "en": "Medkit",
+    "uk": "Аптечка",
+    "ru": "Аптечка"
+  },
+  {
+    "source": "Painkillers",
+    "en": "Painkillers",
+    "uk": "Знеболювальне",
+    "ru": "Обезболивающее"
+  },
+  {
+    "source": "Adrenaline",
+    "en": "Adrenaline",
+    "uk": "Адреналін",
+    "ru": "Адреналин"
+  },
+  {
+    "source": "Radio",
+    "en": "Radio",
+    "uk": "Рація",
+    "ru": "Рация"
+  },
+  {
+    "source": "Flashlight",
+    "en": "Flashlight",
+    "uk": "Ліхтарик",
+    "ru": "Фонарик"
+  },
+  {
+    "source": "Coin",
+    "en": "Coin",
+    "uk": "Монета",
+    "ru": "Монета"
+  },
+  {
+    "source": "Light Armor",
+    "en": "Light Armor",
+    "uk": "Легка броня",
+    "ru": "Лёгкая броня"
+  },
+  {
+    "source": "Combat Armor",
+    "en": "Combat Armor",
+    "uk": "Бойова броня",
+    "ru": "Боевая броня"
+  },
+  {
+    "source": "Heavy Armor",
+    "en": "Heavy Armor",
+    "uk": "Важка броня",
+    "ru": "Тяжёлая броня"
+  },
+  {
+    "source": "Scientist Keycard",
+    "en": "Scientist Keycard",
+    "uk": "Картка науковця",
+    "ru": "Карточка учёного"
+  },
+  {
+    "source": "Zone Manager Keycard",
+    "en": "Zone Manager Keycard",
+    "uk": "Картка зонального менеджера",
+    "ru": "Карточка зонального менеджера"
+  },
+  {
+    "source": "Guard Keycard",
+    "en": "Guard Keycard",
+    "uk": "Картка охоронця",
+    "ru": "Карточка охранника"
+  },
+  {
+    "source": "MTF Operative Keycard",
+    "en": "MTF Operative Keycard",
+    "uk": "Картка бійця МОГ",
+    "ru": "Карточка бойца МОГ"
+  },
+  {
+    "source": "MTF Captain Keycard",
+    "en": "MTF Captain Keycard",
+    "uk": "Картка капітана МОГ",
+    "ru": "Карточка капитана МОГ"
+  },
+  {
+    "source": "Facility Manager Keycard",
+    "en": "Facility Manager Keycard",
+    "uk": "Картка директора комплексу",
+    "ru": "Карточка директора комплекса"
+  },
+  {
+    "source": "High-Explosive Grenade",
+    "en": "High-Explosive Grenade",
+    "uk": "Осколкова граната",
+    "ru": "Осколочная граната"
+  },
+  {
+    "source": "Flashbang Grenade",
+    "en": "Flashbang Grenade",
+    "uk": "Світлошумова граната",
+    "ru": "Светошумовая граната"
+  },
+  {
+    "source": "event={0}; paused={1}; rollback={2}; gravity={3}; chaos_used={4}/{5}; next_chaos_in={6}",
+    "en": "event={0}; paused={1}; rollback={2}; gravity={3}; chaos_used={4}/{5}; next_chaos_in={6}",
+    "uk": "Подія: {0}; пауза: {1}; змін для відновлення: {2}; гравітація: {3}; хаос: {4}/{5}; наступний через: {6}",
+    "ru": "Событие: {0}; пауза: {1}; изменений для восстановления: {2}; гравитация: {3}; хаос: {4}/{5}; следующий через: {6}"
+  },
+  {
+    "source": "{0}; role_patch={1}; mtf_wait={2}; chaos_wait={3}",
+    "en": "{0}; role_patch={1}; mtf_wait={2}; chaos_wait={3}",
+    "uk": "{0}; патч ролей: {1}; очікування МОГ: {2}; очікування ПХ: {3}",
+    "ru": "{0}; патч ролей: {1}; ожидание МОГ: {2}; ожидание ПХ: {3}"
+  },
+  {
+    "source": "Added perk: {0} to {1}",
+    "en": "Added perk: {0} to {1}",
+    "uk": "Перк додано: {0} для {1}",
+    "ru": "Перк добавлен: {0} для {1}",
+    "verbatim": [
+      0,
+      1
+    ]
+  },
+  {
+    "source": "Upgraded perk: {0} for {1}",
+    "en": "Upgraded perk: {0} for {1}",
+    "uk": "Перк покращено: {0} для {1}",
+    "ru": "Перк улучшен: {0} для {1}",
+    "verbatim": [
+      0,
+      1
+    ]
+  },
+  {
+    "source": "Dropped perk: {0}",
+    "en": "Dropped perk: {0}",
+    "uk": "Перк скинуто: {0}",
+    "ru": "Перк сброшен: {0}",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Changed config option: {0} to {1}",
+    "en": "Changed config option: {0} to {1}",
+    "uk": "Налаштування змінено: {0} = {1}",
+    "ru": "Настройка изменена: {0} = {1}",
+    "verbatim": [
+      0,
+      1
+    ]
+  },
+  {
+    "source": "Перки раскиданы по карте! Удачи выжить :)",
+    "en": "Perks are scattered around the map! Good luck surviving :)",
+    "uk": "Перки розкидані по карті! Удачі вижити :)",
+    "ru": "Перки раскиданы по карте! Удачи выжить :)"
+  },
+  {
+    "source": "Можно пробовать выжить, ведь катка без перков!",
+    "en": "Time to try surviving — this round has no perks!",
+    "uk": "Можна спробувати вижити, адже цей раунд без перків!",
+    "ru": "Можно пробовать выжить, ведь катка без перков!"
+  },
+  {
+    "source": "This round has no perks.",
+    "en": "This round has no perks.",
+    "uk": "У цьому раунді немає перків.",
+    "ru": "В этом раунде нет перков."
+  },
+  {
+    "source": "Talky Settings",
+    "en": "Talky Settings",
+    "uk": "Налаштування Talky",
+    "ru": "Настройки Talky"
+  },
+  {
+    "source": "Animate - Grab",
+    "en": "Animate - Grab",
+    "uk": "Жест рукою",
+    "ru": "Жест рукой"
+  },
+  {
+    "source": "Reach out and grab something.",
+    "en": "Reach out and grab something.",
+    "uk": "Простягни руку, ніби хочеш щось узяти.",
+    "ru": "Протяни руку, будто хочешь что-то взять."
+  },
+  {
+    "source": "Default Emotion",
+    "en": "Default Emotion",
+    "uk": "Звичний вираз обличчя",
+    "ru": "Обычное выражение лица"
+  },
+  {
+    "source": "How you look when not talking.",
+    "en": "How you look when not talking.",
+    "uk": "Який вигляд має твоє обличчя, коли ти мовчиш.",
+    "ru": "Как выглядит твоё лицо, когда ты молчишь."
+  },
+  {
+    "source": "Enable Talking",
+    "en": "Enable Talking",
+    "uk": "Міміка під час розмови",
+    "ru": "Мимика при разговоре"
+  },
+  {
+    "source": "Whether to animate your face while talking.",
+    "en": "Whether to animate your face while talking.",
+    "uk": "Чи рухається твоє обличчя, коли ти говориш.",
+    "ru": "Будет ли твоё лицо двигаться, когда ты говоришь."
+  },
+  {
+    "source": "Neutral",
+    "en": "Neutral",
+    "uk": "Нейтральний вираз",
+    "ru": "Нейтральное выражение"
+  },
+  {
+    "source": "Happy",
+    "en": "Happy",
+    "uk": "Радість",
+    "ru": "Радость"
+  },
+  {
+    "source": "Awkward Smile",
+    "en": "Awkward Smile",
+    "uk": "Незручна усмішка",
+    "ru": "Неловкая улыбка"
+  },
+  {
+    "source": "Scared",
+    "en": "Scared",
+    "uk": "Переляк",
+    "ru": "Испуг"
+  },
+  {
+    "source": "Angry",
+    "en": "Angry",
+    "uk": "Злість",
+    "ru": "Злость"
+  },
+  {
+    "source": "Chad",
+    "en": "Chad",
+    "uk": "Чад",
+    "ru": "Чад"
+  },
+  {
+    "source": "Ogre",
+    "en": "Ogre",
+    "uk": "Огр",
+    "ru": "Огр"
+  },
+  {
+    "source": "Enabled",
+    "en": "Enabled",
+    "uk": "Увімкнено",
+    "ru": "Включено"
+  },
+  {
+    "source": "Disabled",
+    "en": "Disabled",
+    "uk": "Вимкнено",
+    "ru": "Выключено"
+  },
+  {
+    "source": "Captor: {0} · {1} m",
+    "en": "Captor: {0} · {1} m",
+    "uk": "Конвоїр: {0} · {1} м",
+    "ru": "Конвоир: {0} · {1} м",
+    "verbatim": [
+      0,
+      1
+    ]
+  },
+  {
+    "source": "Prisoner: {0} · {1} m",
+    "en": "Prisoner: {0} · {1} m",
+    "uk": "Полонений: {0} · {1} м",
+    "ru": "Пленный: {0} · {1} м",
+    "verbatim": [
+      0,
+      1
+    ]
+  },
+  {
+    "source": "Prisoner: {0} (eliminated)",
+    "en": "Prisoner: {0} (eliminated)",
+    "uk": "Полонений: {0} (ліквідований)",
+    "ru": "Пленный: {0} (ликвидирован)",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "Your explosive bracelet detonated.",
+    "en": "Your explosive bracelet detonated.",
+    "uk": "Твій вибуховий браслет здетонував.",
+    "ru": "Твой взрывной браслет сдетонировал."
+  },
+  {
+    "source": "Bracelet diagnostics require an empty waiting server.",
+    "en": "Bracelet diagnostics require an empty waiting server.",
+    "uk": "Для перевірки браслетів потрібен порожній сервер в очікуванні гравців.",
+    "ru": "Для проверки браслетов нужен пустой сервер в ожидании игроков."
+  },
+  {
+    "source": "Bracelet diagnostics started; results will appear in the server console.",
+    "en": "Bracelet diagnostics started; results will appear in the server console.",
+    "uk": "Перевірку браслетів розпочато; результати з’являться в консолі сервера.",
+    "ru": "Проверка браслетов запущена; результаты появятся в консоли сервера."
+  },
+  {
+    "source": "Сливание взрывчатых веществ в камеру",
+    "en": "Filling the chamber with explosives",
+    "uk": "Заливання вибухових речовин у камеру",
+    "ru": "Сливание взрывчатых веществ в камеру"
+  },
+  {
+    "source": "детонация",
+    "en": "Detonation",
+    "uk": "детонація",
+    "ru": "детонация"
+  },
+  {
+    "source": "Паравоз!",
+    "en": "Paravoz!",
+    "uk": "Паровоз!",
+    "ru": "Паравоз!"
+  },
+  {
+    "source": "Paravoz",
+    "en": "Paravoz",
+    "uk": "Паровоз",
+    "ru": "Паравоз"
+  },
+  {
+    "source": "Paravoz Hunter",
+    "en": "Paravoz Hunter",
+    "uk": "Мисливець на Паровозів",
+    "ru": "Паравозо-убийца"
+  },
+  {
+    "source": "Paravoz virus outbreak",
+    "en": "Paravoz virus outbreak",
+    "uk": "Поширення вірусу «Паровоз»",
+    "ru": "Распространение вируса «Паравоз»"
+  },
+  {
+    "source": "Release in: {0}",
+    "en": "Release in: {0}",
+    "uk": "До виходу: {0}",
+    "ru": "До выхода: {0}"
+  },
+  {
+    "source": "Solo Paravoz test requires exactly one connected player and an active round.",
+    "en": "Solo Paravoz test requires exactly one connected player and an active round.",
+    "uk": "Для соло-тесту Паровоза потрібен один гравець і розпочатий раунд.",
+    "ru": "Для соло-теста Паравоза нужен один игрок и начавшийся раунд."
+  },
+  {
+    "source": "Solo Paravoz test started.",
+    "en": "Solo Paravoz test started.",
+    "uk": "Соло-тест Паровоза розпочато.",
+    "ru": "Соло-тест Паравоза запущен."
+  },
+  {
+    "source": "Solo Paravoz test stopped.",
+    "en": "Solo Paravoz test stopped.",
+    "uk": "Соло-тест Паровоза завершено.",
+    "ru": "Соло-тест Паравоза завершён."
+  },
+  {
+    "source": "Solo Paravoz test is not active.",
+    "en": "Solo Paravoz test is not active.",
+    "uk": "Соло-тест Паровоза не запущено.",
+    "ru": "Соло-тест Паравоза не запущен."
+  },
+  {
+    "source": "Death was caused by the detonation of an explosive bracelet.",
+    "en": "Death was caused by the detonation of an explosive bracelet.",
+    "uk": "Смерть настала внаслідок детонації вибухового браслета.",
+    "ru": "Смерть наступила в результате детонации взрывного браслета."
+  },
+  {
+    "source": "Severe blast injuries are present. The explosion originated at the wrist.",
+    "en": "Severe blast injuries are present. The explosion originated at the wrist.",
+    "uk": "На тілі виявлено тяжкі вибухові ушкодження. Джерело вибуху було на зап’ясті.",
+    "ru": "На теле обнаружены тяжёлые взрывные повреждения. Источник взрыва находился на запястье."
+  },
+  {
+    "source": "Severe blast injuries are present. Death was caused by a nearby explosive bracelet.",
+    "en": "Severe blast injuries are present. Death was caused by a nearby explosive bracelet.",
+    "uk": "На тілі виявлено тяжкі вибухові ушкодження. Причиною смерті став вибух браслета поруч.",
+    "ru": "На теле обнаружены тяжёлые взрывные повреждения. Причиной смерти стал взрыв браслета поблизости."
+  },
+  {
+    "source": "The cause of death could not be determined.",
+    "en": "The cause of death could not be determined.",
+    "uk": "Причину смерті не встановлено.",
+    "ru": "Причина смерти не установлена."
+  },
+  {
+    "source": "ELIMINATION PROCESS INITIATED. MOVE AWAY FROM THE PRISONER!",
+    "en": "ELIMINATION PROCESS INITIATED. MOVE AWAY FROM THE PRISONER!",
+    "uk": "ПРОЦЕС ЛІКВІДАЦІЇ ЗАПУЩЕНО. ВІДІЙДІТЬ ВІД УВ’ЯЗНЕНОГО!",
+    "ru": "ПРОЦЕСС ЛИКВИДИРОВАНИЯ ЗАПУЩЕН. ОТОЙДИТЕ ОТ ЗАКЛЮЧЁННОГО!"
+  },
+  {
+    "source": "Prisoner: {0} ({1})",
+    "en": "Prisoner: {0} ({1})",
+    "uk": "Полонений: {0} ({1})",
+    "ru": "Пленный: {0} ({1})",
+    "verbatim": [
+      0
+    ]
+  },
+  {
+    "source": "eliminated",
+    "en": "eliminated",
+    "uk": "ліквідований",
+    "ru": "ликвидирован"
+  },
+  {
+    "source": "Spectator",
+    "en": "Spectator",
+    "uk": "Спостерігач",
+    "ru": "Наблюдатель"
+  },
+  {
+    "source": "No role",
+    "en": "No role",
+    "uk": "Без ролі",
+    "ru": "Без роли"
+  },
+  {
+    "source": "Custom role",
+    "en": "Custom role",
+    "uk": "Особлива роль",
+    "ru": "Особая роль"
+  },
+  {
+    "source": "Destroyed role",
+    "en": "Destroyed role",
+    "uk": "Роль знищено",
+    "ru": "Роль уничтожена"
+  },
+  {
+    "source": "Flamingo",
+    "en": "Flamingo",
+    "uk": "Фламінго",
+    "ru": "Фламинго"
+  },
+  {
+    "source": "Alpha Flamingo",
+    "en": "Alpha Flamingo",
+    "uk": "Альфа-фламінго",
+    "ru": "Альфа-фламинго"
+  },
+  {
+    "source": "Zombie Flamingo",
+    "en": "Zombie Flamingo",
+    "uk": "Фламінго-зомбі",
+    "ru": "Фламинго-зомби"
+  },
+  {
+    "source": "MTF Flamingo",
+    "en": "MTF Flamingo",
+    "uk": "Фламінго МОГ",
+    "ru": "Фламинго МОГ"
+  },
+  {
+    "source": "CI Flamingo",
+    "en": "CI Flamingo",
+    "uk": "Фламінго ПХ",
+    "ru": "Фламинго ПХ"
+  },
+  {
+    "source": "Individual SCP voice volumes",
+    "en": "Individual SCP voice volumes",
+    "uk": "Гучність окремих SCP",
+    "ru": "Громкость отдельных SCP"
+  },
+  {
+    "source": "Show individual SCP volume sliders",
+    "en": "Show individual SCP volume sliders",
+    "uk": "Показувати гучність окремих гравців",
+    "ru": "Показывать громкость отдельных игроков"
+  },
+  {
+    "source": "SCP local voice volume",
+    "en": "SCP local voice volume",
+    "uk": "Гучність локального голосу SCP",
+    "ru": "Громкость локального голоса SCP"
+  },
+  {
+    "source": "100% = normal voice level; above 100% = boost; 0% = mute. This changes the volume of SCP local voices only for you.",
+    "en": "100% = normal voice level; above 100% = boost; 0% = mute. This changes the volume of SCP local voices only for you.",
+    "uk": "100% — звичайна гучність, понад 100% — підсилення, 0% — без звуку. Змінює гучність локальних голосів SCP лише для тебе.",
+    "ru": "100% — обычная громкость, выше 100% — усиление, 0% — без звука. Меняет громкость локальных голосов SCP только для тебя."
+  },
+  {
+    "source": "Volume of this player's SCP local voice, on top of the overall SCP volume. 100% = normal; above 100% = boost; 0% = mute. Only affects what you hear.",
+    "en": "Volume of this player's SCP local voice, on top of the overall SCP volume. 100% = normal; above 100% = boost; 0% = mute. Only affects what you hear.",
+    "uk": "Гучність локального голосу цього гравця за SCP, додатково до загальної гучності SCP. 100% — звичайна, понад 100% — підсилення, 0% — без звуку. Впливає лише на те, що чуєш ти.",
+    "ru": "Громкость локального голоса этого игрока за SCP, дополнительно к общей громкости SCP. 100% — обычная, выше 100% — усиление, 0% — без звука. Влияет только на то, что слышишь ты."
+  },
+  {
+    "source": "SCP voice: {0}",
+    "en": "SCP voice: {0}",
+    "uk": "Голос SCP: {0}",
+    "ru": "Голос SCP: {0}",
+    "verbatim": [
+      0
+    ]
+  }
+]

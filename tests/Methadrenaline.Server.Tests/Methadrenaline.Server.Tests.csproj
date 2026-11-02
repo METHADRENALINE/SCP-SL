@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsTestProject>true</IsTestProject>
+    <IsPackable>false</IsPackable>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="../../src/Methadrenaline.Server/Localization/catalog.xml" LogicalName="catalog.xml" />
+    <EmbeddedResource Include="../../src/Methadrenaline.Server/Localization/catalog.json" LogicalName="catalog-source.json" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.3" PrivateAssets="all" />
+    <Compile Include="../../src/Methadrenaline.Server/Core/*.cs" Link="Core/%(Filename)%(Extension)" />
+    <Compile Include="../../src/Methadrenaline.Server/Config.cs" Link="Config.cs" />
+    <Compile Include="../../src/Methadrenaline.Server/Voting/*.cs" Link="Voting/%(Filename)%(Extension)" />
+    <Compile Include="../../src/SecretAPI/SecretAPI/Features/UserSettings/SettingBatchPolicy.cs" Link="SettingBatchPolicy.cs" />
+  </ItemGroup>
+  <Target Name="CompileLocalizationCatalog" BeforeTargets="PrepareResources">
+    <Exec Command="dotnet run --project &quot;$(MSBuildThisFileDirectory)../../tools/LocalizationCatalog&quot; -c Release -- --compile-catalog &quot;$(MSBuildThisFileDirectory)../../src/Methadrenaline.Server/Localization/catalog.json&quot; &quot;$(MSBuildThisFileDirectory)../../src/Methadrenaline.Server/Localization/catalog.xml&quot;" />
+  </Target>
+</Project>

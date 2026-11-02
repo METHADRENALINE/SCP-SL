@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Methadrenaline.Server</AssemblyName>
+    <RootNamespace>Methadrenaline.Server</RootNamespace>
+    <Version>1.14.0</Version>
+    <Authors>Wechirok</Authors>
+    <ServerManagedPath Condition="'$(ServerManagedPath)' == ''">$(MSBuildThisFileDirectory)../../references/managed</ServerManagedPath>
+    <ServerDependenciesPath Condition="'$(ServerDependenciesPath)' == ''">$(MSBuildThisFileDirectory)../../references/dependencies</ServerDependenciesPath>
+    <ServerPluginsPath Condition="'$(ServerPluginsPath)' == ''">$(MSBuildThisFileDirectory)../../references/plugins</ServerPluginsPath>
+    <NoStdLib>true</NoStdLib>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+    <FrameworkPathOverride>$(ServerManagedPath)</FrameworkPathOverride>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" HintPath="$(ServerManagedPath)/mscorlib.dll" Private="false" />
+    <Reference Include="System" HintPath="$(ServerManagedPath)/System.dll" Private="false" />
+    <Reference Include="System.Core" HintPath="$(ServerManagedPath)/System.Core.dll" Private="false" />
+    <Reference Include="netstandard" HintPath="$(ServerManagedPath)/netstandard.dll" Private="false" />
+    <EmbeddedResource Include="Localization/catalog.xml" />
+    <EmbeddedResource Include="$(ParavozMusicFile)" LogicalName="Methadrenaline.Server.Audio.paravoz-track.ogg" Condition="'$(ParavozMusicFile)' != '' And Exists('$(ParavozMusicFile)')" />
+    <ProjectReference Include="../SecretAPI/SecretAPI/SecretAPI.csproj" Private="false" />
+    <Reference Include="RueI" HintPath="$(ServerPluginsPath)/RueI.dll" Private="false" />
+    <Reference Include="UltimateHUD" HintPath="$(ServerPluginsPath)/UltimateHUD.dll" Private="false" />
+    <Reference Include="AudioPlayerApi" HintPath="$(ServerDependenciesPath)/AudioPlayerApi.dll" Private="false" />
+    <Reference Include="SecretLabNAudio.Core" HintPath="$(ServerDependenciesPath)/SecretLabNAudio.Core.dll" Private="false" />
+    <Reference Include="SwiftArcade" HintPath="$(ServerPluginsPath)/SwiftArcade.dll" Private="false" />
+    <Reference Include="System.Xml" HintPath="$(ServerManagedPath)/System.Xml.dll" Private="false" />
+    <Reference Include="System.Xml.Linq" HintPath="$(ServerManagedPath)/System.Xml.Linq.dll" Private="false" />
+    <Reference Include="System.Text.Json" HintPath="$(ServerManagedPath)/System.Text.Json.dll" Private="false" />
+    <Reference Include="System.Memory" HintPath="$(ServerManagedPath)/System.Memory.dll" Private="false" />
+    <Reference Include="LabApi" HintPath="$(ServerManagedPath)/LabApi.dll" Private="false" />
+    <Reference Include="Assembly-CSharp" HintPath="$(ServerManagedPath)/Assembly-CSharp.dll" Private="false" />
+    <Reference Include="Assembly-CSharp-firstpass" HintPath="$(ServerManagedPath)/Assembly-CSharp-firstpass.dll" Private="false" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="$(ServerManagedPath)/UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="UnityEngine.AudioModule" HintPath="$(ServerManagedPath)/UnityEngine.AudioModule.dll" Private="false" />
+    <Reference Include="UnityEngine.PhysicsModule" HintPath="$(ServerManagedPath)/UnityEngine.PhysicsModule.dll" Private="false" />
+    <Reference Include="Mirror" HintPath="$(ServerManagedPath)/Mirror.dll" Private="false" />
+    <Reference Include="Pooling" HintPath="$(ServerManagedPath)/Pooling.dll" Private="false" />
+    <Reference Include="CommandSystem.Core" HintPath="$(ServerManagedPath)/CommandSystem.Core.dll" Private="false" />
+    <Reference Include="0Harmony" HintPath="$(ServerDependenciesPath)/0Harmony.dll" Private="false" />
+  </ItemGroup>
+  <Target Name="RequirePrivateMusic" BeforeTargets="PrepareResources" Condition="'$(DesignTimeBuild)' != 'true'">
+    <Error Condition="!Exists('$(ParavozMusicFile)')" Text="Set ParavozMusicFile to an external 48000 Hz mono Ogg Vorbis file. Audio is not distributed with this source." />
+  </Target>
+  <Target Name="CompileLocalizationCatalog" BeforeTargets="PrepareResources">
+    <Exec Command="dotnet run --project &quot;$(MSBuildThisFileDirectory)../../tools/LocalizationCatalog&quot; -c Release -- --compile-catalog &quot;$(MSBuildThisFileDirectory)Localization/catalog.json&quot; &quot;$(MSBuildThisFileDirectory)Localization/catalog.xml&quot;" />
+  </Target>
+</Project>

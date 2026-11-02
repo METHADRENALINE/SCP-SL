@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <Version>3.4.0.1</Version>
+    <Authors>obvEve;Wechirok</Authors>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <ServerManagedPath Condition="'$(ServerManagedPath)' == ''">$(MSBuildThisFileDirectory)../../references/managed</ServerManagedPath>
+  </PropertyGroup>
+</Project>
