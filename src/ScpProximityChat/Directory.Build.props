@@ -1,0 +1,51 @@
+<Project>
+
+    <PropertyGroup>
+        <Version>1.1.1.2</Version>
+        <TargetFramework>net48</TargetFramework>
+        <LangVersion>13</LangVersion>
+        <Nullable>enable</Nullable>
+        <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+        <NoStdLib>true</NoStdLib>
+        <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+        <ServerManagedPath Condition="'$(ServerManagedPath)' == ''">$(MSBuildThisFileDirectory)../../references/managed</ServerManagedPath>
+        <ServerDependenciesPath Condition="'$(ServerDependenciesPath)' == ''">$(MSBuildThisFileDirectory)../../references/dependencies</ServerDependenciesPath>
+        <ServerPluginsPath Condition="'$(ServerPluginsPath)' == ''">$(MSBuildThisFileDirectory)../../references/plugins</ServerPluginsPath>
+        <FrameworkPathOverride>$(ServerManagedPath)</FrameworkPathOverride>
+        <ReferencePath>$(ServerManagedPath)</ReferencePath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="SecretLabNAudio.Core" HintPath="$(ServerDependenciesPath)/SecretLabNAudio.Core.dll" Private="false" />
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="mscorlib" HintPath="$(ServerManagedPath)/mscorlib.dll" Private="false" />
+        <Reference Include="System" HintPath="$(ServerManagedPath)/System.dll" Private="false" />
+        <Reference Include="System.Core" HintPath="$(ServerManagedPath)/System.Core.dll" Private="false" />
+        <Reference Include="netstandard" HintPath="$(ServerManagedPath)/netstandard.dll" Private="false" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Assembly-CSharp" HintPath="$(ServerManagedPath)/Assembly-CSharp.dll" Publicize="true" Private="false" />
+        <Reference Include="Assembly-CSharp-firstpass" HintPath="$(ServerManagedPath)/Assembly-CSharp-firstpass.dll" Private="false" />
+        <Reference Include="LabApi" HintPath="$(ServerManagedPath)/LabApi.dll" Private="false" />
+        <Reference Include="CommandSystem.Core" HintPath="$(ServerManagedPath)/CommandSystem.Core.dll" Private="false" />
+        <Reference Include="Mirror" HintPath="$(ServerManagedPath)/Mirror.dll" Private="false" />
+        <Reference Include="Pooling" HintPath="$(ServerManagedPath)/Pooling.dll" Private="false" />
+        <Reference Include="UnityEngine" HintPath="$(ServerManagedPath)/UnityEngine.dll" Private="false" />
+        <Reference Include="UnityEngine.CoreModule" HintPath="$(ServerManagedPath)/UnityEngine.CoreModule.dll" Private="false" />
+        <Reference Include="UnityEngine.AudioModule" HintPath="$(ServerManagedPath)/UnityEngine.AudioModule.dll" Private="false" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="System" />
+        <Using Include="System.Collections.Generic" />
+        <Using Include="LabApi.Features.Wrappers" />
+        <Using Include="UnityEngine" />
+    </ItemGroup>
+
+</Project>

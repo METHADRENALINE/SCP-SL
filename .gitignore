@@ -1,0 +1,27 @@
+# Only source files and explicitly reviewed build inputs belong in this repository.
+*
+!*/
+!/.gitignore
+!/.github/workflows/verify.yml
+!/LICENSE
+!/src/**/*.cs
+!/src/**/*.csproj
+!/src/**/*.props
+!/src/**/*.targets
+!/src/**/*.slnx
+!/src/**/LICENSE
+!/src/SecretAPI/SecretAPI.SourceGenerators/AnalyzerReleases.*.md
+!/src/Methadrenaline.Server/Localization/catalog.json
+!/tests/**/*.cs
+!/tests/**/*.csproj
+!/tools/LocalizationCatalog/Program.cs
+!/tools/LocalizationCatalog/LocalizationCatalog.csproj
+!/tools/RepositoryPolicy/check.py
+
+**/bin/**
+**/obj/**
+**/TestResults/**
+**/.git/**
+**/upstream/**
+**/references/**
+**/[Rr][Ee][Aa][Dd][Mm][Ee]*
