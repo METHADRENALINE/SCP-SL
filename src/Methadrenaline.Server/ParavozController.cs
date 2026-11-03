@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using CustomPlayerEffects;
 using Footprinting;
+using InventorySystem.Items.Pickups;
 using Interactables.Interobjects;
 using Interactables.Interobjects.DoorUtils;
 using LabApi.Events.Arguments.PlayerEvents;
@@ -91,12 +92,14 @@ internal sealed class ParavozController : IDisposable
     internal void Enable()
     {
         Presentation.Enable();
+        ItemPickupBase.OnPickupAdded += PickupAdded;
         PlayerEvents.Escaping += Escaping;
         PlayerEvents.Escaped += Escaped;
         PlayerEvents.Death += Death;
         PlayerEvents.Left += Left;
         PlayerEvents.ChangedRole += ChangedRole;
         PlayerEvents.UpdatingEffect += EffectUpdating;
+        PlayerEvents.DroppingItem += DroppingItem;
         ServerEvents.WaveRespawning += WaveRespawning;
         ServerEvents.RoundEnding += RoundEnding;
         ServerEvents.RoundEndingConditionsCheck += RoundEndingConditionsCheck;
@@ -145,6 +148,7 @@ internal sealed class ParavozController : IDisposable
         wasLocked = Round.IsLocked;
         Round.IsLocked = true;
         Active = true;
+        RemoveSurfacePasses();
         int run = ++epoch;
         try
         {
@@ -243,6 +247,19 @@ internal sealed class ParavozController : IDisposable
         YieldDoor(player, door);
     }
 
+    internal void RemoveSurfacePasses()
+    {
+        if (!Active) return;
+        foreach (var pickup in Pickup.List.Where(p => p.Type == ItemType.SurfaceAccessPass).ToArray()) pickup.Destroy();
+        foreach (var player in Player.List)
+            foreach (var item in player.Items.Where(i => i.Type == ItemType.SurfaceAccessPass).ToArray()) player.RemoveItem(item);
+    }
+
+    private void PickupAdded(ItemPickupBase pickup)
+    {
+        if (Active && pickup.Info.ItemId == ItemType.SurfaceAccessPass) pickup.DestroySelf();
+    }
+
     internal void YieldDoor(Player player, DoorVariant door)
     {
         if (!IsParavoz(player) || player.NetworkId == initialCarrier && isolation != null) return;
@@ -324,6 +341,11 @@ internal sealed class ParavozController : IDisposable
     {
         if (IsParavoz(ev.Player) && Abilities.Enabled(ev.Player) && ev.Effect is MovementBoost && ev.Player.IsAlive && ev.Intensity == 0 && !initializing.Contains(ev.Player.NetworkId))
             ev.IsAllowed = false;
+    }
+
+    private void DroppingItem(PlayerDroppingItemEventArgs ev)
+    {
+        if (IsParavoz(ev.Player)) ev.IsAllowed = false;
     }
 
     private void Escaping(PlayerEscapingEventArgs ev)
@@ -441,12 +463,14 @@ internal sealed class ParavozController : IDisposable
     {
         Reset();
         Presentation.Dispose();
+        ItemPickupBase.OnPickupAdded -= PickupAdded;
         PlayerEvents.Escaping -= Escaping;
         PlayerEvents.Escaped -= Escaped;
         PlayerEvents.Death -= Death;
         PlayerEvents.Left -= Left;
         PlayerEvents.ChangedRole -= ChangedRole;
         PlayerEvents.UpdatingEffect -= EffectUpdating;
+        PlayerEvents.DroppingItem -= DroppingItem;
         ServerEvents.WaveRespawning -= WaveRespawning;
         ServerEvents.RoundEnding -= RoundEnding;
         ServerEvents.RoundEndingConditionsCheck -= RoundEndingConditionsCheck;

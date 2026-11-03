@@ -1,0 +1,13 @@
+# Public template. Keep account assignments and secrets only in the installed copy.
+show_toggled_hint: true
+enabled: Proximity Chat enabled.
+disabled: Proximity Chat disabled.
+audio_settings:
+  is_spatial: true
+  volume: 6
+  min_distance: 12
+  max_distance: 70
+match_human_voice_distances: false
+allowed_roles: null
+validate_receive: false
+audible_to_spectators: true

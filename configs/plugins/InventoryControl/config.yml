@@ -1,0 +1,39 @@
+# Public template. Keep account assignments and secrets only in the installed copy.
+debug: false
+inventory:
+  NtfCaptain_1576:
+    role_type_id: NtfCaptain
+    keep_items: true
+    keep_ammos: true
+    items:
+      SCP1576: 45
+    ammos: {}
+  ChaosMarauder_1576:
+    role_type_id: ChaosMarauder
+    keep_items: true
+    keep_ammos: true
+    items:
+      SCP1576: 45
+    ammos: {}
+  Scientist_1576:
+    role_type_id: Scientist
+    keep_items: true
+    keep_ammos: true
+    items:
+      SCP1576: 70
+    ammos: {}
+  ClassD_1576:
+    role_type_id: ClassD
+    keep_items: true
+    keep_ammos: true
+    items:
+      SCP1576: 45
+    ammos: {}
+  FacilityGuard_1576:
+    role_type_id: FacilityGuard
+    keep_items: true
+    keep_ammos: true
+    items:
+      SCP1576: 60
+    ammos: {}
+inventory_rank: {}

@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <AssemblyName>Methadrenaline.Server</AssemblyName>
     <RootNamespace>Methadrenaline.Server</RootNamespace>
-    <Version>1.14.0</Version>
+    <Version>1.15.2</Version>
     <Authors>Wechirok</Authors>
     <ServerManagedPath Condition="'$(ServerManagedPath)' == ''">$(MSBuildThisFileDirectory)../../references/managed</ServerManagedPath>
     <ServerDependenciesPath Condition="'$(ServerDependenciesPath)' == ''">$(MSBuildThisFileDirectory)../../references/dependencies</ServerDependenciesPath>

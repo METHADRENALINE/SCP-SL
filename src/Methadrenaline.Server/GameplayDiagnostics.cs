@@ -61,6 +61,10 @@ internal static class GameplayDiagnostics
                 if (EventDirector.Participants.Any()) yield break;
                 Player carrier = players.Single(plugin.Paravoz.IsParavoz);
                 var runners = players.Where(p => p != carrier).ToArray();
+                using (var controls = ParavozSurfacePassDiagnostics.Probe(runners[0], Check))
+                    while (controls.MoveNext()) yield return controls.Current;
+                foreach (var inventoryCheck in ParavozRadioInventoryDiagnostics.Run(carrier, runners[0]))
+                    Check(inventoryCheck.Key, inventoryCheck.Value);
                 foreach (var voiceCheck in ParavozVoiceDiagnostics.Run(plugin.Paravoz, carrier, runners[0]))
                     Check(voiceCheck.Key, voiceCheck.Value);
                 foreach (var presentationCheck in ParavozPresentationDiagnostics.Run(plugin.Paravoz, carrier, runners[0], runners[1]))
@@ -251,6 +255,7 @@ internal static class GameplayDiagnostics
                 Logger.Info($"[METHADRENALINE] Fire tick result: victim_hp={runners[1].Health}; role={runners[1].Role}; carrier_pos={carrier.Position}; victim_pos={runners[1].Position}");
                 yield return Timing.WaitForSeconds(0.4f);
                 Check("native_fire_infects", plugin.Paravoz.IsParavoz(runners[1]) && runners[1].IsAlive && runners[1].Role == RoleTypeId.ClassD);
+                Check("infected_paravoz_has_only_radio", runners[1].Items.Count() == 1 && runners[1].Items.Single().Type == ItemType.Radio);
                 plugin.Paravoz.Presentation.RefreshNow();
                 Check("infected_player_gets_visuals_and_shared_music", plugin.Paravoz.Presentation.Emitters.ContainsKey(runners[1].NetworkId) && plugin.Paravoz.Presentation.Playback?.ClipsById.Count == 1);
                 Check("human_escape_winner", plugin.Paravoz.Result == ParavozWinner.Humans);

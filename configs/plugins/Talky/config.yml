@@ -1,0 +1,60 @@
+# Public template. Keep account assignments and secrets only in the installed copy.
+low_db_threshold: -80
+high_db_threshold: -30
+emotion_reset_time: 500
+speech_update_interval: 0.0329999998
+enable_grab_animation: true
+enable_reaction_on_hurt: true
+minium_damage_for_reaction: 5
+enable_emote_on_consumables: true
+enable_head_bobbing: true
+head_bob_amount: 10
+enable_glancing: true
+glace_range: 7
+glace_fov: 140
+glace_gain: 1.5
+glance_max_yaw: 40
+glance_max_pitch: 35
+glance_max_duration: 1000
+enabled_spectator_head_movements: false
+prefer_harmony_look_sync: true
+performance:
+  mode: Automatic
+  fixed_tier: Full
+  talky_budget_ms_per_frame: 1
+  hard_talky_budget_ms_per_frame: 3
+  server_p95_degrade_ms: 25
+  server_p95_emergency_ms: 33.3
+  server_p95_recovery_ms: 20
+  evaluation_window_seconds: 2
+  consecutive_breach_windows: 3
+  emergency_breach_windows: 2
+  warmup_seconds: 15
+  transition_cooldown_seconds: 20
+  recovery_healthy_seconds: 90
+  recovery_budget_ratio: 0.5
+  recovery_cooldown_seconds: 60
+  recovery_probe_seconds: 10
+  economy_face_hz: 20
+  economy_glance_hz: 10
+  economy_look_hz: 30
+  minimum_face_hz: 15
+  summary_log_interval_seconds: 300
+translations:
+  s_s_group_label: Talky Settings
+  s_s_grab_label: Animate - Grab
+  s_s_grab_hint: Reach out and grab something.
+  s_s_default_emotion_label: Default Emotion
+  s_s_default_emotion_hint: How you look when not talking.
+  s_s_enable_talking_label: Enable Talking
+  s_s_enable_talking_hint: Whether to animate your face while talking.
+  neutral: Neutral
+  happy: Happy
+  awkward_smile: Awkward Smile
+  scared: Scared
+  angry: Angry
+  chad: Chad
+  ogre: Ogre
+  s_s_enabled: Enabled
+  s_s_disabled: Disabled
+debug: false

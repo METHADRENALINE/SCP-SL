@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "game": {
+    "steam_app": 996560,
+    "branch": "public",
+    "tested_version": "14.2.9",
+    "tested_steam_build": 26364472,
+    "labapi_version": "1.1.7"
+  },
+  "artifacts": [
+    {
+      "name": "SecretLabNAudio.Core.dll",
+      "version": "v2.1.2",
+      "sha256": "f82df5c68a158223c184175f4be5c2466b0e60c8e911625f9f2073ec98150158",
+      "target": "LabAPI/dependencies/{port}/SecretLabNAudio.Core.dll",
+      "url": "https://github.com/Axwabo/SecretLabNAudio/releases/download/v2.1.2/SecretLabNAudio.Core.dll"
+    },
+    {
+      "name": "UltimateHUD.dll",
+      "version": "7.1.1-LabAPI",
+      "sha256": "809d480f89beb7c3f522323ea1dbc922f5c8537097e968c8fe18c719ce7830f8",
+      "target": "LabAPI/plugins/{port}/UltimateHUD.dll",
+      "url": "https://github.com/Vretu-Dev/UltimateHUD/releases/download/7.1.1-LabAPI/UltimateHUD.dll"
+    },
+    {
+      "name": "RueI.dll",
+      "version": "v3.1.2",
+      "sha256": "f85e57c460395507986a2ff8f011f9b7fc93ed3651444251b68d7f2880afdeff",
+      "target": "LabAPI/plugins/{port}/RueI.dll",
+      "url": "https://github.com/pawslee/RueI/releases/download/v3.1.2/RueI.dll"
+    },
+    {
+      "name": "ProjectMER.dll",
+      "version": "2026.7.6.1",
+      "sha256": "2091a7d44bc3d09ebc7764bcd4b16ba5c7219149eabd82285511d81dadc4b150",
+      "target": "LabAPI/plugins/{port}/ProjectMER.dll",
+      "url": "https://github.com/Michal78900/ProjectMER/releases/download/2026.7.6.1/ProjectMER.dll"
+    },
+    {
+      "name": "SwiftArcade.dll",
+      "version": "v2.4",
+      "sha256": "1b624d36bccfc1f0f16c761ad53fe600eedee9ced916de83b6a82ea73d649f11",
+      "target": "LabAPI/plugins/{port}/SwiftArcade.dll",
+      "url": "https://github.com/SwiftKraft/SwiftArcade/releases/download/v2.4/SwiftArcade.dll"
+    },
+    {
+      "name": "SwiftArcade schematics",
+      "version": "v2.4",
+      "url": "https://github.com/SwiftKraft/SwiftArcade/releases/download/v2.4/Schematics.zip",
+      "sha256": "1202394a9981358b5bbe7762f7931b4efdb42ce45345e59f4361c7d2451c4d19",
+      "target": "LabAPI/configs/ProjectMER/Schematics",
+      "extract": true
+    },
+    {
+      "name": "InventoryControl.dll",
+      "version": "1.0.3",
+      "sha256": "91a971a424cfe52cde3f04c4bbff7a1915e8a4e975d84b72a831510525d32236",
+      "target": "LabAPI/plugins/{port}/InventoryControl.dll",
+      "url": "https://github.com/MedveMarci/InventoryControl/releases/download/1.0.3/InventoryControl.dll"
+    },
+    {
+      "name": "NLayer.NAudioSupport.dll",
+      "version": "v2.1.2-runtime",
+      "sha256": "ce0bd802a21d2cd48363642a21281fe2945e6c85b8ec3d838266cf30e60e32e8",
+      "target": "LabAPI/dependencies/{port}/NLayer.NAudioSupport.dll",
+      "url": "https://github.com/Axwabo/SecretLabNAudio/releases/download/v2.1.2/SecretLabNAudio.zip",
+      "archive_sha256": "d205f56ba907c02b0a0625cde7674043cf6fe5c0dc4d24bbacd670dec33df633",
+      "member": "bin/NLayer.NAudioSupport.dll"
+    },
+    {
+      "name": "System.ValueTuple.dll",
+      "version": "v2.1.2-runtime",
+      "sha256": "e905d102585b22c6df04f219af5cbdbfa7bc165979e9788b62df6dcc165e10f4",
+      "target": "LabAPI/dependencies/{port}/System.ValueTuple.dll",
+      "url": "https://github.com/Axwabo/SecretLabNAudio/releases/download/v2.1.2/SecretLabNAudio.zip",
+      "archive_sha256": "d205f56ba907c02b0a0625cde7674043cf6fe5c0dc4d24bbacd670dec33df633",
+      "member": "bin/System.ValueTuple.dll"
+    },
+    {
+      "name": "SecretLabNAudio.dll",
+      "version": "v2.1.2-runtime",
+      "sha256": "2528ac462f31c70b654ecc7a84e63d2a3b359d3eb7e098223b2bda7a3f8d0144",
+      "target": "LabAPI/plugins/global/SecretLabNAudio.dll",
+      "url": "https://github.com/Axwabo/SecretLabNAudio/releases/download/v2.1.2/SecretLabNAudio.zip",
+      "archive_sha256": "d205f56ba907c02b0a0625cde7674043cf6fe5c0dc4d24bbacd670dec33df633",
+      "member": "bin/SecretLabNAudio.dll"
+    },
+    {
+      "name": "NAudio.Core.dll",
+      "version": "v2.1.2-runtime",
+      "sha256": "fcf493fc47a2f478a65303886b975fbdbf714cbb1f2d79f7fce97e4bb16b01a8",
+      "target": "LabAPI/dependencies/{port}/NAudio.Core.dll",
+      "url": "https://github.com/Axwabo/SecretLabNAudio/releases/download/v2.1.2/SecretLabNAudio.zip",
+      "archive_sha256": "d205f56ba907c02b0a0625cde7674043cf6fe5c0dc4d24bbacd670dec33df633",
+      "member": "bin/NAudio.Core.dll"
+    },
+    {
+      "name": "NLayer.dll",
+      "version": "v2.1.2-runtime",
+      "sha256": "70f17ddfb089f1bab75ec8991328fc73ed050ee1e82b1b7a87bf894a248d61d7",
+      "target": "LabAPI/dependencies/{port}/NLayer.dll",
+      "url": "https://github.com/Axwabo/SecretLabNAudio/releases/download/v2.1.2/SecretLabNAudio.zip",
+      "archive_sha256": "d205f56ba907c02b0a0625cde7674043cf6fe5c0dc4d24bbacd670dec33df633",
+      "member": "bin/NLayer.dll"
+    },
+    {
+      "name": "NAudio.Vorbis.dll",
+      "version": "v2.1.2-runtime",
+      "sha256": "0ae4de203ffeb14cc5f10859402d3f56e9fe6689c58587d52ba4aa731ef3e8c0",
+      "target": "LabAPI/dependencies/{port}/NAudio.Vorbis.dll",
+      "url": "https://github.com/Axwabo/SecretLabNAudio/releases/download/v2.1.2/SecretLabNAudio.zip",
+      "archive_sha256": "d205f56ba907c02b0a0625cde7674043cf6fe5c0dc4d24bbacd670dec33df633",
+      "member": "bin/NAudio.Vorbis.dll"
+    },
+    {
+      "name": "NVorbis.dll",
+      "version": "v2.1.2-runtime",
+      "sha256": "2c6c2281c29344679c97df33a283897ab60c6a676c858d7c675209195315e982",
+      "target": "LabAPI/dependencies/{port}/NVorbis.dll",
+      "url": "https://github.com/Axwabo/SecretLabNAudio/releases/download/v2.1.2/SecretLabNAudio.zip",
+      "archive_sha256": "d205f56ba907c02b0a0625cde7674043cf6fe5c0dc4d24bbacd670dec33df633",
+      "member": "bin/NVorbis.dll"
+    },
+    {
+      "name": "NAudio.Wasapi.dll",
+      "version": "v2.1.2-runtime",
+      "sha256": "618ef0e49d64e7a66dfe64bbf6ae81705b9d9683d8a9f321e5c3024d666bdf82",
+      "target": "LabAPI/dependencies/{port}/NAudio.Wasapi.dll",
+      "url": "https://github.com/Axwabo/SecretLabNAudio/releases/download/v2.1.2/SecretLabNAudio.zip",
+      "archive_sha256": "d205f56ba907c02b0a0625cde7674043cf6fe5c0dc4d24bbacd670dec33df633",
+      "member": "bin/NAudio.Wasapi.dll"
+    },
+    {
+      "name": "Talky.dll",
+      "version": "v1.0.0-pre3",
+      "sha256": "7a10abfa9b4a7d41a60f1c9e300955cc213414d577f0fcd8cc11ca29ffe13ac0",
+      "target": "LabAPI/plugins/{port}/Talky.dll",
+      "url": "https://github.com/tayjay/Talky/releases/download/v1.0.0-pre3/Talky.dll"
+    },
+    {
+      "name": "AudioPlayerApi.dll",
+      "sha256": "d034aa58d1f386c8d65f83ed3d57dc75995deb9c45347f64435bd311e5f5772e",
+      "target": "LabAPI/dependencies/{port}/AudioPlayerApi.dll",
+      "version": "1.1.2",
+      "url": "https://github.com/Killers0992/AudioPlayerApi/releases/download/1.1.2/dependencies.zip",
+      "archive_sha256": "e4fa950abd821c21ff67b4141cafc244b0a7df1dc2f2e354dab3ac5117ddbf21",
+      "member": "dependencies/AudioPlayerApi.dll"
+    },
+    {
+      "name": "FrikanUtils.dll",
+      "sha256": "907c39a34db8bf1bd6296064b22e36225c9fb00a9c8064aa89b80364c6245fb6",
+      "target": "LabAPI/dependencies/{port}/FrikanUtils.dll",
+      "version": "1.2.0",
+      "url": "https://github.com/FrikandelbroodjeCommunity/FrikanUtils/releases/download/1.2.0/FrikanUtils.dll"
+    },
+    {
+      "name": "SharpCompress.dll",
+      "sha256": "f770e48105267eb91f3f44560a54a9368c9825d85da2863a8b85d3acc4a5fe45",
+      "target": "LabAPI/dependencies/{port}/SharpCompress.dll",
+      "version": "1.1.2",
+      "url": "https://github.com/Killers0992/AudioPlayerApi/releases/download/1.1.2/dependencies.zip",
+      "archive_sha256": "e4fa950abd821c21ff67b4141cafc244b0a7df1dc2f2e354dab3ac5117ddbf21",
+      "member": "dependencies/SharpCompress.dll"
+    },
+    {
+      "name": "0Harmony.dll",
+      "version": "2.2.2.0",
+      "url": "https://github.com/pardeike/Harmony/releases/download/v2.2.2.0/Harmony.2.2.2.0.zip",
+      "archive_sha256": "93aeda62533bb6df7106b4bcbb63f51201f302aa7656df6dee4ee4f52b7ff3a9",
+      "member": "net45/0Harmony.dll",
+      "sha256": "6928f117d52c0683c44683c0656cd5a345d21aa45720b11c64dc72a35771cac5",
+      "target": "LabAPI/dependencies/{port}/0Harmony.dll"
+    },
+    {
+      "name": "SwiftArcade Spells/Bolt of Darkness/cast.ogg",
+      "version": "v2.4",
+      "url": "https://raw.githubusercontent.com/SwiftKraft/SwiftArcade/17e19a61c599efd34f54cf89cf3625827a8f7b7f/Sounds/Spells/Bolt%20of%20Darkness/cast.ogg",
+      "sha256": "aad93368556c86bd295e759355a8d912641dd2485cf3f9480de02ca55910601c",
+      "target": "Swift Arcade Mode/Sounds/Spells/Bolt of Darkness/cast.ogg"
+    },
+    {
+      "name": "SwiftArcade Spells/Bolt of Darkness/hit.ogg",
+      "version": "v2.4",
+      "url": "https://raw.githubusercontent.com/SwiftKraft/SwiftArcade/17e19a61c599efd34f54cf89cf3625827a8f7b7f/Sounds/Spells/Bolt%20of%20Darkness/hit.ogg",
+      "sha256": "ea5c37ca9af4201ed6fa28b51bf9355ad5a6603adca6e042bfca04f84a278e89",
+      "target": "Swift Arcade Mode/Sounds/Spells/Bolt of Darkness/hit.ogg"
+    },
+    {
+      "name": "SwiftArcade Spells/Curse of Pain/cast.ogg",
+      "version": "v2.4",
+      "url": "https://raw.githubusercontent.com/SwiftKraft/SwiftArcade/17e19a61c599efd34f54cf89cf3625827a8f7b7f/Sounds/Spells/Curse%20of%20Pain/cast.ogg",
+      "sha256": "75f6b55d78ab5a675399d4b378a8622658a48562505f25345b8e45ba4587bebe",
+      "target": "Swift Arcade Mode/Sounds/Spells/Curse of Pain/cast.ogg"
+    },
+    {
+      "name": "SwiftArcade Spells/Curse of Pain/curse.ogg",
+      "version": "v2.4",
+      "url": "https://raw.githubusercontent.com/SwiftKraft/SwiftArcade/17e19a61c599efd34f54cf89cf3625827a8f7b7f/Sounds/Spells/Curse%20of%20Pain/curse.ogg",
+      "sha256": "66eebc7c6f00f00bde78199e33ea51cb4f5834baa26f88f3f9d04e1caaabf772",
+      "target": "Swift Arcade Mode/Sounds/Spells/Curse of Pain/curse.ogg"
+    },
+    {
+      "name": "SwiftArcade Spells/Elemental Bolt/cast.ogg",
+      "version": "v2.4",
+      "url": "https://raw.githubusercontent.com/SwiftKraft/SwiftArcade/17e19a61c599efd34f54cf89cf3625827a8f7b7f/Sounds/Spells/Elemental%20Bolt/cast.ogg",
+      "sha256": "3552e6659d72f912014cdbc43f6085a199dddd583d4d283ac9fb572d3d86f963",
+      "target": "Swift Arcade Mode/Sounds/Spells/Elemental Bolt/cast.ogg"
+    },
+    {
+      "name": "SwiftArcade Spells/Fireball/cast.ogg",
+      "version": "v2.4",
+      "url": "https://raw.githubusercontent.com/SwiftKraft/SwiftArcade/17e19a61c599efd34f54cf89cf3625827a8f7b7f/Sounds/Spells/Fireball/cast.ogg",
+      "sha256": "39cd3af9f41f7ffd23f8750691f6870f5115954bec215cf47dc78a042da314fe",
+      "target": "Swift Arcade Mode/Sounds/Spells/Fireball/cast.ogg"
+    },
+    {
+      "name": "SwiftArcade Spells/Ice Bolt/cast.ogg",
+      "version": "v2.4",
+      "url": "https://raw.githubusercontent.com/SwiftKraft/SwiftArcade/17e19a61c599efd34f54cf89cf3625827a8f7b7f/Sounds/Spells/Ice%20Bolt/cast.ogg",
+      "sha256": "42bccad9f07bdd5251bc7aa55c28044b3c4aad35e16896905f4d950b48cb399b",
+      "target": "Swift Arcade Mode/Sounds/Spells/Ice Bolt/cast.ogg"
+    },
+    {
+      "name": "SwiftArcade Spells/Magic Missile/cast.ogg",
+      "version": "v2.4",
+      "url": "https://raw.githubusercontent.com/SwiftKraft/SwiftArcade/17e19a61c599efd34f54cf89cf3625827a8f7b7f/Sounds/Spells/Magic%20Missile/cast.ogg",
+      "sha256": "e0f9fed7ee7f6b673d62708d83a4972a32eb6e4de25da7dc62c8e840db6a65b8",
+      "target": "Swift Arcade Mode/Sounds/Spells/Magic Missile/cast.ogg"
+    },
+    {
+      "name": "SwiftArcade Spells/Summon Rock Golem/hit.ogg",
+      "version": "v2.4",
+      "url": "https://raw.githubusercontent.com/SwiftKraft/SwiftArcade/17e19a61c599efd34f54cf89cf3625827a8f7b7f/Sounds/Spells/Summon%20Rock%20Golem/hit.ogg",
+      "sha256": "05fa604ef209f68d97bf88ec3a22b184fdfa2117f6359b7d5a9244f7aa23dd61",
+      "target": "Swift Arcade Mode/Sounds/Spells/Summon Rock Golem/hit.ogg"
+    }
+  ]
+}

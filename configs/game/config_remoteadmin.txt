@@ -1,0 +1,63 @@
+# Public template. Add account assignments only to the installed private copy.
+Members:
+
+enable_staff_access: false
+enable_manager_access: true
+enable_banteam_access: true
+enable_banteam_reserved_slots: true
+enable_banteam_bypass_geoblocking: true
+
+owner_badge: Owner
+owner_color: nickel
+owner_cover: true
+owner_hidden: false
+owner_kick_power: 255
+owner_required_kick_power: 255
+
+Roles:
+ - owner
+
+Permissions:
+ - KickingAndShortTermBanning: [owner]
+ - BanningUpToDay: [owner]
+ - LongTermBanning: [owner]
+ - ForceclassSelf: [owner]
+ - ForceclassToSpectator: [owner]
+ - ForceclassWithoutRestrictions: [owner]
+ - GivingItems: [owner]
+ - WarheadEvents: [owner]
+ - RespawnEvents: [owner]
+ - RoundEvents: [owner]
+ - SetGroup: [owner]
+ - GameplayData: [owner]
+ - Overwatch: [owner]
+ - FacilityManagement: [owner]
+ - PlayersManagement: [owner]
+ - PermissionsManagement: [owner]
+ - ServerConsoleCommands: [owner]
+ - ViewHiddenBadges: [owner]
+ - ServerConfigs: [owner]
+ - Broadcasting: [owner]
+ - PlayerSensitiveDataAccess: [owner]
+ - Noclip: [owner]
+ - AFKImmunity: [owner]
+ - AdminChat: [owner]
+ - ViewHiddenGlobalBadges: [owner]
+ - Announcer: [owner]
+ - Effects: [owner]
+ - FriendlyFireDetectorImmunity: [owner]
+ - FriendlyFireDetectorTempDisable: [owner]
+ - ServerLogLiveFeed: [owner]
+ - ExecuteAs: [owner]
+ - Vanish: [owner]
+
+override_password: none
+override_password_role: owner
+allow_central_server_commands_as_ServerConsoleCommands: false
+enable_predefined_ban_templates: true
+PredefinedBanTemplates:
+ - [0, Consider this a warning!]
+ - [3600, Mic Spamming]
+ - [86400, Team Killing (Minor Offence)]
+ - [604800, Team Killing (Major Offence)]
+ - [1577000000, Abusing Exploits]

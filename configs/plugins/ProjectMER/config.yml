@@ -1,0 +1,9 @@
+# Public template. Keep account assignments and secrets only in the installed copy.
+enable_file_system_watcher: false
+auto_select: true
+on_waiting_for_players: []
+on_round_started: []
+on_lcz_decontamination_started: []
+on_warhead_started: []
+on_warhead_stopped: []
+on_warhead_detonated: []
