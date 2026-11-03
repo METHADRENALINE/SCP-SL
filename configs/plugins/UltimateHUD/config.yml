@@ -1,0 +1,40 @@
+# Public template. Keep account assignments and secrets only in the installed copy.
+enable_clock: false
+clock: <space=-480><color={color}><size=25><b>Time:</b> {time}</size></color>
+time_zone: 2
+clock_visual: BOTH
+clock_y_cordinate: 980
+enable_tps: false
+tps: <space=-60><color={color}><size=25><b>TPS:</b> {tps}/{maxTps}</size></color>
+tps_visual: BOTH
+tps_y_cordinate: 980
+enable_round_time: false
+round_time: <space=400><color={color}><size=25><b>Round Time:</b> {round_time}</size></color>
+round_time_visual: BOTH
+round_time_y_cordinate: 980
+enable_player_hud: true
+player_hud: <size=25>{role}</size>
+player_hud_y_cordinate: 15
+enable_spectator_list: false
+spectator_list_header: '<align=right><size=28><color={color}>👥 Watching you: ({count})</color></size></align>'
+spectator_list_players: <align=right><size=28><color={color}>• {nickname}</color></size></align>
+hidden_for_roles:
+- Overwatch
+spectator_list_y_cordinate: 800
+enable_ammo_counter: false
+weapon_name: <size=28><space=-900><color={color}>{weapon}</color> <alpha=#00>tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt</size>
+ammo_counter: <size=28><space=-900><b><color={color}>{current} / {max}</color></b> <alpha=#00>tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt</size>
+ammo_counter_y_cordinate: 150
+enable_spectator_hud: false
+spectator_hud: <size=33><color=#808080><b>Spectating:</b> <color=white>{nickname}</color> <b>|</b> <b>ID:</b> <color=white>{id}</color>
+  <b>|</b> <b>Role:</b> {role} <b>| Kills:</b> <color=yellow>{kills}</color></color></size>
+spectator_hud_y_cordinate: 15
+hide_skeleton_nickname: true
+enable_spectator_map_info: true
+spectator_map_info: <space=650><size=27><b>Generators:</b> <color=orange>{engaged}/{maxGenerators}</color> <b>|
+  Warhead:</b> <color={warheadColor}>{warheadStatus}</color></size>
+map_info_y_cordinate: 70
+enable_spectator_server_info: false
+spectator_server_info: <space=-500><size=27><b>Players:</b> <color=orange>{players}/{maxPlayers}</color> <b>| Spectators:</b>
+  <color=orange>{spectators}</color></size>
+server_info_y_cordinate: 70

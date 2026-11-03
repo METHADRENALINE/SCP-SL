@@ -1,0 +1,86 @@
+# Public template. Keep account assignments and secrets only in the installed copy.
+warhead_statuses:
+- status: Armed
+  name: Armed
+  color: red
+- status: NotArmed
+  name: Not Armed
+  color: green
+- status: InProgress
+  name: In Progress
+  color: orange
+- status: Detonated
+  name: Detonated
+  color: '#8B0000'
+game_roles:
+- role: Tutorial
+  name: Tutorial
+- role: ClassD
+  name: Class-D
+- role: Scientist
+  name: Scientist
+- role: FacilityGuard
+  name: Facility Guard
+- role: Filmmaker
+  name: Film Maker
+- role: Overwatch
+  name: Overwatch
+- role: NtfPrivate
+  name: MTF Private
+- role: NtfSergeant
+  name: MTF Sergeant
+- role: NtfSpecialist
+  name: MTF Specialist
+- role: NtfCaptain
+  name: MTF Captain
+- role: ChaosConscript
+  name: CI Conscript
+- role: ChaosRifleman
+  name: CI Rifleman
+- role: ChaosRepressor
+  name: CI Repressor
+- role: ChaosMarauder
+  name: CI Marauder
+- role: Scp049
+  name: SCP-049
+- role: Scp0492
+  name: SCP-049-2
+- role: Scp079
+  name: SCP-079
+- role: Scp096
+  name: SCP-096
+- role: Scp106
+  name: SCP-106
+- role: Scp173
+  name: SCP-173
+- role: Scp939
+  name: SCP-939
+- role: Scp3114
+  name: SCP-3114
+weapon_name:
+- weapon: GunCOM15
+  name: COM-15
+- weapon: GunCOM18
+  name: COM-18
+- weapon: GunE11SR
+  name: Epsilon
+- weapon: GunFSP9
+  name: FSP-9
+- weapon: GunLogicer
+  name: Logicer
+- weapon: GunRevolver
+  name: Revolver
+- weapon: GunAK
+  name: AK
+- weapon: GunShotgun
+  name: Shotgun
+- weapon: GunCom45
+  name: COM-45
+- weapon: ParticleDisruptor
+  name: Particle X3
+- weapon: GunFRMG0
+  name: FR-MG-0
+- weapon: GunA7
+  name: A7
+- weapon: GunSCP127
+  name: SCP-127

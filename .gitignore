@@ -1,4 +1,4 @@
-# Only source files and explicitly reviewed build inputs belong in this repository.
+# Only source, reviewed public templates and deployment inputs belong here.
 *
 !*/
 !/.gitignore
@@ -25,3 +25,41 @@
 **/upstream/**
 **/references/**
 **/[Rr][Ee][Aa][Dd][Mm][Ee]*
+
+# Reviewed public deployment files. Runtime instances must live outside this checkout.
+!/.gitattributes
+!/configs/game/config_gameplay.txt
+!/configs/game/config_localadmin.txt
+!/configs/game/config_remoteadmin.txt
+!/configs/game/config_sharing.txt
+!/configs/game/hoster_policy.txt
+!/configs/plugins/InventoryControl/config.yml
+!/configs/plugins/InventoryControl/properties.yml
+!/configs/plugins/METHADRENALINE/config.yml
+!/configs/plugins/METHADRENALINE/properties.yml
+!/configs/plugins/ProjectMER/config.yml
+!/configs/plugins/ProjectMER/properties.yml
+!/configs/plugins/RueI/properties.yml
+!/configs/plugins/SCP Proximity Chat/config.yml
+!/configs/plugins/SCP Proximity Chat/properties.yml
+!/configs/plugins/SCPSL Arcade Mode/config.yml
+!/configs/plugins/SCPSL Arcade Mode/properties.yml
+!/configs/plugins/SSSS Proximity Chat/config.yml
+!/configs/plugins/SSSS Proximity Chat/properties.yml
+!/configs/plugins/SSSS Proximity Chat/translations.yml
+!/configs/plugins/SecretAPI/properties.yml
+!/configs/plugins/SecretLabNAudio.FFmpeg/config.yml
+!/configs/plugins/SecretLabNAudio.FFmpeg/properties.yml
+!/configs/plugins/SecretLabNAudio/properties.yml
+!/configs/plugins/Talky/config.yml
+!/configs/plugins/Talky/properties.yml
+!/configs/plugins/UltimateHUD/config.yml
+!/configs/plugins/UltimateHUD/properties.yml
+!/configs/plugins/UltimateHUD/translation.yml
+!/configs/server-info.txt
+!/deployment/install.py
+!/deployment/manifest.json
+!/deployment/serverctl
+!/docs/deployment.md
+!/tests/Deployment/test_install.py
+!/tests/RepositoryPolicy/test_policy.py

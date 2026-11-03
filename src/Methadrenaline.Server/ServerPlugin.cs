@@ -30,7 +30,7 @@ public sealed class ServerPlugin : Plugin<Config>
     public override string Name => "METHADRENALINE";
     public override string Author => "Wechirok";
     public override string Description => "Private community gameplay and temporary facility anomalies.";
-    public override Version Version => new(1, 13, 2);
+    public override Version Version => new(1, 15, 2);
     public override LabApi.Loader.Features.Plugins.Enums.LoadPriority Priority => LabApi.Loader.Features.Plugins.Enums.LoadPriority.Lowest;
     public override Version RequiredApiVersion => new(1, 1, 7);
 
@@ -159,6 +159,7 @@ public sealed class ServerPlugin : Plugin<Config>
         Timing.CallDelayed(0.25f, () =>
         {
             if (Instance != this || !player.GameObject || !player.IsHuman || player.IsTutorial || player.LifeId != life || player.IsHost || player.IsNpc || player.IsDummy) return;
+            if (Paravoz?.IsParavoz(player) == true) return;
             try
             {
                 if (Config.RadiosForHumans && !player.Items.Any(item => item.Type == ItemType.Radio))

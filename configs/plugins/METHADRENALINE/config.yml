@@ -1,0 +1,23 @@
+# Public template. Keep account assignments and secrets only in the installed copy.
+mode_voting_enabled: false
+mode_voting_bind_address: 127.0.0.1
+mode_voting_port: 8790
+mode_voting_token_file: ''
+basic_asn_exempt_user_ids: []
+preferred_scp_roles: true
+radios_for_humans: true
+class_d_starting_card: true
+small_server_respawn_limit: 90
+events_enabled: true
+first_chaos_minimum_delay: 45
+first_chaos_maximum_delay: 120
+minimum_chaos_gap: 90
+maximum_chaos_gap: 180
+event_duration: 22
+gravity_multiplier: 0.349999994
+levitation_acceleration: 12
+minimum_event_players: 1
+maximum_affected_rooms: 16
+maximum_affected_doors: 32
+door_pulse_interval: 1.5
+signal_pulse_interval: 5

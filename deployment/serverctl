@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
+port="$(python3 -c 'import json,sys; print(int(json.load(open(sys.argv[1]))["port"]))' "$root/instance.json")"
+session="scpsl-$port"
+target="=$session:0.0"
+
+case "${1:-status}" in
+    start)
+        if tmux has-session -t "=$session" 2>/dev/null; then
+            printf 'SCP: SL is already running\n'
+            exit 0
+        fi
+        mkdir -p -- "$root/logs" "$root/state"
+        # Use the same isolated application-data root in the game and all plugins.
+        tmux new-session -d -s "$session" -c "$root/game" \
+            env "XDG_CONFIG_HOME=$root/state" "$root/game/LocalAdmin" "$port" --logs "$root/logs"
+        sleep 0.5
+        if ! tmux has-session -t "=$session" 2>/dev/null; then
+            printf 'Server exited during startup; inspect the private runtime logs\n' >&2
+            exit 1
+        fi
+        printf 'Started SCP: SL on port %s\n' "$port"
+        ;;
+    stop)
+        if ! tmux has-session -t "=$session" 2>/dev/null; then
+            printf 'SCP: SL is already stopped\n'
+            exit 0
+        fi
+        tmux send-keys -t "$target" -l exit
+        tmux send-keys -t "$target" Enter
+        for ((attempt=0; attempt<100; attempt++)); do
+            if ! tmux has-session -t "=$session" 2>/dev/null; then
+                printf 'SCP: SL stopped\n'
+                exit 0
+            fi
+            sleep 0.2
+        done
+        printf 'Server has not stopped yet; inspect its console\n' >&2
+        exit 1
+        ;;
+    status)
+        if tmux has-session -t "=$session" 2>/dev/null; then
+            printf 'SCP: SL is running\n'
+        else
+            printf 'SCP: SL is stopped\n'
+            exit 1
+        fi
+        ;;
+    console) exec tmux attach-session -t "=$session" ;;
+    *) printf 'Usage: %s {start|stop|status|console}\n' "$0" >&2; exit 2 ;;
+esac

@@ -4,6 +4,7 @@ using System.Linq;
 using CustomPlayerEffects;
 using Footprinting;
 using InventorySystem.Items;
+using InventorySystem.Disarming;
 using LabApi.Features.Wrappers;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
@@ -44,11 +45,32 @@ internal sealed class ParavozAbilities
         states.Add(player.NetworkId, state);
         player.ReferenceHub.interCoordinator.AddBlocker(state);
         Maintain(player);
+        RefreshInventoryView(player);
+    }
+
+    internal static void RefreshInventoryView(Player player)
+    {
+        if (!player.IsDestroyed && player.ReferenceHub.connectionToClient is { isReady: true } connection)
+            connection.Send(new DisarmedPlayersListMessage(DisarmedPlayers.Entries));
     }
 
     internal void Maintain(Player player)
     {
         if (!Enabled(player)) return;
+        Item? radio = null;
+        foreach (Item item in player.Items.ToArray())
+        {
+            if (item.Type == ItemType.Radio && radio == null) radio = item;
+            else player.RemoveItem(item);
+        }
+        bool created = radio == null;
+        radio ??= player.AddItem(ItemType.Radio);
+        if (radio is RadioItem transmitter)
+        {
+            transmitter.BatteryPercent = 100;
+            if (created) transmitter.Base.ServerProcessCmd(InventorySystem.Items.Radio.RadioMessages.RadioCommand.Enable);
+        }
+        if (player.ReferenceHub.inventory.UserInventory.ReserveAmmo.Values.Any(amount => amount > 0)) player.ClearAmmo();
         var movement = player.GetEffect<MovementBoost>()!;
         if (movement.Intensity < 50) movement.ServerSetState(50);
         var stamina = player.ReferenceHub.playerStats.GetModule<StaminaStat>();
@@ -105,6 +127,8 @@ internal sealed class ParavozAbilities
         states.Remove(id);
         state.Active = false;
         var player = state.Player;
+        if (!player.IsDestroyed) player.ReferenceHub.interCoordinator.RemoveBlocker(state);
+        RefreshInventoryView(player);
         if (player.IsDestroyed || player.LifeId != state.Life) return;
         player.GetEffect<MovementBoost>()?.ServerSetState(state.Movement);
     }
