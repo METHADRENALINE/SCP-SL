@@ -9,6 +9,13 @@ spec.loader.exec_module(policy)
 
 
 class PublicationPolicyTests(unittest.TestCase):
+    def test_root_readme_is_allowed_and_still_scanned(self):
+        self.assertEqual([], policy.problems('README.md', (ROOT / 'README.md').read_bytes()))
+        for name in ['src/README.md', 'README.txt', 'readme.md', 'docs/README.md']:
+            self.assertTrue(policy.problems(name, b'public description'))
+        self.assertTrue(policy.problems('README.md', ('ghp_' + 'x' * 30).encode()))
+        self.assertTrue(policy.problems('README.md', ('765611' + '9' * 11).encode()))
+
     def test_only_reviewed_map_assets_are_allowed(self):
         for name in policy.MAP_ASSETS:
             data = (ROOT / name).read_bytes()
