@@ -9,6 +9,14 @@ spec.loader.exec_module(policy)
 
 
 class PublicationPolicyTests(unittest.TestCase):
+    def test_only_reviewed_map_assets_are_allowed(self):
+        for name in policy.MAP_ASSETS:
+            data = (ROOT / name).read_bytes()
+            with self.subTest(name=name):
+                self.assertEqual([], policy.problems(name, data))
+                self.assertTrue(policy.problems(name, data + b'private'))
+        self.assertTrue(policy.problems('src/Methadrenaline.Server/Map/unknown.deflate', b'private'))
+
     def test_all_reviewed_templates_pass(self):
         for name in policy.CONFIG_FILES:
             with self.subTest(name=name):

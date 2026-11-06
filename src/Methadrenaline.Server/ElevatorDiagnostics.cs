@@ -29,7 +29,7 @@ internal static class ElevatorDiagnostics
         bool arrivalDoorsOpen = true, departureDoorsClosed = true;
         var arrived = new HashSet<NativeElevator>();
         int samples = 0;
-        var cabin = lifts[0];
+        var cabin = lifts.First(c => !ParavozBoundaries.SurfaceLift(c));
         try
         {
             // A closed landing must stay closed even if its cabin is absent.
@@ -51,12 +51,21 @@ internal static class ElevatorDiagnostics
             var humanFpc = ((IFpcRole)human.RoleBase).FpcModule;
             check("elevator_passengers_attach_to_native_waypoint", carrierFpc.RelativePosition.WaypointId == cabin.Network_waypointId && humanFpc.RelativePosition.WaypointId == cabin.Network_waypointId);
 
+            bool surfaceBlocked = true, interiorAllowed = true;
             foreach (var lift in lifts)
             {
                 var panel = ElevatorPanel.AllPanels.First(p => p.AssignedChamber == lift);
                 lift.ServerInteract(carrier.ReferenceHub, panel.ColliderId);
+                if (ParavozBoundaries.SurfaceLift(lift))
+                {
+                    surfaceBlocked &= lift.DestinationLevel == levels[lift];
+                    lift.ServerInteract(human.ReferenceHub, panel.ColliderId);
+                }
+                else interiorAllowed &= lift.DestinationLevel != levels[lift];
             }
-            check("elevator_buttons_accept_paravoz", lifts.All(c => c.DestinationLevel != levels[c]));
+            check("surface_elevator_buttons_reject_paravoz", lifts.Any(ParavozBoundaries.SurfaceLift) && surfaceBlocked);
+            check("interior_elevator_buttons_accept_paravoz", interiorAllowed);
+            check("surface_elevator_buttons_accept_humans", lifts.Where(ParavozBoundaries.SurfaceLift).All(c => c.DestinationLevel != levels[c]));
             float deadline = Time.realtimeSinceStartup + 60;
             bool carrierInside = true, humanInside = true;
             do

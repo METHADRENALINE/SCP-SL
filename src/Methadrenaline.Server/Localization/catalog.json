@@ -1,5 +1,323 @@
 [
   {
+    "source": "Site-02 Map",
+    "en": "Site-02 Map",
+    "uk": "Мапа Зони-02",
+    "ru": "Карта Зоны-02"
+  },
+  {
+    "source": "Light Containment Zone",
+    "en": "Light Containment Zone",
+    "uk": "Зона легкого утримання",
+    "ru": "Лёгкая зона содержания"
+  },
+  {
+    "source": "Heavy Containment Zone",
+    "en": "Heavy Containment Zone",
+    "uk": "Зона посиленого утримання",
+    "ru": "Тяжёлая зона содержания"
+  },
+  {
+    "source": "Entrance Zone (Offices)",
+    "en": "Entrance Zone (Offices)",
+    "uk": "Вхідна зона (офіси)",
+    "ru": "Входная зона (офисы)"
+  },
+  {
+    "source": "You are here",
+    "en": "You are here",
+    "uk": "Ви тут",
+    "ru": "Вы здесь"
+  },
+  {
+    "source": "Room index",
+    "en": "Room index",
+    "uk": "Список кімнат",
+    "ru": "Список комнат"
+  },
+  {
+    "source": "Inspect the item to show or hide the map (I by default)",
+    "en": "Inspect item  ·  Open or close map  ·  I by default",
+    "uk": "Оглянути предмет  ·  Відкрити або закрити карту  ·  Типово I",
+    "ru": "Осмотреть предмет  ·  Открыть или закрыть карту  ·  По умолчанию I"
+  },
+  {
+    "source": "Class D cells",
+    "en": "Class D cells",
+    "uk": "Камери класу D",
+    "ru": "Камеры D-класса"
+  },
+  {
+    "source": "Computer office PC15",
+    "en": "Computer office PC15",
+    "uk": "Комп’ютерний офіс PC15",
+    "ru": "Компьютерный офис PC15"
+  },
+  {
+    "source": "Checkpoint EX-A",
+    "en": "Checkpoint EX-A",
+    "uk": "КПП EX-A",
+    "ru": "КПП EX-A"
+  },
+  {
+    "source": "Checkpoint EX-B",
+    "en": "Checkpoint EX-B",
+    "uk": "КПП EX-B",
+    "ru": "КПП EX-B"
+  },
+  {
+    "source": "Restrooms WC00",
+    "en": "Restrooms WC00",
+    "uk": "Вбиральні WC00",
+    "ru": "Туалеты WC00"
+  },
+  {
+    "source": "Light armory",
+    "en": "Light armory",
+    "uk": "Арсенал легкої зони",
+    "ru": "Арсенал ЛЗС"
+  },
+  {
+    "source": "SCP-173 chamber PT00",
+    "en": "SCP-173 chamber PT00",
+    "uk": "Камера SCP-173 PT00",
+    "ru": "Камера SCP-173 PT00"
+  },
+  {
+    "source": "Glass room GR18",
+    "en": "Glass room GR18",
+    "uk": "Скляний куб GR18",
+    "ru": "Стеклянный куб GR18"
+  },
+  {
+    "source": "SCP-330 chamber TC01",
+    "en": "SCP-330 chamber TC01",
+    "uk": "Камера SCP-330 TC01",
+    "ru": "Камера SCP-330 TC01"
+  },
+  {
+    "source": "SCP-914 chamber",
+    "en": "SCP-914 chamber",
+    "uk": "Камера SCP-914",
+    "ru": "Камера SCP-914"
+  },
+  {
+    "source": "Greenhouse VT00",
+    "en": "Greenhouse VT00",
+    "uk": "Теплиця VT00",
+    "ru": "Теплица VT00"
+  },
+  {
+    "source": "Airlock",
+    "en": "Airlock",
+    "uk": "Повітряний шлюз",
+    "ru": "Воздушный шлюз"
+  },
+  {
+    "source": "Entrance checkpoint",
+    "en": "Entrance checkpoint",
+    "uk": "КПП до вхідної зони",
+    "ru": "КПП во Входную зону"
+  },
+  {
+    "source": "Heavy containment checkpoint",
+    "en": "Heavy containment checkpoint",
+    "uk": "КПП до посиленої зони",
+    "ru": "КПП в Тяжёлую зону"
+  },
+  {
+    "source": "Elevator system A",
+    "en": "Elevator system A",
+    "uk": "Ліфти A",
+    "ru": "Лифты A"
+  },
+  {
+    "source": "Elevator system B",
+    "en": "Elevator system B",
+    "uk": "Ліфти B",
+    "ru": "Лифты B"
+  },
+  {
+    "source": "Alpha Warhead silo",
+    "en": "Alpha Warhead silo",
+    "uk": "Шахта боєголовки «Альфа»",
+    "ru": "Шахта боеголовки «Альфа»"
+  },
+  {
+    "source": "SCP-049 chamber",
+    "en": "SCP-049 chamber",
+    "uk": "Камера SCP-049",
+    "ru": "Камера SCP-049"
+  },
+  {
+    "source": "SCP-079 chamber",
+    "en": "SCP-079 chamber",
+    "uk": "Камера SCP-079",
+    "ru": "Камера SCP-079"
+  },
+  {
+    "source": "SCP-096 chamber",
+    "en": "SCP-096 chamber",
+    "uk": "Камера SCP-096",
+    "ru": "Камера SCP-096"
+  },
+  {
+    "source": "SCP-106 chamber",
+    "en": "SCP-106 chamber",
+    "uk": "Камера SCP-106",
+    "ru": "Камера SCP-106"
+  },
+  {
+    "source": "SCP-939 chamber",
+    "en": "SCP-939 chamber",
+    "uk": "Камера SCP-939",
+    "ru": "Камера SCP-939"
+  },
+  {
+    "source": "SCP-127 chamber",
+    "en": "SCP-127 chamber",
+    "uk": "Камера SCP-127",
+    "ru": "Камера SCP-127"
+  },
+  {
+    "source": "Micro H.I.D. armory",
+    "en": "Micro H.I.D. armory",
+    "uk": "Зброярня Micro H.I.D.",
+    "ru": "Оружейная Micro H.I.D."
+  },
+  {
+    "source": "Heavy armory",
+    "en": "Heavy armory",
+    "uk": "Арсенал посиленої зони",
+    "ru": "Арсенал ТЗС"
+  },
+  {
+    "source": "Server room",
+    "en": "Server room",
+    "uk": "Серверна",
+    "ru": "Серверная"
+  },
+  {
+    "source": "Tesla gate",
+    "en": "Tesla gate",
+    "uk": "Ворота Тесла",
+    "ru": "Ворота Тесла"
+  },
+  {
+    "source": "Collapsed tunnel",
+    "en": "Collapsed tunnel",
+    "uk": "Обвалений коридор",
+    "ru": "Обвалившийся коридор"
+  },
+  {
+    "source": "Gate A",
+    "en": "Gate A",
+    "uk": "Ворота A",
+    "ru": "Ворота А"
+  },
+  {
+    "source": "Gate B",
+    "en": "Gate B",
+    "uk": "Ворота B",
+    "ru": "Ворота Б"
+  },
+  {
+    "source": "Red room",
+    "en": "Red room",
+    "uk": "Червона кімната",
+    "ru": "Красная комната"
+  },
+  {
+    "source": "Evacuation shelter",
+    "en": "Evacuation shelter",
+    "uk": "Евакуаційне укриття",
+    "ru": "Эвакуационное убежище"
+  },
+  {
+    "source": "Intercom room",
+    "en": "Intercom room",
+    "uk": "Інтерком",
+    "ru": "Интерком"
+  },
+  {
+    "source": "Two-story office",
+    "en": "Two-story office",
+    "uk": "Двоповерховий офіс",
+    "ru": "Двухэтажный офис"
+  },
+  {
+    "source": "Cubical office",
+    "en": "Cubical office",
+    "uk": "Квадратний офіс",
+    "ru": "Квадратный офис"
+  },
+  {
+    "source": "Side office",
+    "en": "Side office",
+    "uk": "Бічний офіс",
+    "ru": "Боковой офис"
+  },
+  {
+    "source": "Test room",
+    "en": "Test room",
+    "uk": "Тестова кімната",
+    "ru": "Тестовая комната"
+  },
+  {
+    "source": "Acroamatic abatement",
+    "en": "Acroamatic abatement",
+    "uk": "Кімната знешкодження відходів",
+    "ru": "Комната устранения отходов"
+  },
+  {
+    "source": "Wayside incinerator",
+    "en": "Wayside incinerator",
+    "uk": "Сміттєспалювач",
+    "ru": "Мусоросжигатель"
+  },
+  {
+    "source": "Ramp tunnel",
+    "en": "Ramp tunnel",
+    "uk": "Тунель із пандусом",
+    "ru": "Тоннель с пандусом"
+  },
+  {
+    "source": "Straight corridor",
+    "en": "Straight corridor",
+    "uk": "Прямий коридор",
+    "ru": "Прямой коридор"
+  },
+  {
+    "source": "Corner corridor",
+    "en": "Corner corridor",
+    "uk": "Кутовий коридор",
+    "ru": "Угловой коридор"
+  },
+  {
+    "source": "T junction",
+    "en": "T junction",
+    "uk": "Т-подібне перехрестя",
+    "ru": "Т-образный перекрёсток"
+  },
+  {
+    "source": "Crossroads",
+    "en": "Crossroads",
+    "uk": "Перехрестя",
+    "ru": "Перекрёсток"
+  },
+  {
+    "source": "Dead end",
+    "en": "Dead end",
+    "uk": "Глухий кут",
+    "ru": "Тупик"
+  },
+  {
+    "source": "Passage",
+    "en": "Passage",
+    "uk": "Прохід",
+    "ru": "Проход"
+  },
+  {
     "source": "Voting for a mode in Discord\n{0} s",
     "en": "Voting for a mode in Discord\n{0} s",
     "uk": "Голосування за режим у Discord\n{0} с",
@@ -22,6 +340,18 @@
     "en": "You will be pulled to Paravoz in {0} seconds!",
     "uk": "Вас притягне до Паравоза через {0} секунд!",
     "ru": "Вас притянет к паравозу через {0} секунд!"
+  },
+  {
+    "source": "Suffocation in {0} s. Change your route!",
+    "en": "Suffocation in {0} s. Change your route!",
+    "uk": "Задихнешся через {0} с. Зміни маршрут!",
+    "ru": "Задохнёшься через {0} с. Смени маршрут!"
+  },
+  {
+    "source": "Self-melting in {0} s! Run to survive!",
+    "en": "Self-melting in {0} s! Run to survive!",
+    "uk": "Самоплавлення через {0} с! Біжи, щоб вижити!",
+    "ru": "Самоплавление через {0} с! Беги, чтобы выжить!"
   },
   {
     "source": "Localization",
@@ -2367,10 +2697,10 @@
     "ru": "METHADRENALINE · Language / Мова / Язык"
   },
   {
-    "source": "Language for perks, messages and server settings. Saved on this client.",
-    "en": "Language for perks, messages and server settings. Saved on this client.",
-    "uk": "Мова перків, повідомлень і налаштувань сервера. Зберігається на цьому клієнті.",
-    "ru": "Язык перков, сообщений и настроек сервера. Сохраняется на этом клиенте."
+    "source": "Language for perks, messages and server settings.",
+    "en": "Language for perks, messages and server settings.",
+    "uk": "Мова перків, повідомлень і налаштувань сервера.",
+    "ru": "Язык перков, сообщений и настроек сервера."
   },
   {
     "source": "Proximity Chat",
@@ -2481,10 +2811,16 @@
     "ru": "Громкость игрока: "
   },
   {
-    "source": "SCP Proximity Chat available.",
-    "en": "SCP Proximity Chat available.",
-    "uk": "Можна говорити з гравцями поруч.",
-    "ru": "Можно говорить с игроками рядом."
+    "source": "Press {0} to switch between nearby players and the SCP team.",
+    "en": "Press {0} to switch between nearby players and the SCP team.",
+    "uk": "Натисни {0}, щоб перемкнути голос між гравцями поруч і командою SCP.",
+    "ru": "Нажми {0}, чтобы переключить голос между игроками рядом и командой SCP."
+  },
+  {
+    "source": "Hold {0} to talk to nearby players.",
+    "en": "Hold {0} to talk to nearby players.",
+    "uk": "Затисни {0}, щоб говорити з гравцями поруч.",
+    "ru": "Зажми {0}, чтобы говорить с игроками рядом."
   },
   {
     "source": "Press {0} to toggle.",
@@ -3682,6 +4018,12 @@
     "ru": "Хаос доступен во время раунда, если выполнены условия и остались события на этот раунд."
   },
   {
+    "source": "Facility events are disabled in Paravoz rounds.",
+    "en": "Facility events are disabled in Paravoz rounds.",
+    "uk": "Події комплексу вимкнені в режимі «Паровоз».",
+    "ru": "События комплекса отключены в режиме «Паравоз»."
+  },
+  {
     "source": "Chaos bundle failed and was rolled back: ",
     "en": "Chaos bundle failed and was rolled back: ",
     "uk": "Хаос не запустився, зміни скасовано: ",
@@ -4173,12 +4515,6 @@
     "ru": "Наблюдатель"
   },
   {
-    "source": "No role",
-    "en": "No role",
-    "uk": "Без ролі",
-    "ru": "Без роли"
-  },
-  {
     "source": "Custom role",
     "en": "Custom role",
     "uk": "Особлива роль",
@@ -4239,16 +4575,16 @@
     "ru": "Громкость локального голоса SCP"
   },
   {
-    "source": "100% = normal voice level; above 100% = boost; 0% = mute. This changes the volume of SCP local voices only for you.",
-    "en": "100% = normal voice level; above 100% = boost; 0% = mute. This changes the volume of SCP local voices only for you.",
-    "uk": "100% — звичайна гучність, понад 100% — підсилення, 0% — без звуку. Змінює гучність локальних голосів SCP лише для тебе.",
-    "ru": "100% — обычная громкость, выше 100% — усиление, 0% — без звука. Меняет громкость локальных голосов SCP только для тебя."
+    "source": "Changes how loud you hear nearby SCPs.",
+    "en": "Changes how loud you hear nearby SCPs.",
+    "uk": "Змінює гучність голосів SCP поруч.",
+    "ru": "Меняет громкость голосов SCP поблизости."
   },
   {
-    "source": "Volume of this player's SCP local voice, on top of the overall SCP volume. 100% = normal; above 100% = boost; 0% = mute. Only affects what you hear.",
-    "en": "Volume of this player's SCP local voice, on top of the overall SCP volume. 100% = normal; above 100% = boost; 0% = mute. Only affects what you hear.",
-    "uk": "Гучність локального голосу цього гравця за SCP, додатково до загальної гучності SCP. 100% — звичайна, понад 100% — підсилення, 0% — без звуку. Впливає лише на те, що чуєш ти.",
-    "ru": "Громкость локального голоса этого игрока за SCP, дополнительно к общей громкости SCP. 100% — обычная, выше 100% — усиление, 0% — без звука. Влияет только на то, что слышишь ты."
+    "source": "Adjusts this player's local SCP voice relative to your overall SCP volume.",
+    "en": "Adjusts this player's local SCP voice relative to your overall SCP volume.",
+    "uk": "Змінює гучність голосу цього гравця за SCP відносно загальної гучності.",
+    "ru": "Меняет громкость голоса этого игрока за SCP относительно общей громкости."
   },
   {
     "source": "SCP voice: {0}",
@@ -4258,5 +4594,137 @@
     "verbatim": [
       0
     ]
+  },
+  {
+    "source": "Map: Office",
+    "en": "Office",
+    "uk": "Офіс",
+    "ru": "Офис"
+  },
+  {
+    "source": "Map: Checkpoint",
+    "en": "Checkpoint",
+    "uk": "КПП",
+    "ru": "КПП"
+  },
+  {
+    "source": "Map: D cells",
+    "en": "D cells",
+    "uk": "Камери D",
+    "ru": "Камеры D"
+  },
+  {
+    "source": "Map: Restrooms",
+    "en": "Restrooms",
+    "uk": "Вбиральні",
+    "ru": "Туалеты"
+  },
+  {
+    "source": "Map: Armory",
+    "en": "Armory",
+    "uk": "Арсенал",
+    "ru": "Арсенал"
+  },
+  {
+    "source": "Map: Glass room",
+    "en": "Glass room",
+    "uk": "Скляна кімната",
+    "ru": "Стеклянная комната"
+  },
+  {
+    "source": "Map: Greenhouse",
+    "en": "Greenhouse",
+    "uk": "Теплиця",
+    "ru": "Теплица"
+  },
+  {
+    "source": "Map: Airlock",
+    "en": "Airlock",
+    "uk": "Шлюз",
+    "ru": "Шлюз"
+  },
+  {
+    "source": "Map: HCZ checkpoint",
+    "en": "To HCZ",
+    "uk": "КПП ЗПУ",
+    "ru": "КПП ТЗС"
+  },
+  {
+    "source": "Map: EZ checkpoint",
+    "en": "To EZ",
+    "uk": "КПП ВЗ",
+    "ru": "КПП ВЗ"
+  },
+  {
+    "source": "Map: Elevators",
+    "en": "Elevators",
+    "uk": "Ліфти",
+    "ru": "Лифты"
+  },
+  {
+    "source": "Map: Warhead",
+    "en": "Warhead",
+    "uk": "Боєголовка",
+    "ru": "Боеголовка"
+  },
+  {
+    "source": "Map: Servers",
+    "en": "Servers",
+    "uk": "Серверна",
+    "ru": "Серверная"
+  },
+  {
+    "source": "Map: Ramp",
+    "en": "Ramp",
+    "uk": "Пандус",
+    "ru": "Пандус"
+  },
+  {
+    "source": "Map: Test room",
+    "en": "Test room",
+    "uk": "Тестова кімната",
+    "ru": "Тестовая комната"
+  },
+  {
+    "source": "Map: Intercom",
+    "en": "Intercom",
+    "uk": "Інтерком",
+    "ru": "Интерком"
+  },
+  {
+    "source": "Map: Corridor",
+    "en": "Corridor",
+    "uk": "Коридор",
+    "ru": "Коридор"
+  },
+  {
+    "source": "Testing chamber PT00",
+    "en": "Testing chamber PT00",
+    "uk": "Випробувальна камера PT00",
+    "ru": "Испытательная камера PT00"
+  },
+  {
+    "source": "SCP-049/173 chambers",
+    "en": "SCP-049 / SCP-173 containment",
+    "uk": "Камери SCP-049 / SCP-173",
+    "ru": "Камеры SCP-049 / SCP-173"
+  },
+  {
+    "source": "SCP-173 chamber",
+    "en": "SCP-173 chamber",
+    "uk": "Камера SCP-173",
+    "ru": "Камера SCP-173"
+  },
+  {
+    "source": "Warhead controls",
+    "en": "Warhead controls",
+    "uk": "Керування боєголовкою",
+    "ru": "Управление боеголовкой"
+  },
+  {
+    "source": "Elevator",
+    "en": "Elevator",
+    "uk": "Ліфт",
+    "ru": "Лифт"
   }
 ]

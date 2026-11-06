@@ -96,17 +96,13 @@ internal sealed class ParavozAbilities
         if (!Enabled(carrier) || carrier.RoleBase is not IFpcRole sourceRole) return;
         var hub = carrier.ReferenceHub;
         Vector3 origin = sourceRole.FpcModule.Position;
+        BurnWindows(carrier, origin, hub.PlayerCameraReference.forward);
         bool hitmarker = false;
         foreach (Player target in Player.List.ToArray())
         {
             if (!carrier.IsAlive) break;
             if (target == carrier || !target.IsAlive || target.RoleBase is not IFpcRole targetRole) continue;
-            Vector3 delta = targetRole.FpcModule.Position - origin;
-            float squared = delta.sqrMagnitude;
-            if (squared > 25f) continue;
-            float distance = Mathf.Sqrt(squared);
-            Vector3 direction = Mathf.Approximately(distance, 0) ? Vector3.zero : delta / distance;
-            if (distance >= 0.7f && Vector3.Dot(direction, hub.PlayerCameraReference.forward) < 0.75f) continue;
+            if (!InFlame(origin, hub.PlayerCameraReference.forward, targetRole.FpcModule.Position, out var direction, out float distance)) continue;
             if (Physics.Raycast(origin, direction, distance, PlayerRolesUtils.AttackMask)) continue;
             // Retain native attacker attribution, shields, friendly damage
             // handling and the existing lethal-fire infection path.
@@ -119,6 +115,36 @@ internal sealed class ParavozAbilities
             if (target.IsAlive) target.ReferenceHub.playerEffectsController.EnableEffect<Burned>(60);
         }
         if (hitmarker) Hitmarker.SendHitmarkerDirectly(hub, 1);
+    }
+
+    private static bool InFlame(Vector3 origin, Vector3 forward, Vector3 point, out Vector3 direction, out float distance)
+    {
+        Vector3 delta = point - origin;
+        distance = delta.magnitude;
+        direction = Mathf.Approximately(distance, 0) ? Vector3.zero : delta / distance;
+        return distance <= 5f && (distance < 0.7f || Vector3.Dot(direction, forward) >= 0.75f);
+    }
+
+    private static void BurnWindows(Player carrier, Vector3 origin, Vector3 forward)
+    {
+        foreach (var window in Window.List.ToArray())
+        {
+            if (window.IsDestroyed || window.IsBroken) continue;
+            foreach (var collider in window.Base.GetComponentsInChildren<Collider>())
+            {
+                if (!collider.enabled || collider.isTrigger) continue;
+                Vector3 point = collider.ClosestPoint(origin);
+                if (!InFlame(origin, forward, point, out var direction, out float distance)) continue;
+                if (Physics.Raycast(origin, direction, out var hit, distance + 0.02f,
+                        PlayerRolesUtils.AttackMask, QueryTriggerInteraction.Ignore) &&
+                    hit.collider.GetComponentInParent<BreakableWindow>() != window.Base) continue;
+                // Native damage synchronizes the break and preserves window events and attribution.
+                const float damage = 15f;
+                window.Base.Damage(damage, new ExplosionDamageHandler(new Footprint(carrier.ReferenceHub),
+                    Vector3.zero, damage, 100, ExplosionType.Custom), point);
+                break; // One hit per pane, even when it has multiple colliders.
+            }
+        }
     }
 
     internal void Forget(uint id)

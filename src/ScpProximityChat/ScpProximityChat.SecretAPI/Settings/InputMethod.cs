@@ -13,13 +13,18 @@ internal sealed class InputMethod : CustomTwoButtonSetting
     ) => IsShared = SettingsRegistry.Shared;
 
     public bool Hold => IsOptionB;
+    internal static bool UsesHold(Player player) => TryGetPlayerSetting(player, out InputMethod? input) && input.Hold;
 
     protected override CustomSetting CreateDuplicate() => new InputMethod();
 
     protected override void HandleSettingUpdate()
     {
-        if (!Hold)
-            ProximityChatToggle.InvalidateCancellation(KnownOwner!);
+        var player = KnownOwner!;
+        ProximityChatToggle.InvalidateCancellation(player);
+        if (!player.CanUseProximityChat()) return;
+        if (Hold && (!TryGetPlayerSetting(player, out ProximityChatToggle? toggle) || !toggle.IsPressed))
+            player.DisableProximityChat();
+        RueI.API.RueDisplay.Get(player).Update();
     }
 
     public override CustomHeader Header => Headers.ProximityChat;

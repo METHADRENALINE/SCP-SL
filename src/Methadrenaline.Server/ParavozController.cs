@@ -12,6 +12,7 @@ using LabApi.Events.Arguments.ServerEvents;
 using LabApi.Events.Handlers;
 using LabApi.Features.Enums;
 using LabApi.Features.Wrappers;
+using LightContainmentZoneDecontamination;
 using MapGeneration;
 using MEC;
 using Methadrenaline.Server.Core;
@@ -21,6 +22,8 @@ using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
 using PlayerRoles.FirstPersonControl.Spawnpoints;
 using PlayerStatsSystem;
+using RueI.API;
+using RueI.API.Elements;
 using UnityEngine;
 using Logger = LabApi.Features.Console.Logger;
 
@@ -28,11 +31,14 @@ namespace Methadrenaline.Server;
 
 internal sealed class ParavozController : IDisposable
 {
+    private static readonly Tag CountdownTag = new("methadrenaline.paravoz.countdown");
+    private readonly Dictionary<Player, string> countdownViewers = new();
     private readonly ParavozPolicy policy = new();
     private readonly System.Random random = new();
     private readonly HashSet<uint> initializing = new();
     private readonly HashSet<uint> pendingInfections = new();
     private RestorationScope? isolation;
+    private RestorationScope? decontamination;
     private Door? isolationDoor;
     private CoroutineHandle timer;
     private float started;
@@ -52,6 +58,7 @@ internal sealed class ParavozController : IDisposable
     internal ParavozPolicy Policy => policy;
     internal ParavozVoice Voice { get; }
     internal ParavozAbilities Abilities { get; } = new();
+    internal ParavozBoundaries Boundaries { get; } = new();
     internal ParavozPresentation Presentation { get; } = new();
     internal ParavozController() => Voice = new ParavozVoice(this);
     internal Door? IsolationDoor => isolationDoor;
@@ -64,14 +71,39 @@ internal sealed class ParavozController : IDisposable
         return "<color=#FF8800>" + string.Format(CultureInfo.InvariantCulture,
             Localizer.Text(viewer.ReferenceHub, ParavozPolicy.WaitingMessage), time) + "</color>";
     }
-    internal IEnumerable<Player> GatheringRunners => Active && !gathered && ParavozPolicy.GatherCountdown(Elapsed) > 0
-        ? Participants.Where(p => p.IsAlive && policy.Is(p.NetworkId, ParavozMember.Runner)) : Enumerable.Empty<Player>();
     internal string GatheringHud(Player viewer)
     {
         int seconds = ParavozPolicy.GatherCountdown(Elapsed);
         if (!Active || gathered || !viewer.IsAlive || !policy.Is(viewer.NetworkId, ParavozMember.Runner) || seconds == 0) return "";
-        return "<color=#FF8800>" + string.Format(CultureInfo.InvariantCulture,
-            Localizer.Text(viewer.ReferenceHub, ParavozPolicy.GatherMessage), seconds) + "</color>";
+        return CountdownText(viewer, ParavozPolicy.GatherMessage, seconds);
+    }
+
+    private static string CountdownText(Player viewer, string template, int seconds)
+        => string.Format(CultureInfo.InvariantCulture, Localizer.Text(viewer.ReferenceHub, template), seconds);
+
+    private void UpdateCountdownHud()
+    {
+        foreach (var viewer in countdownViewers.Keys.ToArray())
+            if (!Active || viewer.IsDestroyed || !viewer.IsAlive) RemoveCountdownHud(viewer);
+        if (!Active) return;
+
+        foreach (var viewer in Participants.Where(p => p.IsAlive))
+        {
+            string line = Boundaries.Warning(viewer) is { } warning
+                ? CountdownText(viewer, warning.Message, warning.Seconds)
+                : GatheringHud(viewer);
+            if (line.Length == 0) { RemoveCountdownHud(viewer); continue; }
+            if (countdownViewers.TryGetValue(viewer, out string old) && old == line) continue;
+            countdownViewers[viewer] = line;
+            RueDisplay.Get(viewer).Show(CountdownTag, new BasicElement(58,
+                "<align=center><size=34><color=#FF8800><nobr>" + line + "</nobr></color></size></align>"));
+        }
+    }
+
+    private void RemoveCountdownHud(Player viewer)
+    {
+        if (countdownViewers.Remove(viewer) && !viewer.IsDestroyed)
+            RueDisplay.Get(viewer).Remove(CountdownTag);
     }
     internal static Door[] ClassDCellDoors() => Door.List.Where(d => !d.IsDestroyed &&
         d.Rooms.Length == 1 && d.Rooms[0].Name == RoomName.LczClassDSpawn).ToArray();
@@ -100,6 +132,7 @@ internal sealed class ParavozController : IDisposable
         PlayerEvents.ChangedRole += ChangedRole;
         PlayerEvents.UpdatingEffect += EffectUpdating;
         PlayerEvents.DroppingItem += DroppingItem;
+        PlayerEvents.InteractingElevator += InteractingElevator;
         ServerEvents.WaveRespawning += WaveRespawning;
         ServerEvents.RoundEnding += RoundEnding;
         ServerEvents.RoundEndingConditionsCheck += RoundEndingConditionsCheck;
@@ -118,8 +151,10 @@ internal sealed class ParavozController : IDisposable
         {
             hub.authManager.UserId = "ID_Dummy";
             var dummy = Player.Get(hub)!;
-            ServerPlugin.Instance!.PerkRounds!.Reset();
-            ServerPlugin.Instance.PerkRounds.Policy.BeginMode(() => CommunityRoundMode.Paravoz);
+            var plugin = ServerPlugin.Instance!;
+            plugin.PerkRounds!.Reset();
+            var mode = plugin.PerkRounds.Policy.BeginMode(() => CommunityRoundMode.Paravoz);
+            plugin.Director.BeginRound(mode);
             BeginRound(new[] { player, dummy }, asCarrier ? player : dummy);
             soloDummy = hub;
             soloPlayer = player.NetworkId;
@@ -148,10 +183,12 @@ internal sealed class ParavozController : IDisposable
         wasLocked = Round.IsLocked;
         Round.IsLocked = true;
         Active = true;
+        ServerPlugin.Instance?.SiteMaps?.Reset();
         RemoveSurfacePasses();
         int run = ++epoch;
         try
         {
+            SuspendDecontamination();
             foreach (var player in players) player.SetRole(RoleTypeId.ClassD, RoleChangeReason.RoundStart);
             // Role spawning is synchronous; avoid placing the carrier into a
             // fresh body until all round-start listeners have finished.
@@ -179,6 +216,8 @@ internal sealed class ParavozController : IDisposable
                         if (!relocated) throw new InvalidOperationException("Cannot clear the Paravoz isolation cell.");
                     }
                     ApplyCarrier(carrier, inside);
+                    foreach (var runner in players.Where(p => p.IsAlive && policy.Is(p.NetworkId, ParavozMember.Runner)))
+                        runner.AddItem(ItemType.SCP207);
                     bool opened = chamber.IsOpened;
                     bool alreadyLocked = (chamber.LockReason & DoorLockReason.AdminCommand) != 0;
                     isolation = new RestorationScope(error => Logger.Error("[METHADRENALINE] Isolation cleanup: " + error));
@@ -227,10 +266,13 @@ internal sealed class ParavozController : IDisposable
             {
                 foreach (var player in Participants.Where(p => p.IsAlive && IsParavoz(p)))
                 {
+                    if (player != WaitingCarrier) Boundaries.Tick(player, Time.realtimeSinceStartup);
+                    if (!player.IsAlive) continue;
                     Abilities.Tick(player);
                     BreachDoors(player);
                 }
                 Evaluate();
+                UpdateCountdownHud();
             }
             yield return Timing.WaitForSeconds(0.2f);
         }
@@ -284,13 +326,15 @@ internal sealed class ParavozController : IDisposable
     {
         if (!Active || !initialized) return;
         Player? attacker = ev.DamageHandler is AttackerDamageHandler damage ? Player.Get(damage.Attacker.Hub) : null;
-        if (IsParavoz(ev.Player) && !IsHunter(attacker)) ev.IsAllowed = false;
+        if (IsParavoz(ev.Player) && !IsHunter(attacker) && !Boundaries.IsExposureDamage(ev.Player, ev.DamageHandler)) ev.IsAllowed = false;
         if (IsParavoz(attacker) && IsParavoz(ev.Player)) ev.IsAllowed = false;
         if (diagnosticPlayers != null) Logger.Info($"[METHADRENALINE] Damage probe victim={ev.Player.NetworkId}; attacker={attacker?.NetworkId}; hunter={IsHunter(attacker)}; carrier={IsParavoz(ev.Player)}; allowed={ev.IsAllowed}; damage={(ev.DamageHandler as StandardDamageHandler)?.Damage}; hp={ev.Player.Health}; god={ev.Player.IsGodModeEnabled}; protection={ev.Player.GetEffect<SpawnProtected>()?.Intensity}");
     }
 
     private void Death(PlayerDeathEventArgs ev)
     {
+        Boundaries.Forget(ev.Player.NetworkId);
+        RemoveCountdownHud(ev.Player);
         Voice.Forget(ev.Player.NetworkId);
         Abilities.Forget(ev.Player.NetworkId);
         Presentation.Forget(ev.Player.NetworkId);
@@ -348,6 +392,11 @@ internal sealed class ParavozController : IDisposable
         if (IsParavoz(ev.Player)) ev.IsAllowed = false;
     }
 
+    private void InteractingElevator(PlayerInteractingElevatorEventArgs ev)
+    {
+        if (IsParavoz(ev.Player) && ParavozBoundaries.SurfaceLift(ev.Elevator.Base)) ev.IsAllowed = false;
+    }
+
     private void Escaping(PlayerEscapingEventArgs ev)
     {
         if (!Active) return;
@@ -376,6 +425,7 @@ internal sealed class ParavozController : IDisposable
     }
     private void ChangedRole(PlayerChangedRoleEventArgs ev)
     {
+        Boundaries.Forget(ev.Player.NetworkId);
         Voice.Forget(ev.Player.NetworkId);
         Abilities.Forget(ev.Player.NetworkId);
         Presentation.Forget(ev.Player.NetworkId);
@@ -386,6 +436,8 @@ internal sealed class ParavozController : IDisposable
     }
     private void Left(PlayerLeftEventArgs ev)
     {
+        Boundaries.Forget(ev.Player.NetworkId);
+        RemoveCountdownHud(ev.Player);
         if (SoloActive && ev.Player.NetworkId == soloPlayer) { Reset(); return; }
         Voice.Forget(ev.Player.NetworkId);
         Abilities.Forget(ev.Player.NetworkId);
@@ -433,12 +485,35 @@ internal sealed class ParavozController : IDisposable
         isolationDoor = null;
         if (releaseCarrier && door != null && !door.IsDestroyed && !door.IsLocked) door.IsOpened = true;
     }
+
+    private void SuspendDecontamination()
+    {
+        var controller = DecontaminationController.Singleton;
+        if (controller == null) return;
+        var previous = controller.DecontaminationOverride;
+        double startTime = controller.NetworkRoundStartTime;
+        decontamination = new RestorationScope(error => Logger.Error("[METHADRENALINE] Decontamination cleanup: " + error));
+        decontamination.Add(() =>
+        {
+            if (!controller) return;
+            controller.NetworkRoundStartTime = startTime;
+            controller.DecontaminationOverride = previous;
+        });
+        controller.DecontaminationOverride = DecontaminationController.DecontaminationStatus.Disabled;
+        // Clients also advance their own announcement phases from this timestamp.
+        controller.NetworkRoundStartTime = 0;
+    }
+
     internal void Reset()
     {
         bool active = Active;
         Active = false;
+        decontamination?.Dispose();
+        decontamination = null;
+        UpdateCountdownHud();
         Voice.Reset();
         Abilities.Reset();
+        Boundaries.Reset();
         Presentation.Reset();
         epoch++;
         Timing.KillCoroutines(timer);
@@ -471,6 +546,7 @@ internal sealed class ParavozController : IDisposable
         PlayerEvents.ChangedRole -= ChangedRole;
         PlayerEvents.UpdatingEffect -= EffectUpdating;
         PlayerEvents.DroppingItem -= DroppingItem;
+        PlayerEvents.InteractingElevator -= InteractingElevator;
         ServerEvents.WaveRespawning -= WaveRespawning;
         ServerEvents.RoundEnding -= RoundEnding;
         ServerEvents.RoundEndingConditionsCheck -= RoundEndingConditionsCheck;

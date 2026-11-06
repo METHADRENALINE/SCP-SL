@@ -4,6 +4,9 @@ using CommandSystem;
 using NetworkManagerUtils.Dummies;
 using PlayerRoles;
 using PlayerRoles.Voice;
+using RueI.API;
+using RueI.API.Elements;
+using RueI.API.Elements.Parameters;
 using SecretLabNAudio.Core;
 using UserSettings.ServerSpecific;
 using Mirror;
@@ -46,11 +49,28 @@ public sealed class ProximityDiagnostics : ICommand
                 .Invoke(null, [player.Connection, new SSSClientResponse(setting)]);
         void Volume(Player player, int id, float value)
             => Receive(player, new SSSliderSetting(id, "volume", 0, 200, 100, true) { SyncFloatValue = value });
+        object? VoiceTip(Player player)
+        {
+            var tag = typeof(SecretApiProximityChatPlugin).GetField("VoiceTipTag", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null);
+            var entries = typeof(RueDisplay).GetField("elements", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(RueDisplay.Get(player))!;
+            try { return entries.GetType().GetProperty("Item")!.GetValue(entries, [tag]); }
+            catch (TargetInvocationException error) when (error.InnerException is KeyNotFoundException) { return null; }
+        }
         try
         {
             source = Make("SCPVolumeSource", RoleTypeId.Scp173);
             var listener = Make("SCPVolumeListener", RoleTypeId.ClassD);
             var other = Make("SCPVolumeOther", RoleTypeId.ClassD);
+            Check("scp_proximity_enabled_on_spawn", source.IsProximityChatEnabled() && !listener.IsProximityChatEnabled());
+            var tip = VoiceTip(source)!;
+            var element = (DynamicElement)tip.GetType().GetField("Element")!.GetValue(tip)!;
+            var expiry = tip.GetType().GetField("ExpiryNode")!.GetValue(tip)!;
+            var expiryValue = expiry.GetType().GetProperty("Value", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(expiry)!;
+            float expiryTime = (float)expiryValue.GetType().GetField("ExpiresAt")!.GetValue(expiryValue)!;
+            Check("scp_bind_tip_private_for_thirty_seconds", VoiceTip(listener) == null &&
+                element.VerticalPosition == 58 && !element.ShowToSpectators &&
+                Mathf.Abs(expiryTime - Time.timeSinceLevelLoad - 30f) < 1 &&
+                element.Parameters?.Single() is KeybindParameter bind && bind.Id == ToggleSettingId);
             Vector3 cameraOffsetAtSpawn = listener.ReferenceHub.PlayerCameraReference.position - listener.Position;
             listener.Position = source.ReferenceHub.PlayerCameraReference.position + Vector3.right * 0.5f - cameraOffsetAtSpawn;
             var role = (IVoiceRole)PlayerRoleLoader.AllRoles[RoleTypeId.ClassD];
@@ -73,7 +93,7 @@ public sealed class ProximityDiagnostics : ICommand
             Volume(listener, PersonalizationManager.IdFor(source.UserId), 50);
             Check("native_personal_volume_multiplies_master_once", Mathf.Approximately(VolumeHelpers.Personalized(listener, source.UserId), settings.Volume * 0.75f));
             Check("other_listener_unchanged", Mathf.Approximately(VolumeHelpers.Personalized(other, source.UserId), settings.Volume));
-            source.EnableProximityChat();
+            Check("scp_default_speaker_is_not_duplicated", !source.EnableProximityChat());
             // Native ReadyList excludes dummies. Exercise the same refresh a
             // real listener receives after joining/updating their settings.
             PersonalizationManager.ConfigureAll(listener);
@@ -156,6 +176,13 @@ public sealed class ProximityDiagnostics : ICommand
             Check("pooled_source_ignores_stale_volume_updates", personal != null && !personal[listener].HasValue);
             checks.Add($"profile: human min={human.minDistance}; max={human.maxDistance}; rolloff={human.rolloffMode}; SCP gain={settings.Volume}; min={settings.MinDistance}; max={settings.MaxDistance}; rolloff={speaker.Base.Playback.Source.rolloffMode}");
             checks.Add("human rolloff keys: " + string.Join("; ", human.GetCustomCurve(AudioSourceCurveType.CustomRolloff).keys.Select(k => $"{k.time}:{k.value}:{k.inTangent}:{k.outTangent}")));
+            source.SetRole(RoleTypeId.ClassD);
+            Check("scp_bind_tip_removed_on_role_change", VoiceTip(source) == null);
+            var input = new SSTwoButtonsSetting(SettingsRegistry.Input.Id, "input", "toggle", "hold");
+            typeof(SSTwoButtonsSetting).GetProperty(nameof(SSTwoButtonsSetting.SyncIsB))!.SetValue(input, true);
+            Receive(source, input);
+            source.SetRole(RoleTypeId.Scp173);
+            Check("scp_saved_hold_mode_starts_in_team_chat", InputMethod.UsesHold(source) && !source.IsProximityChatEnabled());
         }
         catch (Exception error) { checks.Add("FAIL: " + error); }
         finally

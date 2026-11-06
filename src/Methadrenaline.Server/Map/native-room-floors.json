@@ -1,0 +1,162 @@
+{
+  "game_version": "14.2.9",
+  "source": "Native collider and camera geometry; no player data",
+  "floors": [
+    {
+      "room": "Lcz173",
+      "reference": 11.446838,
+      "minY": 5.723419,
+      "maxY": 20.798218,
+      "width": 370,
+      "height": 240,
+      "step": 0.08,
+      "quads": 97,
+      "maximum_highlight_quads": 51,
+      "regions": 6,
+      "marks": [
+        {
+          "region": 1,
+          "key": "Testing chamber PT00",
+          "x": 16.489008,
+          "z": 11.579979
+        }
+      ],
+      "occupied": 17042
+    },
+    {
+      "room": "Hcz079",
+      "reference": -3.331334,
+      "minY": -6.401672,
+      "maxY": -1.665667,
+      "width": 164,
+      "height": 203,
+      "step": 0.08,
+      "quads": 112,
+      "maximum_highlight_quads": 60,
+      "regions": 4,
+      "marks": [
+        {
+          "region": 5,
+          "key": "SCP-079 chamber",
+          "x": 4.04944,
+          "z": -10.770315
+        }
+      ],
+      "occupied": 23969
+    },
+    {
+      "room": "HczWarhead",
+      "reference": -72.399368,
+      "minY": -102.291046,
+      "maxY": -36.199684,
+      "width": 666,
+      "height": 340,
+      "step": 0.08,
+      "quads": 536,
+      "maximum_highlight_quads": 433,
+      "regions": 2,
+      "marks": [
+        {
+          "region": 1,
+          "key": "Warhead controls",
+          "x": 37.016088,
+          "z": 9.482981
+        },
+        {
+          "region": 2,
+          "key": "Map: Armory",
+          "x": -9.303911,
+          "z": 3.242981
+        },
+        {
+          "region": 2,
+          "key": "Elevator",
+          "x": 5.416089,
+          "z": -4.757018
+        }
+      ],
+      "occupied": 93010
+    },
+    {
+      "room": "Hcz049",
+      "reference": 89.051018,
+      "minY": 44.525509,
+      "maxY": 100.976135,
+      "width": 558,
+      "height": 422,
+      "step": 0.08,
+      "quads": 148,
+      "maximum_highlight_quads": 116,
+      "regions": 8,
+      "marks": [
+        {
+          "region": 2,
+          "key": "SCP-173 chamber",
+          "x": 21.983406,
+          "z": 10.134249
+        },
+        {
+          "region": 8,
+          "key": "SCP-049 chamber",
+          "x": 0.863407,
+          "z": -9.86575
+        },
+        {
+          "region": 1,
+          "key": "Elevator",
+          "x": 3.663407,
+          "z": -0.66575
+        }
+      ],
+      "occupied": 91686
+    },
+    {
+      "room": "HczServers",
+      "reference": -4.499062,
+      "minY": -43.062592,
+      "maxY": -2.249531,
+      "width": 137,
+      "height": 171,
+      "step": 0.08,
+      "quads": 72,
+      "maximum_highlight_quads": 63,
+      "regions": 2,
+      "marks": [
+        {
+          "region": 1,
+          "key": "Elevator",
+          "x": -3.580025,
+          "z": 4.289554
+        },
+        {
+          "region": 1,
+          "key": "Server room",
+          "x": 0.019975,
+          "z": 0.129554
+        }
+      ],
+      "occupied": 14464
+    },
+    {
+      "room": "EzGateA",
+      "reference": 3.983643,
+      "minY": 1.991821,
+      "maxY": 21.595169,
+      "width": 142,
+      "height": 247,
+      "step": 0.08,
+      "quads": 258,
+      "maximum_highlight_quads": 228,
+      "regions": 2,
+      "marks": [
+        {
+          "region": 3,
+          "key": "Elevator",
+          "x": 0.610556,
+          "z": -1.49571
+        }
+      ],
+      "occupied": 13385
+    }
+  ]
+}

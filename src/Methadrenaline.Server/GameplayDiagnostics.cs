@@ -9,6 +9,7 @@ using LabApi.Events.Arguments.PlayerEvents;
 using LabApi.Events.Arguments.ServerEvents;
 using LabApi.Events.Handlers;
 using LabApi.Features.Wrappers;
+using LightContainmentZoneDecontamination;
 using MEC;
 using Methadrenaline.Server.Core;
 using Mirror;
@@ -16,9 +17,15 @@ using NetworkManagerUtils.Dummies;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
 using PlayerStatsSystem;
+using RueI.API;
+using RueI.API.Parsing;
 using UnityEngine;
 using Logger = LabApi.Features.Console.Logger;
 using NativeRadio = InventorySystem.Items.Radio.RadioItem;
+using NativeRadioPickup = InventorySystem.Items.Radio.RadioPickup;
+using RadioMessages = InventorySystem.Items.Radio.RadioMessages;
+using RadioStatusMessage = InventorySystem.Items.Radio.RadioStatusMessage;
+using RoundStart = GameCore.RoundStart;
 
 namespace Methadrenaline.Server;
 
@@ -32,10 +39,73 @@ internal static class GameplayDiagnostics
         bool lobby = Round.IsLobbyLocked, locked = Round.IsLocked, paused = plugin.Director.Paused;
         var hubs = new List<ReferenceHub>();
         int passed = 0, failed = 0;
+        bool completed = false;
         void Check(string name, bool result)
         {
             if (result) passed++; else failed++;
             Logger.Info($"[METHADRENALINE] Gameplay check {name}: {(result ? "PASS" : "FAIL")}");
+        }
+        string HudOnDisplay(Player player, Type controller, string tagField)
+        {
+            var tag = AccessTools.Field(controller, tagField).GetValue(null);
+            var entries = AccessTools.Field(typeof(RueDisplay), "elements").GetValue(RueDisplay.Get(player));
+            object? entry;
+            try { entry = AccessTools.Property(entries.GetType(), "Item").GetValue(entries, new[] { tag }); }
+            catch (TargetInvocationException error) when (error.InnerException is KeyNotFoundException) { return ""; }
+            if (entry == null) return "";
+            var element = AccessTools.Field(entry.GetType(), "Element").GetValue(entry)!;
+            var parsed = AccessTools.Method(element.GetType(), "GetParsedData").Invoke(element, new object[] { player.ReferenceHub })!;
+            return (string)(AccessTools.Property(typeof(ParsedData), "ParsedString")?.GetValue(parsed) ??
+                AccessTools.Field(typeof(ParsedData), "ParsedString").GetValue(parsed))!;
+        }
+        void ProbeWarheadTimers(bool paravoz)
+        {
+            var warhead = AlphaWarheadController.Singleton;
+            var savedInfo = warhead.Info;
+            bool savedLock = warhead.IsLocked;
+            var autoEnabled = AccessTools.Field(typeof(AlphaWarheadController), "_autoDetonate");
+            var autoTime = AccessTools.Field(typeof(AlphaWarheadController), "_autoDetonateTime");
+            var automatic = AccessTools.Field(typeof(AlphaWarheadController), "_isAutomatic");
+            object savedAutoEnabled = autoEnabled.GetValue(warhead), savedAutoTime = autoTime.GetValue(warhead);
+            object savedAutomatic = automatic.GetValue(warhead);
+            short timer = RoundStart.singleton.Timer;
+            float dmsTime = DeadmanSwitch.CountdownTimeLeft;
+            bool dmsForced = DeadmanSwitch.ForceCountdownToggle;
+            try
+            {
+                RoundStart.singleton.NetworkTimer = -1;
+                autoEnabled.SetValue(warhead, true);
+                autoTime.SetValue(warhead, 0f);
+                AccessTools.Method(typeof(AlphaWarheadController), "ServerUpdateAutonuke").Invoke(warhead, null);
+                Check(paravoz ? "paravoz_round_timer_cannot_start_warhead" : "normal_round_timer_can_start_warhead",
+                    warhead.Info.InProgress != paravoz);
+                if (!paravoz) return;
+
+                DeadmanSwitch.ForceCountdownToggle = true;
+                DeadmanSwitch.CountdownTimeLeft = -1;
+                AccessTools.Method(typeof(DeadmanSwitch), "OnUpdate").Invoke(null, null);
+                DeadmanSwitch.InitiateProtocol();
+                Check("paravoz_blocks_deadman_timer_and_direct_protocol", DeadmanSwitch.CountdownTimeLeft == -1 &&
+                    !DeadmanSwitch.IsSequenceActive && !warhead.Info.InProgress);
+                warhead.StartDetonation(isAutomatic: true, suppressSubtitles: true);
+                Check("paravoz_rejects_direct_automatic_warhead_start", !warhead.Info.InProgress);
+                warhead.StartDetonation(suppressSubtitles: true);
+                Check("paravoz_still_allows_manual_warhead_start", warhead.Info.InProgress);
+            }
+            finally
+            {
+                warhead.NetworkInfo = savedInfo;
+                warhead.IsLocked = savedLock;
+                autoEnabled.SetValue(warhead, savedAutoEnabled);
+                autoTime.SetValue(warhead, savedAutoTime);
+                automatic.SetValue(warhead, savedAutomatic);
+                RoundStart.singleton.NetworkTimer = timer;
+                if (paravoz)
+                {
+                    DeadmanSwitch.ForceCountdownToggle = dmsForced;
+                    DeadmanSwitch.CountdownTimeLeft = dmsTime;
+                }
+            }
         }
         Timing.RunCoroutine(Probe());
         return "Gameplay diagnostics started.";
@@ -45,7 +115,17 @@ internal static class GameplayDiagnostics
             try
             {
                 Round.IsLobbyLocked = Round.IsLocked = true;
-                plugin.Director.Pause(true);
+                foreach (var mode in new[] { CommunityRoundMode.Plain, CommunityRoundMode.Perks })
+                {
+                    plugin.Director.BeginRound(mode);
+                    Check("chaos_has_schedule_in_" + mode, !plugin.Director.Status.Contains("next_chaos_in=none"));
+                }
+                bool eventWasActive = plugin.Director.TryStart("blackout", true, out _);
+                plugin.Director.BeginRound(CommunityRoundMode.Paravoz);
+                Check("paravoz_chaos_has_no_schedule_and_restores_active_events", eventWasActive &&
+                    plugin.Director.Status.StartsWith("event=none;") && plugin.Director.Status.Contains("next_chaos_in=none"));
+                Check("paravoz_rejects_manual_facility_events", AnomalyPolicy.Names.Concat(new[] { "chaos" })
+                    .All(name => !plugin.Director.TryStart(name, false, out string result) && result == "Facility events are disabled in Paravoz rounds."));
                 for (int i = 0; i < 3; i++)
                 {
                     var hub = DummyUtils.SpawnDummy("GameplayProbe" + i);
@@ -53,7 +133,16 @@ internal static class GameplayDiagnostics
                     hubs.Add(hub);
                 }
                 var players = hubs.Select(h => Player.Get(h)!).ToArray();
+                var decon = DecontaminationController.Singleton;
+                var deconMode = decon.DecontaminationOverride;
+                double deconStart = decon.NetworkRoundStartTime;
                 plugin.Paravoz!.BeginRound(players);
+                plugin.SiteMaps!.BeginRound();
+                decon.DecontaminationOverride = DecontaminationController.DecontaminationStatus.Forced;
+                Check("paravoz_decontamination_disabled_and_client_timer_cleared",
+                    decon.DecontaminationOverride == DecontaminationController.DecontaminationStatus.Disabled &&
+                    decon.NetworkRoundStartTime == 0 && !decon.IsDecontaminating);
+                ProbeWarheadTimers(paravoz: true);
                 // Native SCP-1509 protects all hubs for the first three scene
                 // seconds, independently of the SpawnProtected status effect.
                 // Also satisfy the native escape path's ten-second life minimum.
@@ -61,6 +150,8 @@ internal static class GameplayDiagnostics
                 if (EventDirector.Participants.Any()) yield break;
                 Player carrier = players.Single(plugin.Paravoz.IsParavoz);
                 var runners = players.Where(p => p != carrier).ToArray();
+                using (var mapProbe = SiteMapDiagnostics.Probe(plugin.SiteMaps, plugin.Localization!, runners[0], HudOnDisplay, Check))
+                    while (mapProbe.MoveNext()) yield return mapProbe.Current;
                 using (var controls = ParavozSurfacePassDiagnostics.Probe(runners[0], Check))
                     while (controls.MoveNext()) yield return controls.Current;
                 foreach (var inventoryCheck in ParavozRadioInventoryDiagnostics.Run(carrier, runners[0]))
@@ -70,6 +161,8 @@ internal static class GameplayDiagnostics
                 foreach (var presentationCheck in ParavozPresentationDiagnostics.Run(plugin.Paravoz, carrier, runners[0], runners[1]))
                     Check(presentationCheck.Key, presentationCheck.Value);
                 Check("all_class_d", players.All(p => p.Role == RoleTypeId.ClassD));
+                Check("only_runners_start_with_cola", runners.All(p => p.Items.Count(i => i.Type == ItemType.SCP207) == 1) &&
+                    carrier.Items.All(i => i.Type != ItemType.SCP207));
                 float nativeHealth = ((IHealthbarRole)PlayerRoleLoader.AllRoles[RoleTypeId.Scp106]).MaxHealth;
                 Logger.Info($"[METHADRENALINE] Native carrier HP={carrier.Health}/{carrier.MaxHealth}; template={nativeHealth}");
                 Check("native_106_health", carrier.Health == nativeHealth && carrier.MaxHealth == nativeHealth && !carrier.IsGodModeEnabled);
@@ -132,10 +225,34 @@ internal static class GameplayDiagnostics
                 Check("runner_role_color_unchanged", UltimateHUD.Options.GetRoleColor(runners[0]) == "#" + ColorUtility.ToHtmlStringRGB(runners[0].RoleBase.RoleColor));
 
                 var radio = (LabApi.Features.Wrappers.RadioItem)runners[0].AddItem(ItemType.Radio)!;
+                const RadioMessages.RadioRangeLevel ultra = RadioMessages.RadioRangeLevel.UltraRange;
+                Check("radio_grant_and_status_use_ultra_range", radio.RangeLevel == ultra &&
+                    new RadioStatusMessage(radio.Base).Range == ultra);
+                radio.Base.ServerProcessCmd(RadioMessages.RadioCommand.ChangeRange);
+                Check("radio_cannot_cycle_away_from_ultra_range", radio.RangeLevel == ultra);
+                radio.Base.ServerProcessCmd(RadioMessages.RadioCommand.Disable);
+                bool poweredOff = !radio.IsUsable && radio.RangeLevel == RadioMessages.RadioRangeLevel.RadioDisabled;
+                radio.Base.ServerProcessCmd(RadioMessages.RadioCommand.Enable);
+                Check("radio_power_toggle_restores_ultra_range", poweredOff && radio.IsUsable && radio.RangeLevel == ultra);
+                Check("paravoz_spawn_radio_uses_ultra_range", carrier.Items.OfType<LabApi.Features.Wrappers.RadioItem>()
+                    .Single().RangeLevel == ultra);
                 Check("radio_full", radio.Base.BatteryPercent == 100);
                 byte battery = radio.Base.BatteryPercent;
                 for (int i = 0; i < 10000; i++) AccessTools.Method(typeof(NativeRadio), "Update").Invoke(radio.Base, null);
                 Check("radio_does_not_drain", radio.Base.BatteryPercent == battery);
+                var mapRadio = Pickup.Create(ItemType.Radio, runners[0].Position)!;
+                try { Check("radio_map_pickup_starts_at_ultra_range", ((NativeRadioPickup)mapRadio.Base).SavedRange == (byte)ultra); }
+                finally { mapRadio.Destroy(); }
+                var droppedRadio = runners[0].DropItem(radio);
+                try
+                {
+                    var pickup = (NativeRadioPickup)droppedRadio.Base;
+                    Check("radio_drop_keeps_ultra_range", pickup.SavedRange == (byte)ultra);
+                    pickup.NetworkSavedRange = (byte)RadioMessages.RadioRangeLevel.LowRange;
+                    var recovered = (LabApi.Features.Wrappers.RadioItem)runners[0].AddItem(droppedRadio)!;
+                    Check("radio_pickup_overrides_legacy_range", recovered.RangeLevel == ultra);
+                }
+                finally { if (!droppedRadio.IsDestroyed) droppedRadio.Destroy(); }
 
                 float hp = carrier.Health;
                 carrier.Damage(new UniversalDamageHandler(50, DeathTranslations.Falldown));
@@ -149,6 +266,7 @@ internal static class GameplayDiagnostics
                 Check("hunter_registered", plugin.Paravoz.IsHunter(runners[0]));
                 Check("native_escape_sets_hunter_body", runners[0].Role == RoleTypeId.NtfPrivate);
                 Check("native_escape_clears_hunter_protection", !runners[0].IsGodModeEnabled && runners[0].GetEffect<SpawnProtected>()?.IsEnabled != true);
+                Check("hunter_loadout_has_no_cola", runners[0].Items.All(i => i.Type != ItemType.SCP207));
                 Check("carrier_hunter_runner_keeps_round_open", plugin.Paravoz.Result == ParavozWinner.None && plugin.Paravoz.Policy.Winner == ParavozWinner.None);
                 var mixedConditions = new RoundEndingConditionsCheckEventArgs(true);
                 ServerEvents.OnRoundEndingConditionsCheck(mixedConditions);
@@ -231,6 +349,68 @@ internal static class GameplayDiagnostics
                     Check("carrier_opens_indestructible_door", gate.IsOpened);
                 }
                 finally { gate.IsOpened = gateWasOpened; }
+                var campRoom = Room.GetRoomAtPosition(carrier.Position)!;
+                Vector3 campPosition = carrier.Position;
+                float boundaryTime = Time.realtimeSinceStartup;
+                var boundaries = plugin.Paravoz.Boundaries;
+                var effect = carrier.GetEffect<PocketCorroding>()!;
+                var movement = ((IFpcRole)carrier.RoleBase).FpcModule;
+                boundaries.Forget(carrier.NetworkId);
+                movement.CurrentMovementState = PlayerMovementState.Walking;
+                boundaries.Tick(carrier, boundaryTime);
+                hp = carrier.Health;
+                Check("idle_penalty_starts_with_three_seconds", boundaries.Warning(carrier) == (ParavozBoundaries.IdleMessage, 3) && carrier.Health == hp);
+                carrier.Position = campPosition + Vector3.right * 0.75f;
+                boundaries.Tick(carrier, boundaryTime + 1.1f);
+                Check("idle_penalty_walking_keeps_countdown", boundaries.Warning(carrier) == (ParavozBoundaries.IdleMessage, 2) && carrier.Health == hp);
+                hp = carrier.Health;
+                carrier.Position = campPosition;
+                boundaries.Tick(carrier, boundaryTime + 2.9f);
+                Check("idle_penalty_waits_until_three_seconds", boundaries.Warning(carrier) == (ParavozBoundaries.IdleMessage, 1) && carrier.Health == hp);
+                carrier.Position = campPosition + Vector3.right * 0.75f;
+                boundaries.Tick(carrier, boundaryTime + 3.1f);
+                float firstMelt = hp - carrier.Health;
+                Check("idle_penalty_damages_while_walking_and_allows_sprint", firstMelt > 0 && !effect.IsEnabled &&
+                    movement.StateProcessor.UpdateMovementState(PlayerMovementState.Sprinting) == PlayerMovementState.Sprinting);
+                movement.CurrentMovementState = PlayerMovementState.Sprinting;
+                hp = carrier.Health;
+                boundaries.Tick(carrier, boundaryTime + 4.2f);
+                Check("idle_penalty_sprint_key_without_motion_does_not_stop_damage", hp - carrier.Health > firstMelt);
+                hp = carrier.Health;
+                carrier.Position = campPosition;
+                boundaries.Tick(carrier, boundaryTime + 5.3f);
+                Check("idle_penalty_running_stops_damage", boundaries.Warning(carrier) == null && carrier.Health == hp);
+                movement.CurrentMovementState = PlayerMovementState.Walking;
+                boundaries.Tick(carrier, boundaryTime + 5.5f);
+                Check("idle_penalty_stopping_again_starts_one_countdown", boundaries.Warning(carrier) == (ParavozBoundaries.IdleMessage, 3));
+
+                boundaries.Forget(carrier.NetworkId);
+                movement.CurrentMovementState = PlayerMovementState.Sprinting;
+                for (int t = 0; t <= 24; t += 4)
+                {
+                    carrier.Position = campPosition + Vector3.right * (t % 8 == 0 ? 0 : 0.75f);
+                    boundaries.Tick(carrier, boundaryTime + t);
+                }
+                bool silentBeforeWarning = boundaries.Warning(carrier) == null;
+                carrier.Position = campPosition + Vector3.right * 0.75f;
+                boundaries.Tick(carrier, boundaryTime + 25.1f);
+                Check("camp_penalty_warns_for_ten_seconds_after_twenty_five", silentBeforeWarning &&
+                    boundaries.Warning(carrier) == (ParavozBoundaries.CampingMessage, 10));
+                carrier.Position = campPosition;
+                boundaries.Tick(carrier, boundaryTime + 29.1f);
+                carrier.Position = campPosition + Vector3.right * 0.75f;
+                boundaries.Tick(carrier, boundaryTime + 33.1f);
+                carrier.Position = campPosition;
+                boundaries.Tick(carrier, boundaryTime + 34.9f);
+                Check("camp_penalty_waits_for_full_warning", carrier.Health == hp && !effect.IsEnabled);
+                var positionBeforePenalty = carrier.Position;
+                boundaries.Tick(carrier, boundaryTime + 35.1f);
+                float campDrain = hp - carrier.Health;
+                Check("camp_penalty_suffocates_without_moving_player", effect.IsEnabled && campDrain > 0 &&
+                    carrier.Position == positionBeforePenalty && Room.GetRoomAtPosition(carrier.Position) == campRoom);
+                carrier.Position = campPosition;
+                movement.CurrentMovementState = PlayerMovementState.Walking;
+                boundaries.Forget(carrier.NetworkId);
                 using (var elevatorProbe = ElevatorDiagnostics.Probe(plugin.Paravoz, carrier, runners[0], Check))
                     while (elevatorProbe.MoveNext()) yield return elevatorProbe.Current;
                 Vector3 origin = carrier.Position;
@@ -238,11 +418,14 @@ internal static class GameplayDiagnostics
                 plugin.Paravoz.AdvanceDiagnostic(350.1f - plugin.Paravoz.Elapsed);
                 Check("gather_countdown_ten_seconds", plugin.Paravoz.GatheringHud(runners[1]).Contains("10"));
                 Check("gather_countdown_private", plugin.Paravoz.GatheringHud(carrier) == "" && plugin.Paravoz.GatheringHud(runners[0]) == "");
-                Check("gather_countdown_in_hud", plugin.Bracelets!.Hud(runners[1]).Contains("10"));
+                yield return Timing.WaitForSeconds(0.3f);
+                string Gathering(Player player) => HudOnDisplay(player, typeof(ParavozController), "CountdownTag");
+                Check("gather_countdown_registered_on_display", Gathering(runners[1]).Contains("10") &&
+                    !Gathering(carrier).Contains("pulled to Paravoz") && Gathering(runners[0]) == "");
                 plugin.Paravoz.AdvanceDiagnostic(10);
                 yield return Timing.WaitForSeconds(0.3f);
                 Check("six_minute_gather", Vector3.Distance(runners[1].Position, carrier.Position) < 3);
-                Check("gather_countdown_removed_after_teleport", plugin.Paravoz.GatheringHud(runners[1]) == "");
+                Check("gather_countdown_removed_after_teleport", Gathering(runners[1]) == "");
 
                 // Use the production attack, not a fabricated death event.
                 runners[0].Position = carrier.Position + Vector3.right * 30;
@@ -271,7 +454,33 @@ internal static class GameplayDiagnostics
                 carrier.Damage(new FirearmDamageHandler(rifle, 20, 1));
                 Check("hunter_still_damages_after_winner_selected", carrier.Health < hp);
 
+                var surface = Room.Get(MapGeneration.FacilityZone.Surface).First();
+                Vector3 indoorPosition = carrier.Position;
+                carrier.Position = surface.Position + Vector3.up;
+                Vector3 exteriorPosition = carrier.Position;
+                boundaryTime = Time.realtimeSinceStartup;
+                plugin.Paravoz.Boundaries.Tick(carrier, boundaryTime);
+                Check("surface_corrosion_does_not_send_to_pocket", effect.IsEnabled && carrier.Position == exteriorPosition);
+                AccessTools.Method(typeof(PocketCorroding), "OnTick").Invoke(effect, null);
+                Check("surface_corrosion_survives_native_tick", effect.IsEnabled);
+                hp = carrier.Health;
+                plugin.Paravoz.Boundaries.Tick(carrier, boundaryTime + 1);
+                float firstDrain = hp - carrier.Health;
+                Check("one_room_camping_hits_harder_than_surface", campDrain > firstDrain && firstDrain > 0);
+                hp = carrier.Health;
+                plugin.Paravoz.Boundaries.Tick(carrier, boundaryTime + 2);
+                Check("surface_drain_bypasses_carrier_immunity_and_accelerates", firstDrain > 0 && hp - carrier.Health > firstDrain);
+                carrier.Position = indoorPosition;
+                plugin.Paravoz.Boundaries.Tick(carrier, boundaryTime + 3);
+                Check("surface_corrosion_clears_on_return", !effect.IsEnabled);
+                carrier.Position = exteriorPosition;
+                for (int i = 4; i <= 24 && carrier.IsAlive; i++) plugin.Paravoz.Boundaries.Tick(carrier, boundaryTime + i);
+                Check("surface_exposure_can_kill_carrier", !carrier.IsAlive);
+
                 plugin.Paravoz.Reset();
+                Check("paravoz_restores_native_decontamination_on_reset",
+                    decon.DecontaminationOverride == deconMode && decon.NetworkRoundStartTime == deconStart);
+                ProbeWarheadTimers(paravoz: false);
                 Check("carrier_abilities_cleaned_on_reset", !plugin.Paravoz.Abilities.Enabled(carrier) && carrier.GetEffect<MovementBoost>()!.Intensity == 0 && !carrier.GetEffect<Invigorated>()!.IsEnabled);
                 Check("presentation_and_music_cleaned_on_reset", plugin.Paravoz.Presentation.Emitters.Count == 0 && plugin.Paravoz.Presentation.Playback == null);
                 var grenade = LabApi.Features.Wrappers.TimedGrenadeProjectile.SpawnActive(runners[0].Position + Vector3.down * 0.7f, ItemType.GrenadeHE, owner: runners[0]);
@@ -284,6 +493,7 @@ internal static class GameplayDiagnostics
                 // A respawned body may remain in a native spectator cache; the
                 // public getter must never expose an alive player as a viewer.
                 Check("alive_not_spectators", players.All(p => p.CurrentSpectators.All(s => !s.IsAlive)));
+                completed = true;
 
                 void FireHits(Player target, string name)
                 {
@@ -307,9 +517,12 @@ internal static class GameplayDiagnostics
             }
             finally
             {
+                if (!completed) Check("gameplay_probe_completed", false);
                 plugin.Paravoz!.Reset();
                 foreach (var hub in hubs) if (hub != null) NetworkServer.Destroy(hub.gameObject);
+                plugin.Director.Reset();
                 plugin.Director.Pause(paused);
+                plugin.SiteMaps?.Reset();
                 Round.IsLobbyLocked = lobby;
                 Round.IsLocked = locked;
                 running = false;

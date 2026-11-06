@@ -1,7 +1,12 @@
 using Hints;
+using LabApi.Events.Arguments.PlayerEvents;
 using LabApi.Events.CustomHandlers;
+using LabApi.Events.Handlers;
 using LabApi.Loader;
 using LabApi.Loader.Features.Plugins;
+using RueI.API;
+using RueI.API.Elements;
+using RueI.API.Elements.Parameters;
 
 namespace ScpProximityChat.SecretAPI;
 
@@ -31,6 +36,8 @@ public sealed class SecretApiProximityChatPlugin : Plugin<SecretApiProximityChat
     public override Version RequiredApiVersion { get; } = new(1, 0, 0);
 
     private readonly PersonalizationEventHandlers _handlers = new();
+    private static readonly Tag VoiceTipTag = new("scp-proximity.keybind");
+    private const string HoldTip = "Hold {0} to talk to nearby players.";
 
     /// <inheritdoc />
     public override void LoadConfigs()
@@ -43,7 +50,7 @@ public sealed class SecretApiProximityChatPlugin : Plugin<SecretApiProximityChat
     /// <inheritdoc/>
     public override void Enable()
     {
-        ProximityChatEvents.Available += SendAvailableHint;
+        PlayerEvents.ChangedRole += OnChangedRole;
         ProximityChatEvents.Receiving += Receiving;
         ProximityChatEvents.Personalizing += PersonalizationManager.RegisterPersonalization;
         CustomHandlersManager.RegisterEventsHandler(_handlers);
@@ -59,7 +66,9 @@ public sealed class SecretApiProximityChatPlugin : Plugin<SecretApiProximityChat
     /// <inheritdoc/>
     public override void Disable()
     {
-        ProximityChatEvents.Available -= SendAvailableHint;
+        PlayerEvents.ChangedRole -= OnChangedRole;
+        foreach (var player in Player.List)
+            if (!player.IsDestroyed) RueDisplay.Get(player).Remove(VoiceTipTag);
         ProximityChatEvents.Receiving -= Receiving;
         ProximityChatEvents.Personalizing -= PersonalizationManager.RegisterPersonalization;
         CustomHandlersManager.UnregisterEventsHandler(_handlers);
@@ -68,15 +77,25 @@ public sealed class SecretApiProximityChatPlugin : Plugin<SecretApiProximityChat
         PersonalizationManager.Reset();
     }
 
-    private void SendAvailableHint(Player player)
+    private void OnChangedRole(PlayerChangedRoleEventArgs ev)
     {
-        if (Config!.ShowAvailableHint)
-            player.SendHint(
-                Config.AvailableHint,
-                [new SSKeybindHintParameter(ToggleSettingId)],
-                HintEffectPresets.FadeInAndOut(0.95f),
-                10
-            );
+        var player = ev.Player;
+        if (player.IsHost || player.IsDestroyed) return;
+        var display = RueDisplay.Get(player);
+        if (!player.CanUseProximityChat())
+        {
+            display.Remove(VoiceTipTag);
+            return;
+        }
+
+        if (InputMethod.UsesHold(player)) player.DisableProximityChat();
+        else player.EnableProximityChat();
+        if (!Config!.ShowAvailableHint) return;
+        display.Show(VoiceTipTag, new DynamicElement(58, () =>
+            "<align=center><size=34><nobr>" + (InputMethod.UsesHold(player) ? HoldTip : Config.AvailableHint) + "</nobr></size></align>")
+        {
+            Parameters = [new KeybindParameter(ToggleSettingId, "<b>{0}</b>")]
+        }, 30f);
     }
 
     private static void Receiving(Player sender, Player target, ref bool allow)

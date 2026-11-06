@@ -27,10 +27,12 @@ public sealed class ServerPlugin : Plugin<Config>
     internal BraceletController? Bracelets { get; private set; }
     internal ParavozController? Paravoz { get; private set; }
     internal ModeVotingController? ModeVoting { get; private set; }
+    internal SiteMapController? SiteMaps { get; private set; }
+    internal bool IsParavozRound => Paravoz?.Active == true || PerkRounds?.Policy.Mode == Methadrenaline.Server.Core.CommunityRoundMode.Paravoz;
     public override string Name => "METHADRENALINE";
     public override string Author => "Wechirok";
     public override string Description => "Private community gameplay and temporary facility anomalies.";
-    public override Version Version => new(1, 15, 2);
+    public override Version Version => new(1, 22, 2);
     public override LabApi.Loader.Features.Plugins.Enums.LoadPriority Priority => LabApi.Loader.Features.Plugins.Enums.LoadPriority.Lowest;
     public override Version RequiredApiVersion => new(1, 1, 7);
 
@@ -46,11 +48,13 @@ public sealed class ServerPlugin : Plugin<Config>
             PerkRounds = new PerkRoundController();
             Bracelets = new BraceletController();
             Paravoz = new ParavozController();
+            SiteMaps = new SiteMapController();
             harmony.PatchAll(typeof(ServerPlugin).Assembly);
             Localization.Enable();
             PerkRounds.Initialize();
             Bracelets.Enable();
             Paravoz.Enable();
+            SiteMaps.Enable();
             if (Config.ModeVotingEnabled)
             {
                 ModeVoting = new ModeVotingController(Config, Localization);
@@ -69,6 +73,7 @@ public sealed class ServerPlugin : Plugin<Config>
             PlayerEvents.Hurting += Hurting;
             PlayerEvents.InteractingDoor += InteractingDoor;
             PlayerEvents.UsingRadio += UsingRadio;
+            PlayerEvents.ChangingRadioRange += ChangingRadioRange;
             Logger.Info($"[METHADRENALINE] Enabled: preferences={Config.PreferredScpRoles}, maximum SCPs=1, radios={Config.RadiosForHumans}, events={Config.EventsEnabled}, chaos=1-2 bundles/round, chaos notifications=off; modes=Vanilla (almost)/Perks/Paravoz; radios=infinite; random_grenades=off.");
         }
         catch
@@ -93,8 +98,11 @@ public sealed class ServerPlugin : Plugin<Config>
         PlayerEvents.Hurting -= Hurting;
         PlayerEvents.InteractingDoor -= InteractingDoor;
         PlayerEvents.UsingRadio -= UsingRadio;
+        PlayerEvents.ChangingRadioRange -= ChangingRadioRange;
         ModeVoting?.Dispose();
         ModeVoting = null;
+        SiteMaps?.Dispose();
+        SiteMaps = null;
         Paravoz?.Dispose();
         Paravoz = null;
         Director?.Dispose();
@@ -111,8 +119,10 @@ public sealed class ServerPlugin : Plugin<Config>
 
     private void RoundStarted()
     {
-        Director.BeginRound();
-        if (PerkRounds?.Policy.Mode == Methadrenaline.Server.Core.CommunityRoundMode.Paravoz) Paravoz!.BeginRound();
+        var mode = PerkRounds?.Policy.Mode;
+        Director.BeginRound(mode);
+        if (mode == Methadrenaline.Server.Core.CommunityRoundMode.Paravoz) Paravoz!.BeginRound();
+        SiteMaps!.BeginRound();
         ConfigureRespawns();
     }
 
@@ -130,11 +140,20 @@ public sealed class ServerPlugin : Plugin<Config>
                 wave.TimeLeft = Config.SmallServerRespawnLimit;
         }
     }
-    private void RoundEnded(RoundEndedEventArgs _) { Director.Reset(); Paravoz?.Reset(); }
-    private void Reset() { Director.Reset(); Paravoz?.Reset(); }
+    private void RoundEnded(RoundEndedEventArgs _) => Reset();
+    private void Reset() { Director.Reset(); Paravoz?.Reset(); SiteMaps?.Reset(); }
     private void UsingRadio(PlayerUsingRadioEventArgs ev) { ev.Drain = 0; }
+    private void ChangingRadioRange(PlayerChangingRadioRangeEventArgs ev) { ev.IsAllowed = false; }
     private void DecontaminationStarting(LczDecontaminationStartingEventArgs _) => Director.Stop();
-    private void WarheadStarting(LabApi.Events.Arguments.WarheadEvents.WarheadStartingEventArgs _) => Director.Stop();
+    private void WarheadStarting(LabApi.Events.Arguments.WarheadEvents.WarheadStartingEventArgs ev)
+    {
+        if (ev.IsAutomatic && IsParavozRound)
+        {
+            ev.IsAllowed = false;
+            return;
+        }
+        Director.Stop();
+    }
     private void ChangingRole(PlayerChangingRoleEventArgs ev) => Director.ForgetPlayer(ev.Player);
     private void Left(PlayerLeftEventArgs ev) => Director.ForgetPlayer(ev.Player);
     private void InteractingDoor(PlayerInteractingDoorEventArgs ev) => Director.DoorTouched(ev.Door);
@@ -191,6 +210,16 @@ public sealed class CommunityCommand : ICommand
         string action = arguments.Count == 0 ? "status" : arguments.Array![arguments.Offset].ToLowerInvariant();
         switch (action)
         {
+            case "environmentcheck": response = ParavozEnvironmentDiagnostics.Run(plugin); return response == "Environment diagnostics started.";
+            case "mapcheck": response = SiteMapOnlyDiagnostics.Run(plugin); return response == "Site map diagnostics started.";
+            case "map":
+                if (arguments.Count != 2 || !int.TryParse(arguments.Array![arguments.Offset + 1], out int mapPlayerId))
+                { response = "Usage: md map <player ID>"; return false; }
+                var mapPlayer = Player.Get(mapPlayerId);
+                if (mapPlayer == null || mapPlayer.IsHost || mapPlayer.IsNpc || mapPlayer.IsDummy)
+                { response = "Player not found."; return false; }
+                response = plugin.SiteMaps?.GiveTo(mapPlayer) ?? "Site-02 Map is disabled.";
+                return response == "Site-02 Map equipped.";
             case "status":
                 bool patched = Harmony.GetPatchInfo(AccessTools.Method(typeof(PlayerRoles.RoleAssign.ScpSpawner), nameof(PlayerRoles.RoleAssign.ScpSpawner.SpawnScps)))?.Prefixes.Any(p => p.owner == "methadrenaline.server") == true;
                 response = $"{plugin.Director.Status}; role_patch={patched}; mtf_wait={RespawnWaves.PrimaryMtfWave?.TimeLeft:0}; chaos_wait={RespawnWaves.PrimaryChaosWave?.TimeLeft:0}; {plugin.PerkRounds?.Status}; {plugin.Bracelets?.Status}; {plugin.Paravoz?.Status}";

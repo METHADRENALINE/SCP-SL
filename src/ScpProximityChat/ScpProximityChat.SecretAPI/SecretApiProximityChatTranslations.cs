@@ -36,7 +36,7 @@ internal sealed class SecretApiProximityChatTranslations
 
     public string MasterVolumeLabel { get; set; } = "SCP local voice volume";
 
-    public string MasterVolumeHint { get; set; } = "100% = normal voice level; above 100% = boost; 0% = mute. This changes the volume of SCP local voices only for you.";
+    public string MasterVolumeHint { get; set; } = "Changes how loud you hear nearby SCPs.";
 
     public string VolumeFor { get; set; } = "SCP voice: ";
 
