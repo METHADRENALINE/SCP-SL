@@ -55,11 +55,11 @@ def allowed(path: str) -> bool:
         return False
     if any(part.lower() in {'bin', 'obj', 'testresults', 'upstream', 'references', 'logs', 'data', 'backups', 'players'} for part in p.parts):
         return False
-    if p.name.lower().startswith('readme'):
+    if p.name.lower().startswith('readme') and path != 'README.md':
         return False
     if path in CONFIG_FILES | DEPLOYMENT_FILES | MAP_SOURCES or path in MAP_ASSETS:
         return True
-    if path in {'.gitignore', '.github/workflows/verify.yml', 'LICENSE', 'tools/RepositoryPolicy/check.py',
+    if path in {'.gitignore', '.github/workflows/verify.yml', 'LICENSE', 'README.md', 'tools/RepositoryPolicy/check.py',
                 'tools/LocalizationCatalog/Program.cs', 'tools/LocalizationCatalog/LocalizationCatalog.csproj',
                 'src/Methadrenaline.Server/Localization/catalog.json'}:
         return True

@@ -70,3 +70,4 @@
 !/docs/deployment.md
 !/tests/Deployment/test_install.py
 !/tests/RepositoryPolicy/test_policy.py
+!/README.md
