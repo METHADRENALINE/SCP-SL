@@ -12,7 +12,9 @@ internal sealed class PersonalizedVolume : VolumeSettingBase
     {
     }
 
-    public PersonalizedVolume(string name, string userId) : base(PersonalizationManager.IdFor(userId), PersonalizationManager.LabelFor(name), "Volume of this player's SCP local voice, on top of the overall SCP volume. 100% = normal; above 100% = boost; 0% = mute. Only affects what you hear.")
+    public PersonalizedVolume(string name, string userId)
+        : base(PersonalizationManager.IdFor(userId), PersonalizationManager.LabelFor(name),
+            "Adjusts this player's local SCP voice relative to your overall SCP volume.")
     {
         Name = name;
         UserId = userId;

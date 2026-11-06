@@ -12,6 +12,13 @@
 !/src/**/LICENSE
 !/src/SecretAPI/SecretAPI.SourceGenerators/AnalyzerReleases.*.md
 !/src/Methadrenaline.Server/Localization/catalog.json
+!/src/Methadrenaline.Server/Map/native-cyrillic-advances.bin
+!/src/Methadrenaline.Server/Map/native-room-icons.deflate
+!/src/Methadrenaline.Server/Map/native-room-outlines.deflate
+!/src/Methadrenaline.Server/Map/native-room-floors.deflate
+!/src/Methadrenaline.Server/Map/native-room-floors.json
+!/tools/MapAssets/compile_floors.py
+!/tools/MapAssets/generate_outlines.py
 !/tests/**/*.cs
 !/tests/**/*.csproj
 !/tools/LocalizationCatalog/Program.cs

@@ -1,6 +1,7 @@
 """Reject private data, secrets and unreviewed files in Git history and the index."""
 
 import argparse
+import hashlib
 import ipaddress
 import re
 import subprocess
@@ -31,6 +32,18 @@ DEPLOYMENT_FILES = {
     'tests/RepositoryPolicy/test_policy.py', 'tests/Deployment/test_install.py',
 }
 
+# Fixed geometry and font metrics only. Any replacement requires a reviewed hash.
+MAP_ASSETS = {
+    'src/Methadrenaline.Server/Map/native-cyrillic-advances.bin': '30551bcca47434f96e1d617ae2faa51626286dcd9f2cc9c644bc38ef72eeb87c',
+    'src/Methadrenaline.Server/Map/native-room-icons.deflate': 'dd0fc36d209ac3d1256bde7dc61546b1390d568211cfede5fd315a7c4cc68d15',
+    'src/Methadrenaline.Server/Map/native-room-outlines.deflate': '9fbbb7ce2eaba46d3844999f462ae5982605cb76f8d8dc0dd7b3c96d3c96918b',
+    'src/Methadrenaline.Server/Map/native-room-floors.deflate': 'bfabd4a73f73ac5aecc4194704a9dd1a1b2325a78dd86291649bd953b769ff7f',
+}
+MAP_SOURCES = {
+    'src/Methadrenaline.Server/Map/native-room-floors.json',
+    'tools/MapAssets/compile_floors.py', 'tools/MapAssets/generate_outlines.py',
+}
+
 
 def git(*args: str) -> bytes:
     return subprocess.check_output(['git', *args])
@@ -44,7 +57,7 @@ def allowed(path: str) -> bool:
         return False
     if p.name.lower().startswith('readme'):
         return False
-    if path in CONFIG_FILES | DEPLOYMENT_FILES:
+    if path in CONFIG_FILES | DEPLOYMENT_FILES | MAP_SOURCES or path in MAP_ASSETS:
         return True
     if path in {'.gitignore', '.github/workflows/verify.yml', 'LICENSE', 'tools/RepositoryPolicy/check.py',
                 'tools/LocalizationCatalog/Program.cs', 'tools/LocalizationCatalog/LocalizationCatalog.csproj',
@@ -73,6 +86,8 @@ EXAMPLE_IDS = {'123456789012345678', '223456789012345678', '18446744073709551616
 def problems(path: str, data: bytes) -> list[str]:
     if not allowed(path):
         return ['file is outside the reviewed source and template allowlist']
+    if path in MAP_ASSETS:
+        return [] if hashlib.sha256(data).hexdigest() == MAP_ASSETS[path] else ['map asset differs from reviewed geometry or font metrics']
     try:
         text = data.decode('utf-8-sig')
     except UnicodeDecodeError:

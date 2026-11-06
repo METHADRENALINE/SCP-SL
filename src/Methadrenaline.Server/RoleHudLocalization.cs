@@ -13,11 +13,11 @@ internal static class RoleHudLocalization
 
     internal static string Translate(Player subject, string label)
     {
+        if (subject.Role == RoleTypeId.None) return "";
         var localization = Localizer.Current;
         if (localization == null) return label;
         if (label == subject.Role.ToString()) label = subject.Role switch
         {
-            RoleTypeId.None => "No role",
             RoleTypeId.CustomRole => "Custom role",
             RoleTypeId.Destroyed => "Destroyed role",
             RoleTypeId.AlphaFlamingo => "Alpha Flamingo",

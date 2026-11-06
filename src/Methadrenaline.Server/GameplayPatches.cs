@@ -2,21 +2,56 @@ using System.Collections.Generic;
 using HarmonyLib;
 using InventorySystem.Items.Radio;
 using LabApi.Features.Wrappers;
+using LightContainmentZoneDecontamination;
 using PlayerRoles.Spectating;
 using PlayerRoles.FirstPersonControl;
 using PlayerStatsSystem;
 using UnityEngine;
 using System;
+using System.Reflection;
 using NativeRadio = InventorySystem.Items.Radio.RadioItem;
+using NativeRadioPickup = InventorySystem.Items.Radio.RadioPickup;
 
 namespace Methadrenaline.Server;
 
-[HarmonyPatch(typeof(NativeRadio), nameof(NativeRadio.OnAdded))]
-internal static class FullRadioBatteryPatch
+[HarmonyPatch]
+internal static class ParavozAutomaticWarheadPatch
 {
-    private static void Postfix(NativeRadio __instance)
+    private static IEnumerable<MethodBase> TargetMethods()
     {
-        if (Mirror.NetworkServer.active) __instance.BatteryPercent = 100;
+        yield return AccessTools.Method(typeof(AlphaWarheadController), "ServerUpdateAutonuke");
+        yield return AccessTools.Method(typeof(DeadmanSwitch), "OnUpdate");
+        yield return AccessTools.Method(typeof(DeadmanSwitch), nameof(DeadmanSwitch.InitiateProtocol));
+    }
+
+    private static bool Prefix() => ServerPlugin.Instance?.IsParavozRound != true;
+}
+
+[HarmonyPatch(typeof(DecontaminationController), "set_DecontaminationOverride")]
+internal static class ParavozDecontaminationPatch
+{
+    private static bool Prefix(DecontaminationController.DecontaminationStatus value)
+        => value == DecontaminationController.DecontaminationStatus.Disabled || ServerPlugin.Instance?.Paravoz?.Active != true;
+}
+
+[HarmonyPatch(typeof(NativeRadio), nameof(NativeRadio.OnAdded))]
+internal static class RadioAcquisitionPatch
+{
+    private static void Postfix(NativeRadio __instance, ref byte ____rangeId)
+    {
+        if (!Mirror.NetworkServer.active) return;
+        __instance.BatteryPercent = 100;
+        ____rangeId = (byte)RadioMessages.RadioRangeLevel.UltraRange;
+    }
+}
+
+[HarmonyPatch(typeof(NativeRadioPickup), "Awake")]
+internal static class UltraRangeRadioPickupPatch
+{
+    private static void Postfix(NativeRadioPickup __instance)
+    {
+        if (Mirror.NetworkServer.active)
+            __instance.NetworkSavedRange = (byte)RadioMessages.RadioRangeLevel.UltraRange;
     }
 }
 

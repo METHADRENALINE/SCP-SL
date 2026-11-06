@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <AssemblyName>Methadrenaline.Server</AssemblyName>
     <RootNamespace>Methadrenaline.Server</RootNamespace>
-    <Version>1.15.2</Version>
+    <Version>1.22.2</Version>
     <Authors>Wechirok</Authors>
     <ServerManagedPath Condition="'$(ServerManagedPath)' == ''">$(MSBuildThisFileDirectory)../../references/managed</ServerManagedPath>
     <ServerDependenciesPath Condition="'$(ServerDependenciesPath)' == ''">$(MSBuildThisFileDirectory)../../references/dependencies</ServerDependenciesPath>
@@ -21,6 +21,9 @@
     <Reference Include="System.Core" HintPath="$(ServerManagedPath)/System.Core.dll" Private="false" />
     <Reference Include="netstandard" HintPath="$(ServerManagedPath)/netstandard.dll" Private="false" />
     <EmbeddedResource Include="Localization/catalog.xml" />
+    <EmbeddedResource Include="Map/native-room-outlines.deflate" />
+    <EmbeddedResource Include="Map/native-room-floors.deflate" />
+    <EmbeddedResource Include="Map/native-cyrillic-advances.bin" />
     <EmbeddedResource Include="$(ParavozMusicFile)" LogicalName="Methadrenaline.Server.Audio.paravoz-track.ogg" Condition="'$(ParavozMusicFile)' != '' And Exists('$(ParavozMusicFile)')" />
     <ProjectReference Include="../SecretAPI/SecretAPI/SecretAPI.csproj" Private="false" />
     <Reference Include="RueI" HintPath="$(ServerPluginsPath)/RueI.dll" Private="false" />
@@ -36,8 +39,13 @@
     <Reference Include="Assembly-CSharp" HintPath="$(ServerManagedPath)/Assembly-CSharp.dll" Private="false" />
     <Reference Include="Assembly-CSharp-firstpass" HintPath="$(ServerManagedPath)/Assembly-CSharp-firstpass.dll" Private="false" />
     <Reference Include="UnityEngine.CoreModule" HintPath="$(ServerManagedPath)/UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="UnityEngine.UI" HintPath="$(ServerManagedPath)/UnityEngine.UI.dll" Private="false" />
     <Reference Include="UnityEngine.AudioModule" HintPath="$(ServerManagedPath)/UnityEngine.AudioModule.dll" Private="false" />
     <Reference Include="UnityEngine.PhysicsModule" HintPath="$(ServerManagedPath)/UnityEngine.PhysicsModule.dll" Private="false" />
+    <Reference Include="Unity.TextMeshPro" HintPath="$(ServerManagedPath)/Unity.TextMeshPro.dll" Private="false" />
+    <Reference Include="UnityEngine.TextRenderingModule" HintPath="$(ServerManagedPath)/UnityEngine.TextRenderingModule.dll" Private="false" />
+    <Reference Include="UnityEngine.TextCoreFontEngineModule" HintPath="$(ServerManagedPath)/UnityEngine.TextCoreFontEngineModule.dll" Private="false" />
+    <Reference Include="UnityEngine.TextCoreTextEngineModule" HintPath="$(ServerManagedPath)/UnityEngine.TextCoreTextEngineModule.dll" Private="false" />
     <Reference Include="Mirror" HintPath="$(ServerManagedPath)/Mirror.dll" Private="false" />
     <Reference Include="Pooling" HintPath="$(ServerManagedPath)/Pooling.dll" Private="false" />
     <Reference Include="CommandSystem.Core" HintPath="$(ServerManagedPath)/CommandSystem.Core.dll" Private="false" />

@@ -31,7 +31,7 @@ internal sealed class LocalizationService : IDisposable
         ownSettings = new ServerSpecificSettingBase[]
         {
             new SSGroupHeader(HeaderId, "Localization"),
-            new SSDropdownSetting(LanguageSettingId, "🌐", new[] { "English", "Українська", "Русский" }, hint: "Language for perks, messages and server settings. Saved on this client.")
+            new SSDropdownSetting(LanguageSettingId, "🌐", new[] { "English", "Українська", "Русский" }, hint: "Language for perks, messages and server settings.")
         };
     }
 
@@ -64,7 +64,7 @@ internal sealed class LocalizationService : IDisposable
         {
             if (disposed || hub == null) return;
             Refresh(hub);
-            SpellCardLocalization.Resend(hub);
+            CustomCardLocalization.Resend(hub);
             BraceletDeathPresentation.Refresh(hub);
             RoleHudLocalization.Refresh(hub);
             RueI.API.RueDisplay.Get(hub).Update();
@@ -102,7 +102,16 @@ internal sealed class LocalizationService : IDisposable
                 SetProperty(clone, "HintDescription", Text(hub, setting.HintDescription));
                 return clone;
             }
-            SetProperty(clone, "Label", Text(hub, setting.Label));
+            string label = Text(hub, setting.Label);
+            if (setting.SettingId == HeaderId)
+            {
+                label = "<nobr><size=90%>" + label + "</size></nobr>";
+                // The client's ContentSizeFitter can leave too little space for the final Cyrillic glyph.
+                // Measure a wider invisible prefix, then reset the pen before drawing the centered title.
+                if (Language(hub) is ServerLanguage.Ukrainian or ServerLanguage.Russian)
+                    label = "<space=9em><color=#00000000>.</color><pos=0>" + label;
+            }
+            SetProperty(clone, "Label", label);
             SetProperty(clone, "HintDescription", Text(hub, setting.HintDescription));
             if (setting is SSDropdownSetting dropdown && !(setting.SettingId == 0 && setting.Label == "Schematic Name"))
                 SetProperty(clone, "Options", dropdown.Options.Select(option => Text(hub, option)).ToArray());

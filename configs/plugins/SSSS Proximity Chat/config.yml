@@ -1,14 +1,5 @@
 # Public template. Keep account assignments and secrets only in the installed copy.
 show_available_hint: true
-available_hint: '
-
-
-
-
-
-
-  SCP Proximity Chat available.
-
-  Press <mark=#77777755><size=0>.</size><space=0.2em><b>{0}</b><space=0.2em><size=0>.</size></mark> to toggle.'
+available_hint: 'Press {0} to switch between nearby players and the SCP team.'
 shared: true
 personalization: true

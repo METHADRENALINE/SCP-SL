@@ -41,6 +41,12 @@ internal static class LocalizationDiagnostics
             }
             Select(a, 1); Select(b, 2);
             Check("native_selection", localization.Language(a) == ServerLanguage.Ukrainian && localization.Language(b) == ServerLanguage.Russian);
+            var localizedSettings = localization.SettingsFor(b, ServerSpecificSettingsSync.DefinedSettings);
+            const string headingSpace = "<space=9em><color=#00000000>.</color><pos=0>";
+            Check("localization_header_cyrillic_width", localizedSettings[0].Label == headingSpace + "<nobr><size=90%>Локализация</size></nobr>" &&
+                localization.SettingsFor(a, ServerSpecificSettingsSync.DefinedSettings)[0].Label == headingSpace + "<nobr><size=90%>Локалізація</size></nobr>");
+            var selector = localizedSettings.Single(s => s.SettingId == LocalizationService.LanguageSettingId);
+            Check("language_tooltip_is_concise", selector.Label == "🌐" && selector.HintDescription == "Язык перков, сообщений и настроек сервера.");
             var settingSource = new ServerSpecificSettingBase[] { new SSKeybindSetting(12341234, "See Perks", hint: "Shows you your perks."), new SSDropdownSetting(12341235, "Input Method", new[] { "Toggle", "Hold" }) };
             var uk = localization.SettingsFor(a, settingSource);
             var ru = localization.SettingsFor(b, settingSource);
@@ -65,6 +71,9 @@ internal static class LocalizationDiagnostics
                 return (string)(AccessTools.Property(typeof(ParsedData), "ParsedString")?.GetValue(parsed) ?? AccessTools.Field(typeof(ParsedData), "ParsedString").GetValue(parsed))!;
             }
             Check("shared_ruei_element", Render(basic, a).Contains("Постріл") && Render(basic, b).Contains("Выстрел"));
+            var voiceTip = new BasicElement(58, "<align=center><size=34><nobr>Press {0} to switch between nearby players and the SCP team.</nobr></size></align>");
+            Check("scp_bind_tip_localized", Render(voiceTip, a).Contains("між гравцями поруч") &&
+                Render(voiceTip, b).Contains("между игроками рядом"));
             var dynamic = new DynamicElement(100, () => "Generators: 1/3 | Warhead: Armed");
             var cached = new CachedElement(100, TimeSpan.FromSeconds(10), () => "Generators: 1/3 | Warhead: Armed");
             Check("dynamic_and_cached_hud", Render(dynamic, a).Contains("Генератори") && Render(cached, b).Contains("Генераторы"));
@@ -103,8 +112,8 @@ internal static class LocalizationDiagnostics
             var card = KeycardItem.CreateCustomKeycardTaskForce(player, "Fireball", "Fireball", default, Color.red, Color.blue, "123456789012", 0);
             var database = (Dictionary<ushort, ArraySegment<byte>>)AccessTools.Field(typeof(NativeCardSync), "Database").GetValue(null)!;
             var original = database[card!.Serial];
-            var ukCard = SpellCardLocalization.Translate(original, ServerLanguage.Ukrainian);
-            var ruCard = SpellCardLocalization.Translate(original, ServerLanguage.Russian);
+            var ukCard = CustomCardLocalization.Translate(original, ServerLanguage.Ukrainian);
+            var ruCard = CustomCardLocalization.Translate(original, ServerLanguage.Russian);
             string CardName(ArraySegment<byte> payload) { using var reader = NetworkReaderPool.Get(payload); return reader.ReadString(); }
             Check("spell_card_names", CardName(original) == "Fireball" && CardName(ukCard) == "Вогняна куля" && CardName(ruCard) == "Огненный шар");
             Check("canonical_spell_unchanged", database[card.Serial].SequenceEqual(original) && card.Permissions == Interactables.Interobjects.DoorUtils.DoorPermissionFlags.None);
@@ -146,8 +155,11 @@ internal static class LocalizationDiagnostics
             RoleHudLocalization.Refresh(b);
             RoleHudLocalization.Refresh(a);
             Check("spectator_language_switch_isolated", StoredHud(b, "SpectatorPlayerInfoTag").Contains("<noparse>Class-D</noparse>") && StoredHud(a, "PlayerInfoTag").Contains("<noparse>D-клас</noparse>") && RoleHudLocalization.Viewer == null);
-            var roleLabels = UltimateHUD.Plugin.Instance.Translation.GameRoles.Select(r => r.Name).Concat(new[] { "Paravoz", "Paravoz Hunter", "Spectator", "No role", "Custom role", "Destroyed role", "Flamingo", "Alpha Flamingo", "Zombie Flamingo", "MTF Flamingo", "CI Flamingo" });
+            var roleLabels = UltimateHUD.Plugin.Instance.Translation.GameRoles.Select(r => r.Name).Where(r => r != "No role")
+                .Concat(new[] { "Paravoz", "Paravoz Hunter", "Spectator", "Custom role", "Destroyed role", "Flamingo", "Alpha Flamingo", "Zombie Flamingo", "MTF Flamingo", "CI Flamingo" });
             Check("all_hud_role_labels_covered", roleLabels.All(label => label.StartsWith("SCP-", StringComparison.Ordinal) || localization.Catalog.Entries.Any(e => e.Source == label)));
+            player.SetRole(RoleTypeId.None);
+            Check("unassigned_role_has_no_label", player.Role == RoleTypeId.None && RoleHudLocalization.Translate(player, "No role") == "");
         }
         catch (Exception error) { checks.Add("FAIL: " + error); }
         finally

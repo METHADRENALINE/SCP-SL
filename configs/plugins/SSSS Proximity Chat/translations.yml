@@ -16,6 +16,5 @@ visibility_label: Show individual SCP volume sliders
 shown: Shown
 hidden: Hidden
 master_volume_label: SCP local voice volume
-master_volume_hint: 100% = normal voice level; above 100% = boost; 0% = mute. This changes the volume of SCP local
-  voices only for you.
+master_volume_hint: Changes how loud you hear nearby SCPs.
 volume_for: 'SCP voice: '

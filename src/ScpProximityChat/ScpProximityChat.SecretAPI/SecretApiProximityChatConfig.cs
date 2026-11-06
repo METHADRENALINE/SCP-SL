@@ -12,7 +12,7 @@ public sealed class SecretApiProximityChatConfig
 
     /// <summary>The hint text to show when Proximity Chat is available. Use {0} for the toggle keybind.</summary>
     [Description("Use \"{0}\" where the keybind should be displayed.")]
-    public string AvailableHint { get; set; } = "\n\n\n\n\n\nSCP Proximity Chat available.\nPress <mark=#77777755><size=0>.</size><space=0.2em><b>{0}</b><space=0.2em><size=0>.</size></mark> to toggle.";
+    public string AvailableHint { get; set; } = "Press {0} to switch between nearby players and the SCP team.";
 
     /// <summary>Whether the same settings should apply on all servers under the same account ID.</summary>
     [Description("Whether the same settings should apply on all servers under the same account ID.")]

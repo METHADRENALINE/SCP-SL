@@ -278,8 +278,6 @@ internal sealed class BraceletController : IDisposable
         var rows = new List<string>();
         string waiting = ServerPlugin.Instance?.Paravoz?.WaitingHud(viewer) ?? "";
         if (waiting.Length > 0) rows.Add(waiting);
-        string gathering = ServerPlugin.Instance?.Paravoz?.GatheringHud(viewer) ?? "";
-        if (gathering.Length > 0) rows.Add(gathering);
         string Name(string name) => "<noparse>" + BraceletPolicy.SafeName(name) + "</noparse>";
         string Text(string template, params object[] values) => string.Format(CultureInfo.InvariantCulture, Localizer.Text(viewer.ReferenceHub, template), values);
         string CaptorStatus(string name, string status, string color)
@@ -325,8 +323,6 @@ internal sealed class BraceletController : IDisposable
     {
         var viewers = new HashSet<Player>();
         if (ServerPlugin.Instance?.Paravoz?.WaitingCarrier is { } waiting) viewers.Add(waiting);
-        if (ServerPlugin.Instance?.Paravoz is { } paravoz)
-            foreach (var runner in paravoz.GatheringRunners) viewers.Add(runner);
         foreach (var life in Ledger.Active.SelectMany(b => new[] { b.Prisoner, b.Captor }).Concat(Ledger.Notices.Select(n => n.Binding.Captor)))
         {
             Player? player = Resolve(life);
