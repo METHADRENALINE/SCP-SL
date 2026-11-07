@@ -13,9 +13,6 @@ using UnityEngine;
 
 namespace Methadrenaline.Server;
 
-// Halloween effects disappear from both clients' and servers' effect registries
-// after the event. Use ordinary synchronized movement effects and server damage
-// instead of adding seasonal effects back and corrupting their network indices.
 internal sealed class ParavozAbilities
 {
     private sealed class State(Player player) : IInteractionBlocker
@@ -84,8 +81,6 @@ internal sealed class ParavozAbilities
         var state = states[player.NetworkId];
         float now = Time.realtimeSinceStartup;
         if (now < state.NextTick) return;
-        // Match Spicy's cadence and four harmless startup ticks. Never burst
-        // delayed damage ticks after a stalled server frame.
         state.NextTick += state.Interval;
         if (state.NextTick <= now) state.NextTick = now + state.Interval;
         if (++state.Ticks > 4) FireTick(player);
@@ -104,8 +99,6 @@ internal sealed class ParavozAbilities
             if (target == carrier || !target.IsAlive || target.RoleBase is not IFpcRole targetRole) continue;
             if (!InFlame(origin, hub.PlayerCameraReference.forward, targetRole.FpcModule.Position, out var direction, out float distance)) continue;
             if (Physics.Raycast(origin, direction, distance, PlayerRolesUtils.AttackMask)) continue;
-            // Retain native attacker attribution, shields, friendly damage
-            // handling and the existing lethal-fire infection path.
             float damage = 15f;
             if (target.ReferenceHub.playerStats.TryGetModule<HumeShieldStat>(out var shield))
                 damage = damage * 3 < shield.CurValue ? damage * 3 : damage + shield.CurValue / 3;
@@ -138,11 +131,10 @@ internal sealed class ParavozAbilities
                 if (Physics.Raycast(origin, direction, out var hit, distance + 0.02f,
                         PlayerRolesUtils.AttackMask, QueryTriggerInteraction.Ignore) &&
                     hit.collider.GetComponentInParent<BreakableWindow>() != window.Base) continue;
-                // Native damage synchronizes the break and preserves window events and attribution.
                 const float damage = 15f;
                 window.Base.Damage(damage, new ExplosionDamageHandler(new Footprint(carrier.ReferenceHub),
                     Vector3.zero, damage, 100, ExplosionType.Custom), point);
-                break; // One hit per pane, even when it has multiple colliders.
+                break;
             }
         }
     }

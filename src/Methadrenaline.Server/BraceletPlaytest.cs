@@ -13,7 +13,6 @@ using Logger = LabApi.Features.Console.Logger;
 
 namespace Methadrenaline.Server;
 
-// An explicit administrator test; never runs during ordinary gameplay.
 internal sealed class BraceletPlaytest(BraceletController controller) : IDisposable
 {
     private Player? prisoner;
@@ -102,7 +101,7 @@ internal sealed class BraceletPlaytest(BraceletController controller) : IDisposa
         try
         {
             Round.IsLobbyLocked = Round.IsLocked = true;
-            prisoner = target; // Human participant in either test direction.
+            prisoner = target;
             target.SetRole(RoleTypeId.FacilityGuard);
             life = target.LifeId;
             target.CurrentItem = target.AddItem(ItemType.GunCOM15);

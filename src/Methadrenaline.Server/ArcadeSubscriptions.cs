@@ -17,7 +17,6 @@ internal static class ArcadeSubscriptions
         var owners = typeof(PlayerEvents).Assembly.GetTypes().Where(t => t.Namespace == "LabApi.Events.Handlers").ToList();
         foreach (string name in new[] { "LabApi.Features.StaticUnityMethods", "UserSettings.ServerSpecific.ServerSpecificSettingsSync", "Interactables.Interobjects.DoorUtils.DoorEvents", "ProjectMER.Events.Handlers.Schematic", "Shutdown", "MEC.Shutdown" })
             if (AccessTools.TypeByName(name) is Type owner) owners.Add(owner);
-        // Internal perk events are also static and can hold score listeners.
         owners.AddRange(typeof(ArcadeCore).Assembly.GetTypes().Where(t => t.IsAbstract && t.IsSealed));
         var result = new List<(EventInfo, FieldInfo)>();
         foreach (var owner in owners.Distinct().Where(t => !t.ContainsGenericParameters))

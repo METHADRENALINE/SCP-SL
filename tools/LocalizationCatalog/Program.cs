@@ -41,8 +41,6 @@ foreach (var (file, source) in sources)
         }
         if (text == null || !text.Any(char.IsLetter)) continue;
         var property = node.Ancestors().OfType<PropertyDeclarationSyntax>().FirstOrDefault();
-        // Retain even single-word strings for review: UI includes Heads/Tails and
-        // item names, while resource IDs are explicitly excluded in the catalog.
         var parent = node.Ancestors().OfType<InvocationExpressionSyntax>().FirstOrDefault();
         var position = tree.GetLineSpan(node.Span).StartLinePosition;
         var site = new Site(file, position.Line + 1, property?.Identifier.ValueText, parent?.Expression.ToString());

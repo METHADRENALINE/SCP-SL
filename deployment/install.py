@@ -30,7 +30,6 @@ def inside(root: Path, relative: str) -> Path:
 
 def write(path: Path, data: bytes, mode: int = 0o600) -> None:
     path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
-    # Never follow or overwrite a file created by another installation.
     with path.open('xb') as stream:
         stream.write(data)
     path.chmod(mode)

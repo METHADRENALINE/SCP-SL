@@ -5,9 +5,6 @@ using SecretAPI.Attributes;
 using SecretAPI.Features.UserSettings;
 using UserSettings.ServerSpecific;
 
-/// <summary>
-/// Fixes validation for <see cref="CustomSetting"/>.
-/// </summary>
 [HarmonyPatchCategory(nameof(CustomSetting))]
 [HarmonyPatch(typeof(ServerSpecificSettingsSync), nameof(ServerSpecificSettingsSync.ServerPrevalidateClientResponse))]
 internal static class SettingsSyncValidateFix
@@ -16,7 +13,6 @@ internal static class SettingsSyncValidateFix
     private static void Postfix(SSSClientResponse msg, ref bool __result)
 #pragma warning restore SA1313
     {
-        // prevent overriding already validated settings
         if (__result)
             return;
 

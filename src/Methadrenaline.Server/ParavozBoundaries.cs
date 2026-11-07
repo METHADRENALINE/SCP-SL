@@ -123,11 +123,9 @@ internal sealed class ParavozBoundaries
             if (state.Effect == null && player.GetEffect<PocketCorroding>() is { } effect)
             {
                 state.Effect = effect;
-                // This native intensity supplies the visuals and movement penalty without a teleport.
                 effect.ServerSetState(106);
             }
         }
-        // Pocket corrosion blocks sprinting on the client. Self-melting alone must leave a way to recover.
         else ClearCorrosion(state);
         if (now < state.NextDamage) return;
         state.NextDamage = now + 1;

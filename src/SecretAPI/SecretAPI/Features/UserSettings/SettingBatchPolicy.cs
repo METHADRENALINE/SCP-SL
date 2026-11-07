@@ -3,7 +3,6 @@ namespace SecretAPI.Features.UserSettings;
 using System;
 using System.Collections.Generic;
 
-/// <summary>Checks one replacement batch, independent of the previously assigned array.</summary>
 internal static class SettingBatchPolicy
 {
     internal static List<T> Filter<T>(IEnumerable<T> incoming, Func<T, int?> getId, IEnumerable<int> reserved, Action<T> duplicate)

@@ -121,8 +121,6 @@ internal static class ParavozPresentationDiagnostics
             presentation.Forget(second.NetworkId);
             presentation.RefreshNow();
             checks["removed_carrier_does_not_leave_an_audio_source"] = presentation.Emitters.Count == 1 && !presentation.Emitters.ContainsKey(second.NetworkId) && audio.ClipsById.Count == 1;
-            // Unity destroys GameObjects at the end of the frame; Mirror must
-            // remove their network identities immediately for client cleanup.
             checks["removed_carrier_leaves_no_flame_objects"] = flameIds.All(id => !NetworkServer.spawned.ContainsKey(id));
         }
         finally

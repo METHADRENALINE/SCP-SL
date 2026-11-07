@@ -84,8 +84,6 @@ internal static class ParavozRoleColorPatch
     }
 }
 
-// Stamina consumption is authoritative on the server. Changing its use rate
-// preserves native sprint input without Invigorated's client mixer/visuals.
 [HarmonyPatch(typeof(FpcStateProcessor), "get_ServerUseRate")]
 internal static class ParavozSilentStaminaPatch
 {
@@ -120,8 +118,6 @@ internal static class ParavozFireFriendlyDamagePatch
         __state = null;
         var mode = ServerPlugin.Instance?.Paravoz;
         if (__instance is not ExplosionDamageHandler { ExplosionType: ExplosionType.Custom } || mode?.IsParavoz(Player.Get(__instance.Attacker.Hub)) != true || mode.IsParavoz(Player.Get(ply))) return;
-        // Keep native attacker attribution and damage modifiers, including the
-        // ordinary IsSuicide flag. Restore the shared multiplier even on errors.
         __state = Multiplier;
         Multiplier = 1;
     }

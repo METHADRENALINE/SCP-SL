@@ -11,8 +11,6 @@ using UnityEngine;
 
 namespace Methadrenaline.Server;
 
-// These floor plans are compiled from native collision geometry, doors and
-// camera locations. Production never raycasts or rebuilds geometry while moving.
 internal sealed class SiteMapSublevels
 {
     private static Definition[]? definitions;
@@ -99,7 +97,6 @@ internal sealed class SiteMapSublevels
                 int id = Data.Cells[y * Data.Width + x];
                 if (id != 0 && highlights.ContainsKey(id)) return id;
             }
-            // Door thresholds and a moving elevator may lie between partitions.
             int maximum = Mathf.CeilToInt(1.2f / Data.Step);
             for (int radius = 1; radius <= maximum; radius++)
                 for (int iy = Math.Max(0, y - radius); iy <= Math.Min(Data.Height - 1, y + radius); iy++)

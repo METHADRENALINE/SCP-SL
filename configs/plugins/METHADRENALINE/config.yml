@@ -1,4 +1,3 @@
-# Public template. Keep account assignments and secrets only in the installed copy.
 mode_voting_enabled: false
 mode_voting_bind_address: 127.0.0.1
 mode_voting_port: 8790

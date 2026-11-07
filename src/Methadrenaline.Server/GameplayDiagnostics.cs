@@ -143,9 +143,6 @@ internal static class GameplayDiagnostics
                     decon.DecontaminationOverride == DecontaminationController.DecontaminationStatus.Disabled &&
                     decon.NetworkRoundStartTime == 0 && !decon.IsDecontaminating);
                 ProbeWarheadTimers(paravoz: true);
-                // Native SCP-1509 protects all hubs for the first three scene
-                // seconds, independently of the SpawnProtected status effect.
-                // Also satisfy the native escape path's ten-second life minimum.
                 yield return Timing.WaitForSeconds(10.5f);
                 if (EventDirector.Participants.Any()) yield break;
                 Player carrier = players.Single(plugin.Paravoz.IsParavoz);
@@ -427,7 +424,6 @@ internal static class GameplayDiagnostics
                 Check("six_minute_gather", Vector3.Distance(runners[1].Position, carrier.Position) < 3);
                 Check("gather_countdown_removed_after_teleport", Gathering(runners[1]) == "");
 
-                // Use the production attack, not a fabricated death event.
                 runners[0].Position = carrier.Position + Vector3.right * 30;
                 runners[1].Position = carrier.Position + Vector3.forward * 0.4f;
                 runners[1].IsGodModeEnabled = false;
@@ -448,7 +444,6 @@ internal static class GameplayDiagnostics
                 var endingEvent = new RoundEndingEventArgs(RoundSummary.LeadingTeam.Anomalies);
                 ServerEvents.OnRoundEnding(endingEvent);
                 Check("custom_win_uses_human_team", endingEvent.IsAllowed && endingEvent.LeadingTeam == RoundSummary.LeadingTeam.ChaosInsurgency);
-                // This is where 1.9.5 blocked every hit indefinitely.
                 FireHits(runners[0], "fire_still_damages_after_winner_selected");
                 hp = carrier.Health;
                 carrier.Damage(new FirearmDamageHandler(rifle, 20, 1));
@@ -490,8 +485,6 @@ internal static class GameplayDiagnostics
                 Check("grenade_damages_its_target", runners[0].Health < grenadeHealth);
                 if (grenade != null && !grenade.IsDestroyed) grenade.Destroy();
 
-                // A respawned body may remain in a native spectator cache; the
-                // public getter must never expose an alive player as a viewer.
                 Check("alive_not_spectators", players.All(p => p.CurrentSpectators.All(s => !s.IsAlive)));
                 completed = true;
 

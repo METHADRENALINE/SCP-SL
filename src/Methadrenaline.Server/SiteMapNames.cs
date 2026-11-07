@@ -7,8 +7,6 @@ internal static class SiteMapNames
     internal static string MapLabel(RoomIdentifier room, System.Func<string, string> localize)
     {
         string name = Room(room);
-        // SCP designations and the signs already printed above LCZ doors are
-        // language-independent; the full localized name remains in the header.
         if (name.StartsWith("SCP-", System.StringComparison.Ordinal)) return name.Split(' ')[0];
         return room.Name switch
         {

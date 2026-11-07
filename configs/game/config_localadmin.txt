@@ -1,4 +1,3 @@
-# Public template. Keep account assignments and secrets only in the installed copy.
 restart_on_crash: true
 enable_heartbeat: true
 set_terminal_title: true

@@ -1,2 +1,1 @@
-# Use the isolated XDG_CONFIG_HOME set by serverctl consistently in the game and plugins.
 gamedir_for_configs: false

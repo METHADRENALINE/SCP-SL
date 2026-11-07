@@ -14,9 +14,6 @@ using Mirror;
 using NorthwoodLib.Pools;
 using SecretAPI.Extensions;
 
-/// <summary>
-/// Wraps <see cref="ServerSpecificSettingBase"/>.
-/// </summary>
 public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
 {
     private static readonly Dictionary<Player, List<CustomSetting>> ReceivedPlayerSettings = [];
@@ -26,7 +23,7 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
         SecretApi.Harmony.PatchCategory(nameof(CustomSetting), SecretApi.Assembly);
 
         ServerSpecificSettingsSync.SendOnJoinFilter = null;
-        ServerSpecificSettingsSync.DefinedSettings ??= []; // fix null ref
+        ServerSpecificSettingsSync.DefinedSettings ??= [];
         ServerSpecificSettingsSync.ServerOnSettingValueReceived += OnSettingsUpdated;
 
         PlayerEvents.Joined += ev => SendSettingsToPlayer(ev.Player);
@@ -34,73 +31,35 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
         PlayerEvents.Left += ev => RemoveStoredPlayer(ev.Player);
     }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CustomSetting"/> class.
-    /// </summary>
-    /// <param name="setting">The setting to use for custom setting.</param>
     protected CustomSetting(ServerSpecificSettingBase setting)
     {
         Base = setting;
     }
 
-    /// <summary>
-    /// Gets the registered custom settings.
-    /// </summary>
-    /// <remarks>Registering a setting directly through this list will result in <see cref="ValidateSettingInternal"/> not triggering. You are recommended to use <see cref="Register(IEnumerable{CustomSetting})"/>.</remarks>
     public static List<CustomSetting> CustomSettings { get; } = [];
 
-    /// <summary>
-    /// Gets a dictionary of player to their received custom settings.
-    /// </summary>
     public static IReadOnlyDictionary<Player, List<CustomSetting>> PlayerSettings => ReceivedPlayerSettings;
 
-    /// <inheritdoc />
     public ServerSpecificSettingBase Base { get; }
 
-    /// <summary>
-    /// Gets the known owner or <see langword="null"/> on the initial object.
-    /// </summary>
     public Player? KnownOwner { get; private set; }
 
-    /// <summary>
-    /// Gets the <see cref="CustomHeader"/> of the setting.
-    /// </summary>
     public abstract CustomHeader Header { get; }
 
-    /// <summary>
-    /// Gets an enum indicating the type of the last update.
-    /// </summary>
-    /// <remarks>When used inside of <see cref="HandleSettingUpdate"/> it will indicate the current status.</remarks>
     public SettingResponseType LastUpdateType { get; private set; } = SettingResponseType.None;
 
-    /// <summary>
-    /// Gets a value indicating whether the current value received is different to that prior to the most recent <see cref="CustomSetting.HandleSettingUpdate"/> call.
-    /// </summary>
     public virtual bool HasValueChanged { get; } = false;
 
-    /// <summary>
-    /// Gets a value indicating whether the setting is currently accessible on the client.
-    /// </summary>
     public bool IsCurrentlyAccessible { get; private set; }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether the setting is server side.
-    /// </summary>
-    /// <remarks>This will result in client not saving the setting values and allows the server to change the setting .</remarks>
     public bool IsServerSetting
     {
         get => Base.IsServerOnly;
         set => Base.IsServerOnly = value;
     }
 
-    /// <summary>
-    /// Gets a value indicating whether the setting is the default and not tied to a <see cref="Player"/>.
-    /// </summary>
     public bool IsDefaultSetting => KnownOwner == null;
 
-    /// <summary>
-    /// Gets or sets the current label.
-    /// </summary>
     public string Label
     {
         get => Base.Label;
@@ -111,9 +70,6 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
         }
     }
 
-    /// <summary>
-    /// Gets or sets the description hint to show.
-    /// </summary>
     public string DescriptionHint
     {
         get => Base.HintDescription;
@@ -124,42 +80,26 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
         }
     }
 
-    /// <summary>
-    /// Gets the current id.
-    /// </summary>
     public int Id
     {
         get => Base.SettingId;
         init => Base.SettingId = value;
     }
 
-    /// <summary>
-    /// Gets or sets the Collection ID for the setting. Defaults to <see cref="byte.MaxValue"/>.
-    /// </summary>
-    /// <remarks>Setting value between 0-20 will allow sharing between servers on the same Account ID.</remarks>
     public byte CollectionId
     {
         get => Base.CollectionId;
         set => Base.CollectionId = value;
     }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether the setting should be shared between servers.
-    /// </summary>
-    /// <remarks><see cref="CollectionId"/> should be used if you are using different settings with the same ID and need extra control.</remarks>
     public bool IsShared
     {
         get => CollectionId < ServerSpecificSettingBase.MaxCollections;
         set => CollectionId = value ? byte.MinValue : byte.MaxValue;
     }
 
-    /// <inheritdoc cref="Register(IEnumerable{CustomSetting})"/>
     public static void Register(params CustomSetting[] settings) => Register((IEnumerable<CustomSetting>)settings);
 
-    /// <summary>
-    /// Registers a collection of settings.
-    /// </summary>
-    /// <param name="settings">The settings to register.</param>
     public static void Register(IEnumerable<CustomSetting> settings)
     {
         foreach (CustomSetting setting in settings)
@@ -169,32 +109,14 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
         }
     }
 
-    /// <inheritdoc cref="UnRegister(IEnumerable{CustomSetting})"/>
     public static void UnRegister(params CustomSetting[] settings) => UnRegister((IEnumerable<CustomSetting>)settings);
 
-    /// <summary>
-    /// Unregisters a collection of settings.
-    /// </summary>
-    /// <param name="settings">The settings to unregister.</param>
     public static void UnRegister(IEnumerable<CustomSetting> settings) => CustomSettings.RemoveAll(settings.Contains);
 
-    /// <inheritdoc cref="UnRegister(IEnumerable{Type})"/>
     public static void UnRegister(params Type[] types) => UnRegister((IEnumerable<Type>)types);
 
-    /// <summary>
-    /// Unregisters a collection of setting based on their <see cref="Type"/>.
-    /// </summary>
-    /// <param name="types">A collection of setting types to unregister. This should be the exact type, not the base.</param>
     public static void UnRegister(IEnumerable<Type> types) => CustomSettings.RemoveAll(s => types.Any(t => s.GetType() == t));
 
-    /// <summary>
-    /// Tries to get player specific setting.
-    /// </summary>
-    /// <param name="player">The player to get settings of.</param>
-    /// <param name="requireAccessible">Whether the setting must currently be accessible to the player.</param>
-    /// <param name="setting">The setting found.</param>
-    /// <typeparam name="TSetting">The setting type to find.</typeparam>
-    /// <returns>Whether a valid was found.</returns>
     public static bool TryGetPlayerSetting<TSetting>(Player player, bool requireAccessible, [NotNullWhen(true)] out TSetting? setting)
         where TSetting : CustomSetting
     {
@@ -218,24 +140,9 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
         return false;
     }
 
-    /// <summary>
-    /// Tries to get player specific setting.
-    /// </summary>
-    /// <param name="player">The player to get settings of.</param>
-    /// <param name="setting">The setting found.</param>
-    /// <typeparam name="TSetting">The setting type to find.</typeparam>
-    /// <returns>Whether setting was found.</returns>
     public static bool TryGetPlayerSetting<TSetting>(Player player, [NotNullWhen(true)] out TSetting? setting)
         where TSetting : CustomSetting => TryGetPlayerSetting(player, false, out setting);
 
-    /// <summary>
-    /// Tries to get player specific setting.
-    /// </summary>
-    /// <param name="player">The player to get settings of.</param>
-    /// <param name="id">The id required of the setting.</param>
-    /// <param name="requireAccessible">Whether the setting must currently be accessible to the player.</param>
-    /// <param name="setting">The setting found.</param>
-    /// <returns>Whether setting was found.</returns>
     public static bool TryGetPlayerSetting(Player player, int id, bool requireAccessible, [NotNullWhen(true)] out CustomSetting? setting)
     {
         setting = null;
@@ -244,53 +151,23 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
         return setting != null;
     }
 
-    /// <summary>
-    /// Gets a player's <see cref="CustomSetting"/>.
-    /// </summary>
-    /// <param name="id">The ID of the setting.</param>
-    /// <param name="player">The player of which to get the setting from.</param>
-    /// <typeparam name="T">The setting class to check for.</typeparam>
-    /// <returns>The found <see cref="CustomSetting"/> matching the params, otherwise null.</returns>
     public static T? GetPlayerSetting<T>(int id, Player player)
         where T : CustomSetting => PlayerSettings.TryGetValue(player, out List<CustomSetting> settings)
         ? settings.FirstOrDefault(s => s.Base.SettingId == id && s.GetType() == typeof(T)) as T
         : null;
 
-    /// <summary>
-    /// Gets a <see cref="CustomSetting"/>, used for validation.
-    /// </summary>
-    /// <param name="type">The type of the base setting.</param>
-    /// <param name="id">The ID of the setting.</param>
-    /// <returns>The found <see cref="CustomSetting"/> matching the params, otherwise null.</returns>
     public static CustomSetting? Get(Type type, int id)
         => CustomSettings.FirstOrDefault(s => s.Base.SettingId == id && s.Base.GetType() == type);
 
-    /// <summary>
-    /// Gets a <see cref="CustomSetting"/>, used for validation.
-    /// </summary>
-    /// <param name="id">The ID of the setting.</param>
-    /// <typeparam name="T">The setting class to check for.</typeparam>
-    /// <returns>The found <see cref="CustomSetting"/> matching the params, otherwise null.</returns>
     public static T? Get<T>(int id)
         where T : CustomSetting => Get(typeof(T), id) as T;
 
-    /// <summary>
-    /// Resyncs all settings to all players.
-    /// </summary>
-    /// <param name="version">The version of the setting. If null will use <see cref="ServerSpecificSettingsSync.Version"/>.</param>
     public static void ResyncServer(int? version = null)
     {
-        // only update to real players that are authenticated
         foreach (Player player in Player.GetAll(PlayerSearchFlags.AuthenticatedPlayers))
             SendSettingsToPlayer(player, version);
     }
 
-    /// <summary>
-    /// Updates the settings of a player based on <see cref="CanView"/>.
-    /// </summary>
-    /// <param name="player">The player to update.</param>
-    /// <param name="version">The version of the setting. If null will use <see cref="ServerSpecificSettingsSync.Version"/>.</param>
-    /// <remarks>This will be automatically called on <see cref="PlayerEvents.Joined"/> and <see cref="PlayerEvents.GroupChanged"/>.</remarks>
     public static void SendSettingsToPlayer(Player player, int? version = null)
     {
         if (player.IsHost || player.IsNpc)
@@ -341,12 +218,6 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
         ListPool<CustomSetting>.Shared.Return(playerSettings);
     }
 
-    /// <summary>
-    /// Reports issues with settings being registered.
-    /// </summary>
-    /// <param name="setting">The <see cref="CustomSetting"/> to validate.</param>
-    /// <param name="settingBase">The <see cref="ServerSpecificSettingBase"/> to validate.</param>
-    /// <returns>Whether the setting is validated and considered fine.</returns>
     internal static bool ValidateSettingInternal(CustomSetting? setting, ServerSpecificSettingBase? settingBase)
     {
         if (settingBase == null && setting == null)
@@ -355,7 +226,6 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
             return false;
         }
 
-        // validating header is pointless and might do unnecessary errors
         if (settingBase is SSGroupHeader)
             return true;
 
@@ -372,17 +242,8 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
         return true;
     }
 
-    /// <summary>
-    /// Checks whether a <see cref="ReferenceHub"/> is equal to <see cref="KnownOwner"/>.
-    /// </summary>
-    /// <param name="hub">The <see cref="ReferenceHub"/> to check.</param>
-    /// <returns>Whether <see cref="ReferenceHub"/> is equal to Owner <see cref="ReferenceHub"/>.</returns>
     internal bool IsKnownOwnerHub(ReferenceHub? hub) => hub && KnownOwner?.ReferenceHub == hub;
 
-    /// <summary>
-    /// Called before <see cref="HandleSettingUpdate"/>, adding <see cref="HasValueChanged"/> and <see cref="LastUpdateType"/>.
-    /// </summary>
-    /// <remarks>This will not have the current status and should always call back to base.</remarks>
     protected virtual void HandleBeforeSettingUpdate()
     {
         LastUpdateType = LastUpdateType == SettingResponseType.None
@@ -390,9 +251,6 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
             : SettingResponseType.Update;
     }
 
-    /// <summary>
-    /// Resyncs the setting to its owner.
-    /// </summary>
     protected void ResyncToOwner()
     {
         if (KnownOwner == null)
@@ -401,31 +259,14 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
         SendSettingsToPlayer(KnownOwner);
     }
 
-    /// <summary>
-    /// Checks if a player is able to view a setting.
-    /// </summary>
-    /// <param name="player">The player to check.</param>
-    /// <returns>A value indicating whether a player is able to view the setting. This is true by default.</returns>
     protected virtual bool CanView(Player player) => true;
 
-    /// <summary>
-    /// Creates a duplicate of the current setting. Used to properly per player sync and implement <see cref="PlayerSettings"/>.
-    /// </summary>
-    /// <returns>The duplicate setting created.</returns>
     protected abstract CustomSetting CreateDuplicate();
 
-    /// <summary>
-    /// Called before setting is sent to a player.
-    /// </summary>
-    /// <remarks>This should be used to personalize a setting per player, such as supporters having more options.</remarks>
     protected virtual void PersonalizeSetting()
     {
     }
 
-    /// <summary>
-    /// Called when client sends a new value on the setting.
-    /// </summary>
-    /// <remarks>You can use <see cref="LastUpdateType"/> to get the current update type.</remarks>
     protected abstract void HandleSettingUpdate();
 
     private static void RemoveStoredPlayer(Player player) => ReceivedPlayerSettings.Remove(player);
@@ -443,7 +284,6 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
             if (setting == null || !setting.CanView(player))
                 return;
 
-            // validate setting existence and then write data from client
             CustomSetting newSettingPlayer = EnsurePlayerSpecificSetting(player, setting);
             newSettingPlayer.HandleBeforeSettingUpdate();
 
@@ -474,9 +314,6 @@ public abstract class CustomSetting : ISetting<ServerSpecificSettingBase>
         return currentSetting;
     }
 
-    /// <summary>
-    /// Sends an update to <see cref="KnownOwner"/> that <see cref="Label"/> or <see cref="DescriptionHint"/> has changed.
-    /// </summary>
     private void SendSettingUpdate()
     {
         if (!IsCurrentlyAccessible)

@@ -7,7 +7,6 @@ namespace Methadrenaline.Server.Core;
 public enum ParavozMember { Runner, Paravoz, Hunter, Eliminated }
 public enum ParavozWinner { None, Humans, Virus, Draw }
 
-/// <summary>One round's roster; infection survives the victim's native death and respawn.</summary>
 public sealed class ParavozPolicy
 {
     public const float IsolationSeconds = 60;

@@ -14,8 +14,6 @@ internal static class PreserveBraceletRangePatch
     }
 }
 
-// Only the bracelet's explicit execution bypasses saving perks. Actual deaths
-// from other sources and all collateral damage retain their normal handlers.
 [HarmonyPatch(typeof(PlayerEvents), nameof(PlayerEvents.OnHurting))]
 internal static class BraceletExecutionDamagePatch
 {

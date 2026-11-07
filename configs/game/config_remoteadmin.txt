@@ -1,4 +1,3 @@
-# Public template. Add account assignments only to the installed private copy.
 Members:
 
 enable_staff_access: false

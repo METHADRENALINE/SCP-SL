@@ -17,8 +17,6 @@ internal static class SiteMapRenderingDiagnostics
 {
     private static TMP_FontAsset? validationFont;
     private static TMP_FontAsset? validationSecondary;
-    // Exercise the installed HUD serializer and the game's actual text engine,
-    // rather than assuming that a valid source string reaches the client intact.
     internal static void Probe(Player player, string source, string name, Action<string, bool> check)
     {
         var identity = player.ReferenceHub.networkIdentity;
@@ -67,8 +65,6 @@ internal static class SiteMapRenderingDiagnostics
                 var previousShader = shaderField.GetValue(null);
                 try
                 {
-                    // The dedicated build strips the mobile shader used by the
-                    // font factory. Its bundled SDF font still has a valid one.
                     shaderField.SetValue(null, text.font.material.shader);
                     testFont = validationFont ??= TMP_FontAsset.CreateFontAsset(testFontPath, 0, 64, 6,
                         UnityEngine.TextCore.LowLevel.GlyphRenderMode.SDFAA, 1024, 1024);
@@ -83,8 +79,6 @@ internal static class SiteMapRenderingDiagnostics
                 finally { shaderField.SetValue(null, previousShader); }
                 previousFallbacks = text.font.fallbackFontAssetTable;
                 text.font.fallbackFontAssetTable = new System.Collections.Generic.List<TMP_FontAsset> { testFont };
-                // Headless shaders have no renderable fallback atlas material.
-                // Use the fallback's own material when testing text geometry.
                 matchPreset.SetValue(settings, false);
             }
             text.fontSize = 36;

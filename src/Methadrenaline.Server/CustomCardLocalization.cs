@@ -10,7 +10,6 @@ using NativeCard = InventorySystem.Items.Keycards.KeycardItem;
 
 namespace Methadrenaline.Server;
 
-// Translate custom names in the Task Force card payload for each recipient.
 internal static class CustomCardLocalization
 {
     private static readonly HashSet<string> Names = new(StringComparer.Ordinal)
@@ -70,7 +69,6 @@ internal static class CustomCardLocalization
         private static bool Prefix(ushort serial, ArraySegment<byte> entry)
         {
             if (Localizer.Current == null || !ShouldLocalize(entry)) return true;
-            // Prepare and validate all variants before touching the native database.
             ArraySegment<byte> uk, ru;
             try
             {

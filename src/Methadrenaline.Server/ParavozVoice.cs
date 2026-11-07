@@ -26,7 +26,6 @@ internal sealed class ParavozVoice : IDisposable
         if (!ev.IsAllowed || player == null) return;
         if (!player.IsAlive || !mode.IsParavoz(player)) { Forget(player.NetworkId); return; }
         ref VoiceMessage message = ref ev.Message;
-        // Never reinterpret another plugin's replacement speaker or null packet.
         if (message.SpeakerNull || message.Speaker != player.ReferenceHub || message.Data == null ||
             message.DataLength <= 0 || message.DataLength > 512 || message.DataLength > message.Data.Length) return;
         uint id = player.NetworkId;
@@ -41,8 +40,6 @@ internal sealed class ParavozVoice : IDisposable
         }
         catch (Exception error)
         {
-            // Leave the original packet intact if the codec fails. Back off so
-            // a malformed stream cannot flood the log or interrupt voice chat.
             Forget(id);
             retryAfter[id] = now + 10;
             Logger.Warn("[METHADRENALINE] Paravoz voice processing suspended for 10s: " + error.GetType().Name);
@@ -82,16 +79,12 @@ internal sealed class ParavozVoice : IDisposable
         internal void Transform(ref VoiceMessage message, float now)
         {
             int count = decoder.Decode(message.Data, message.DataLength, samples);
-            // Stock clients produce 480-sample packets. Opus also supports the
-            // shorter 120/240 frames; larger frames exceed the native buffer.
             if (count != 120 && count != 240 && count != 480) return;
             if (now - lastPacket > 0.5f) effect.Reset();
             lastPacket = now;
             effect.Process(samples, count);
             int length = encoder.Encode(samples, encoded, count);
             if (length <= 0 || length > encoded.Length) return;
-            // Incoming network buffers may be pooled/shared. Own the outgoing
-            // bytes; never modify Talky's source data or a previous packet.
             var output = new byte[length];
             Buffer.BlockCopy(encoded, 0, output, 0, length);
             message.Data = output;
@@ -108,8 +101,6 @@ internal sealed class ParavozVoice : IDisposable
     }
 }
 
-// After all sending listeners (including Talky's analysis of the original
-// microphone stream), but before native per-listener validation and fanout.
 [HarmonyPatch(typeof(PlayerEvents), nameof(PlayerEvents.OnSendingVoiceMessage))]
 internal static class ParavozVoicePatch
 {

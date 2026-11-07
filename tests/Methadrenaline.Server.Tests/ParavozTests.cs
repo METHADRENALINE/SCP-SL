@@ -71,7 +71,6 @@ public sealed class ParavozTests
         Assert.True(game.Is(1, ParavozMember.Paravoz));
         Assert.True(game.Is(2, ParavozMember.Hunter));
         Assert.True(game.Is(3, ParavozMember.Runner));
-        // Repeated escape notifications cannot consume another runner.
         Assert.False(game.Escape(2));
         Assert.Equal(ParavozWinner.None, game.Winner);
     }
@@ -80,7 +79,7 @@ public sealed class ParavozTests
     {
         var game = new ParavozPolicy();
         game.Begin(new uint[] { 1, 2, 3, 4, 5, 6 }, 1);
-        game.Eliminate(2); // The recorded Tesla death.
+        game.Eliminate(2);
         foreach (uint id in new uint[] { 3, 4, 5 })
         {
             Assert.True(game.Escape(id));

@@ -1,7 +1,3 @@
-"""Build clean silhouettes from the original 14.2.9 room sprite alpha masks.
-
-Requires Pillow. Run from any directory; no game or player data is read.
-"""
 import collections
 import math
 from pathlib import Path
@@ -107,7 +103,6 @@ def align(points, name):
             if math.dist(candidate, points[vertex]) <= 12:
                 result[vertex] = candidate
                 continue
-        # At a nearly tangent curve, keep its endpoint close to the source.
         x, y = points[vertex]
         if aligned1:
             distance = (a * x + b * y - c) / (a * a + b * b)
@@ -122,9 +117,6 @@ def align(points, name):
 def contours(alpha, size, name):
     source = Image.frombytes("L", (size, size), alpha)
     image = Image.new("L", (512, 512))
-    # Draw the silhouette once, then its substantial translucent interior areas.
-    # Texture-edge antialiasing must not become extra floor bands along every
-    # wall: that multiplies the number of quads without adding room detail.
     for lower, upper, opacity in ((24, 256, 255), (24, 64, 33), (64, 128, 94), (128, 192, 160)):
         mask = source.point(lambda value: 255 if lower <= value < upper else 0)
         if opacity == 255:

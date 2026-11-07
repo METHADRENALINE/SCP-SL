@@ -1,4 +1,3 @@
-# Public template. Keep account assignments and secrets only in the installed copy.
 chat_header: Proximity Chat
 personalization_header: Individual SCP voice volumes
 toggle_label: Toggle SCP Proximity Chat

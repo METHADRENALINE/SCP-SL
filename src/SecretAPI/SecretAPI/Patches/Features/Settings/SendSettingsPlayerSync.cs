@@ -6,9 +6,6 @@ using SecretAPI.Attributes;
 using SecretAPI.Features.UserSettings;
 using UserSettings.ServerSpecific;
 
-/// <summary>
-/// Fixes <see cref="ServerSpecificSettingsSync.SendToPlayer(ReferenceHub)"/> to resync with <see cref="CustomSetting.SendSettingsToPlayer"/>.
-/// </summary>
 [HarmonyPatchCategory(nameof(CustomSetting))]
 [HarmonyPatch(typeof(ServerSpecificSettingsSync), nameof(ServerSpecificSettingsSync.SendToPlayer), typeof(ReferenceHub))]
 internal static class SendSettingsPlayerSync

@@ -9,8 +9,6 @@ public static class RolePolicy
     public static int ScpCount(int participants, int willingPlayers)
         => Math.Min(Math.Max(0, willingPlayers), participants < 2 ? 0 : 1);
 
-    // Shuffle players before assigning their best available role. When two players
-    // want the same role, either player has exactly the same chance to choose first.
     public static IReadOnlyDictionary<int, int> Allocate(
         IReadOnlyList<IReadOnlyDictionary<int, int>> preferences,
         IReadOnlyList<int> roles,
@@ -35,8 +33,6 @@ public static class RolePolicy
         {
             if (allowed == null) return true;
             if (preferences.Count == 1) return allowed(role, empty);
-            // Support SCPs such as 079 must remain selectable as a first preference
-            // when a compatible companion can legally spawn before them.
             return used.Count == 0
                 ? roles.Any(other => other != role && PairAllowed(role, other))
                 : PairAllowed(used.Single(), role);

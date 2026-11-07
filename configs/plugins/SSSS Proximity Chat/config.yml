@@ -1,4 +1,3 @@
-# Public template. Keep account assignments and secrets only in the installed copy.
 show_available_hint: true
 available_hint: 'Press {0} to switch between nearby players and the SCP team.'
 shared: true

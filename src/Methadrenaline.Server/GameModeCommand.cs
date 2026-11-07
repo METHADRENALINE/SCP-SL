@@ -35,8 +35,6 @@ public sealed class GameModeCommand : ICommand
     }
 }
 
-// Scope this flag to the native permission-checked RA/server command. Automatic
-// ForceRoundStart calls must still wait for the poll. Finalizer clears on errors.
 [HarmonyPatch(typeof(ForceStartCommand), nameof(ForceStartCommand.Execute))]
 internal static class AdministrativeRoundStartPatch
 {

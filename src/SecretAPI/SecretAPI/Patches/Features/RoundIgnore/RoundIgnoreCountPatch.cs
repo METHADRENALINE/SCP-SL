@@ -14,9 +14,6 @@ using SecretAPI.Enums;
 using SecretAPI.Extensions;
 using SecretAPI.Features;
 
-/// <summary>
-/// Handles patching to implement <see cref="RoundIgnoreStatus.ScpTargetCount"/> into <see cref="RoundSummary.UpdateTargetCount"/>.
-/// </summary>
 [HarmonyPatchCategory(nameof(PlayerRoundIgnore))]
 [HarmonyPatch]
 internal static class RoundIgnoreCountPatch

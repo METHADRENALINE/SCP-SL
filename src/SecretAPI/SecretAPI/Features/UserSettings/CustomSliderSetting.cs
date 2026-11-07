@@ -3,35 +3,14 @@ namespace SecretAPI.Features.UserSettings;
 using global::UserSettings.ServerSpecific;
 using UnityEngine;
 
-/// <summary>
-/// Wrapper for <see cref="SSSliderSetting"/>.
-/// </summary>
 public abstract class CustomSliderSetting : CustomSetting, ISetting<SSSliderSetting>
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CustomSliderSetting"/> class.
-    /// </summary>
-    /// <param name="setting">The setting to wrap.</param>
     protected CustomSliderSetting(SSSliderSetting setting)
         : base(setting)
     {
         Base = setting;
     }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CustomSliderSetting"/> class.
-    /// </summary>
-    /// <param name="id">The ID of the setting.</param>
-    /// <param name="label">The setting's label.</param>
-    /// <param name="minValue">The slider's minimum value.</param>
-    /// <param name="maxValue">The slider's maximum value.</param>
-    /// <param name="defaultValue">The default value for the slider.</param>
-    /// <param name="integer">Whether it should be an integer (false for float).</param>
-    /// <param name="valueToStringFormat">Value to string format.</param>
-    /// <param name="finalDisplayFormat">The final display format.</param>
-    /// <param name="hint">The hint to display.</param>
-    /// <param name="collectionId">The <see cref="CustomSetting.CollectionId"/>.</param>
-    /// <param name="isServerSetting">See <see cref="CustomSetting.IsServerSetting"/>.</param>
     protected CustomSliderSetting(
         int? id,
         string label,
@@ -48,35 +27,18 @@ public abstract class CustomSliderSetting : CustomSetting, ISetting<SSSliderSett
     {
     }
 
-    /// <inheritdoc/>
     public new SSSliderSetting Base { get; }
 
-    /// <inheritdoc />
     public override bool HasValueChanged => !Mathf.Approximately(LastSelectedValueFloat, SelectedValueFloat);
 
-    /// <summary>
-    /// Gets the selected value prior to the most recent <see cref="CustomSetting.HandleSettingUpdate"/> call as a float.
-    /// </summary>
     public float LastSelectedValueFloat { get; private set; }
 
-    /// <summary>
-    /// Gets the selected value prior to the most recent <see cref="CustomSetting.HandleSettingUpdate"/> call as an int.
-    /// </summary>
     public int LastSelectedValueInt => Mathf.RoundToInt(LastSelectedValueFloat);
 
-    /// <summary>
-    /// Gets the synced value selected as a float.
-    /// </summary>
     public float SelectedValueFloat => Base.SyncFloatValue;
 
-    /// <summary>
-    /// Gets the synced value selected as an integer.
-    /// </summary>
     public int SelectedValueInt => Base.SyncIntValue;
 
-    /// <summary>
-    /// Gets or sets the value to string format.
-    /// </summary>
     public string ValueToStringFormat
     {
         get => Base.ValueToStringFormat;
@@ -87,9 +49,6 @@ public abstract class CustomSliderSetting : CustomSetting, ISetting<SSSliderSett
         }
     }
 
-    /// <summary>
-    /// Gets or sets the final display format.
-    /// </summary>
     public string FinalDisplayFormat
     {
         get => Base.FinalDisplayFormat;
@@ -100,9 +59,6 @@ public abstract class CustomSliderSetting : CustomSetting, ISetting<SSSliderSett
         }
     }
 
-    /// <summary>
-    /// Gets or sets the minimum value of the setting.
-    /// </summary>
     public float MinimumValue
     {
         get => Base.MinValue;
@@ -113,9 +69,6 @@ public abstract class CustomSliderSetting : CustomSetting, ISetting<SSSliderSett
         }
     }
 
-    /// <summary>
-    /// Gets or sets the maximum value of the setting.
-    /// </summary>
     public float MaximumValue
     {
         get => Base.MaxValue;
@@ -126,18 +79,12 @@ public abstract class CustomSliderSetting : CustomSetting, ISetting<SSSliderSett
         }
     }
 
-    /// <summary>
-    /// Gets or sets the default value of the setting.
-    /// </summary>
     public float DefaultValue
     {
         get => Base.DefaultValue;
         set => Base.DefaultValue = value;
     }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether to use integer. False will use float.
-    /// </summary>
     public bool UseInteger
     {
         get => Base.Integer;
@@ -148,22 +95,14 @@ public abstract class CustomSliderSetting : CustomSetting, ISetting<SSSliderSett
         }
     }
 
-    /// <summary>
-    /// Sends an update to <see cref="CustomSetting.KnownOwner"/> that this has been updated on Server. Only works if <see cref="CustomSetting.IsServerSetting"/> is true.
-    /// </summary>
-    /// <param name="value">The new value that this is set to.</param>
     public void SendServerUpdate(float value) => Base.SendValueUpdate(value, false, IsKnownOwnerHub);
 
-    /// <inheritdoc />
     protected override void HandleBeforeSettingUpdate()
     {
         base.HandleBeforeSettingUpdate();
         LastSelectedValueFloat = SelectedValueFloat;
     }
 
-    /// <summary>
-    /// Sends an update that any of the slider values have been updated.
-    /// </summary>
     private void SendSliderUpdate()
     {
         if (!IsCurrentlyAccessible)

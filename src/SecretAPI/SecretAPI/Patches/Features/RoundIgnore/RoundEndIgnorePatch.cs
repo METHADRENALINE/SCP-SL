@@ -14,9 +14,6 @@ using SecretAPI.Enums;
 using SecretAPI.Extensions;
 using SecretAPI.Features;
 
-/// <summary>
-/// Handles patching to implement <see cref="RoundIgnoreStatus.RoundEndingCheck"/> into <see cref="RoundSummary._ProcessServerSideCode"/>.
-/// </summary>
 [HarmonyPatchCategory(nameof(PlayerRoundIgnore))]
 [HarmonyPatch]
 internal static class RoundEndIgnorePatch
@@ -24,7 +21,7 @@ internal static class RoundEndIgnorePatch
     private const string StateMachine = "_ProcessServerSideCode";
     private const string MoveNext = "MoveNext";
     private const int ReferenceHubLocalIndex = 20;
-    private const int SkipAdvanceAmount = 4; // amount needed to get to IL_0131: br IL_01bd
+    private const int SkipAdvanceAmount = 4;
 
     private static MethodInfo TargetMethod()
     {

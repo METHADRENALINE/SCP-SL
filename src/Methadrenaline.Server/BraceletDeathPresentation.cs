@@ -10,8 +10,6 @@ using PlayerStatsSystem;
 
 namespace Methadrenaline.Server;
 
-// Keep the real damage handler on the server. Only presentation payloads use
-// CustomReasonDamageHandler, which an unmodified client already understands.
 internal static class BraceletDeathPresentation
 {
     internal const string DeathText = "Death was caused by the detonation of an explosive bracelet.";
@@ -83,8 +81,6 @@ internal static class BraceletDeathPresentation
     {
         int component = Array.IndexOf(body.netIdentity.NetworkBehaviours, body);
         if (component < 0 || component >= 64) throw new InvalidOperationException("The ragdoll has no network component index.");
-        // Mirror delta envelope: component mask, byte-size safety marker,
-        // unchanged SyncObjects, Info's dirty bit, then native SyncVar data.
         Compression.CompressVarUInt(writer, 1UL << component);
         int marker = writer.Position;
         writer.WriteByte(0);
@@ -140,8 +136,6 @@ internal static class BraceletBodyTextPatch
     }
 }
 
-// Cached Mirror delta payloads are shared between observers. Send the localized
-// Info immediately after that batch, without changing its original cache.
 [HarmonyPatch(typeof(NetworkServer), "SerializeForConnection")]
 internal static class BraceletBodyUpdatePatch
 {

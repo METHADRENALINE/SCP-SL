@@ -15,7 +15,7 @@ internal sealed class BraceletAudio : IDisposable
         internal Player Wearer = wearer;
         internal AudioPlayer Player = player;
         internal Speaker Speaker = speaker;
-        internal int Cue = cue; // 0 activation, 1..5 warnings, -1 irreversible alarm.
+        internal int Cue = cue;
         internal int PendingCue;
     }
     private readonly Dictionary<BraceletLife, Emitter> players = new();
@@ -69,8 +69,6 @@ internal sealed class BraceletAudio : IDisposable
                 }
                 catch { player.Destroy(); throw; }
             }
-            // Keep the speaker until release: destroying it at the last PCM
-            // packet can cut off the client's remaining buffered sound.
             if (cue > 0 && emitter.Cue < 0) return;
             if (cue > 0 && emitter.Player.ClipsById.Count > 0)
             {
@@ -87,7 +85,6 @@ internal sealed class BraceletAudio : IDisposable
     }
     private void Start(Emitter emitter, string clip, int cue)
     {
-        // Only the irreversible alarm interrupts a running burst.
         foreach (int id in emitter.Player.ClipsById.Keys.ToArray()) emitter.Player.RemoveClipById(id);
         emitter.PendingCue = 0;
         emitter.Cue = cue;
@@ -112,8 +109,6 @@ internal sealed class BraceletAudio : IDisposable
     {
         if (players.TryGetValue(life, out var e)) e.PendingCue = 0;
     }
-    // Called after the controller observes the current distance, so a return
-    // cancels stale warnings before a newly finished burst can dispatch them.
     internal void Flush(BraceletLife life, double distance)
     {
         if (!players.TryGetValue(life, out var e) || e.Player == null || e.Cue < 0 || e.PendingCue == 0 || e.Player.ClipsById.Count > 0) return;
@@ -126,7 +121,6 @@ internal sealed class BraceletAudio : IDisposable
         if (!players.TryGetValue(life, out var e)) return;
         players.Remove(life);
         if (e.Player == null) return;
-        // Destroy is deferred. Silence the previous stream in this frame.
         e.Player.SendSoundGlobally = false;
         e.Player.Condition = null;
         e.Player.Owners.Clear();

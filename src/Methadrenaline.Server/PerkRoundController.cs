@@ -23,8 +23,6 @@ using Logger = LabApi.Features.Console.Logger;
 
 namespace Methadrenaline.Server;
 
-/// <summary>Owns the entire SwiftArcade lifecycle. Keeping the assembly loaded
-/// preserves its assets and commands while its gameplay is suspended.</summary>
 internal sealed class PerkRoundController : IDisposable
 {
     internal const string DisabledMessage = "This round has no perks.";
@@ -71,8 +69,6 @@ internal sealed class PerkRoundController : IDisposable
     internal void Announce()
     {
         int epoch = Epoch;
-        // SwiftArcade spawns its coins after 0.1s. Its optional mode also clears
-        // broadcasts during RoundStarted, so announce after both have completed.
         Timing.CallDelayed(0.35f, () =>
         {
             if (disposed || epoch != Epoch || !Policy.HasPerks.HasValue || !Round.IsRoundInProgress) return;
@@ -91,8 +87,6 @@ internal sealed class PerkRoundController : IDisposable
     internal void Resume()
     {
         if (Active) return;
-        // Upstream Enable appends to these registries. Fresh registries prevent
-        // duplicate perks, recipes, modes and score handlers after OFF -> ON.
         PerkManager.RegisteredPerks.Clear();
         UpgradePathManager.RegisteredUpgrades.Clear();
         Gambler.PositiveEffects.Clear();
@@ -136,8 +130,6 @@ internal sealed class PerkRoundController : IDisposable
             {
                 upstreamEnabled = false;
                 Clean(arcade.Disable);
-                // SwiftArcade 2.4 Disable forgets this subscription and leaves
-                // its settings registered. Remove both without touching others.
                 var handler = (Action<ReferenceHub, ServerSpecificSettingBase>)Delegate.CreateDelegate(typeof(Action<ReferenceHub, ServerSpecificSettingBase>), AccessTools.Method(typeof(SSSManager), "OnPressKeybind"));
                 ServerSpecificSettingsSync.ServerOnSettingValueReceived -= handler;
             }

@@ -7,17 +7,9 @@ using Interactables.Interobjects;
 using Mirror;
 using UnityEngine;
 
-/// <summary>
-/// Handles the storing of a prefab.
-/// </summary>
-/// <typeparam name="TPrefab">The prefab to use.</typeparam>
-/// <remarks>For <see cref="BasicDoor"/> or <see cref="Scp079CameraToy"/> use <see cref="PrefabManager"/>.</remarks>
 public static class PrefabStore<TPrefab>
     where TPrefab : NetworkBehaviour
 {
-    /// <summary>
-    /// Gets the first prefab found of the specified type.
-    /// </summary>
     public static TPrefab Prefab
     {
         get
@@ -32,10 +24,6 @@ public static class PrefabStore<TPrefab>
         }
     }
 
-    /// <summary>
-    /// Gets every single prefab associated with this component.
-    /// </summary>
-    /// <remarks>Used to find all of a base type (such as <see cref="BasicDoor"/>).</remarks>
     public static TPrefab[] AllComponentPrefabs
     {
         get

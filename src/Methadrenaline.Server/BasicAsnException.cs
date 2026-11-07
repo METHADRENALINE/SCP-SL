@@ -6,9 +6,6 @@ using Methadrenaline.Server.Core;
 
 namespace Methadrenaline.Server;
 
-// CheckBans runs after signed-token, challenge, identity and version validation.
-// Replace only its reading of the ban reason, without mutating the signed token
-// or skipping the remaining local bans, IP matching and mute checks.
 [HarmonyPatch(typeof(PlayerAuthenticationManager), "CheckBans")]
 internal static class BasicAsnException
 {

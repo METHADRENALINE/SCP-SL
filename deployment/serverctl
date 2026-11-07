@@ -13,7 +13,6 @@ case "${1:-status}" in
             exit 0
         fi
         mkdir -p -- "$root/logs" "$root/state"
-        # Use the same isolated application-data root in the game and all plugins.
         tmux new-session -d -s "$session" -c "$root/game" \
             env "XDG_CONFIG_HOME=$root/state" "$root/game/LocalAdmin" "$port" --logs "$root/logs"
         sleep 0.5

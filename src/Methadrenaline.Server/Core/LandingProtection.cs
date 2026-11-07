@@ -1,6 +1,5 @@
 namespace Methadrenaline.Server.Core;
 
-/// <summary>Protect the first landing, even after a very long airborne descent.</summary>
 public sealed class LandingProtection(int life)
 {
     public int Life { get; } = life;
@@ -10,7 +9,6 @@ public sealed class LandingProtection(int life)
     {
         if (currentLife != Life || !alive) return false;
         if (grounded && !landedAt.HasValue) landedAt = now;
-        // Native fall damage is evaluated on the update after ground contact.
         return !landedAt.HasValue || now - landedAt.Value < 0.5;
     }
 }

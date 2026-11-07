@@ -43,9 +43,6 @@ internal static class BraceletDiagnostics
                 hub.authManager.UserId = "ID_Dummy";
                 Player.Get(hub)!.SetRole(pair.Item2);
             }
-            // Unity Start initializes the character manager and human hitboxes
-            // after the command returns. The native SCP-1509 damage modifier also
-            // protects every hub for the first three seconds of a new scene.
             Timing.CallDelayed(4f, () =>
             {
                 try
@@ -99,8 +96,6 @@ internal static class BraceletDiagnostics
         void FinishBurst(AudioPlayer player)
         {
             foreach (var clip in player.ClipsById.Values) clip.ReadPosition = clip.Samples.Length;
-            // Exercise the library's real end-of-stream cleanup, not a fake
-            // elapsed time or a copy of our queue implementation.
             AccessTools.Method(typeof(AudioPlayer), "SendAudioData").Invoke(player, null);
         }
         try
@@ -163,7 +158,7 @@ internal static class BraceletDiagnostics
 
             captor.SetRole(RoleTypeId.FacilityGuard);
             Cuff(captor, prisoner);
-            prisoner.IsDisarmed = false; // Native/admin removal without Uncuffed.
+            prisoner.IsDisarmed = false;
             controller.CheckNow();
             Check("silent_uncuff_releases", controller.Ledger.Active.Count == 0 && prisoner.IsAlive && controller.ExplosionCount == blasts);
             Cuff(captor, prisoner);
@@ -279,8 +274,6 @@ internal static class BraceletDiagnostics
             controller.CheckNow();
             Check("captor_death_and_return_cannot_cancel_sequence", prisoner.IsAlive && controller.IsCommitted(prisoner));
             Check("alarm_survives_uncuff_and_captor_death", alarm != null && ReferenceEquals(alarm, controller.Audio.Playback(BraceletController.Life(prisoner))));
-            // Sample just after the boundary: the native float clock can round
-            // an exact 3-second step down. Core tests cover exact phase edges.
             controller.AdvanceDiagnosticTime(3.01f);
             Check("detonation_text_from_fourth_second", prisoner.IsAlive && controller.Hud(prisoner).Contains("Detonation"));
             Check("detonation_alarm_continues_without_restarting", alarm != null && ReferenceEquals(alarm, controller.Audio.Playback(BraceletController.Life(prisoner))));
@@ -301,8 +294,6 @@ internal static class BraceletDiagnostics
             Free(captor, prisoner);
             controller.Reset();
 
-            // Compare collateral damage to the game's own HE explosion at the
-            // same location, with the same attacker and unmodified prefab.
             if (!InventoryItemLoader.TryGetItem(ItemType.GrenadeHE, out ThrowableItem grenadeItem) || grenadeItem.Projectile is not ExplosionGrenade grenade)
                 throw new InvalidOperationException("Native HE prefab unavailable.");
             Vector3 blastPosition = origin + Vector3.up * 0.5f;
@@ -316,8 +307,6 @@ internal static class BraceletDiagnostics
             witness.HumeShield = 0;
             witness.IsGodModeEnabled = false;
             witness.DisableEffect<SpawnProtected>();
-            // Network dummies do not submit the next movement packet that
-            // normally updates the server's third-person hitbox transform.
             var model = ((IFpcRole)witness.RoleBase).FpcModule.CharacterModelInstance;
             model.transform.position = witness.Position;
             foreach (var hitbox in model.Hitboxes) hitbox.SetColliders(true);
@@ -325,8 +314,6 @@ internal static class BraceletDiagnostics
             ExplosionGrenade.Explode(new Footprint(captor.ReferenceHub), blastPosition, grenade, ExplosionType.Grenade);
             float nativeDamage = 5000 - witness.Health;
             Check("native_he_hits_probe", nativeDamage > 0);
-            // The first HE applies Burned, which increases subsequent damage.
-            // Restore the same unburned target conditions for the comparison.
             witness.DisableEffect<Burned>();
             witness.DisableEffect<Deafened>();
             witness.DisableEffect<Concussed>();
@@ -430,8 +417,6 @@ internal static class BraceletDiagnostics
                     spectator.WritePrivateSpawnData(mysterious);
                     new CustomReasonDamageHandler(localization.Text(prisoner.ReferenceHub, BraceletDeathPresentation.UnknownDeathText)).WriteDeathScreen(expectedMysterious);
                     Check("collateral_unknown_death_localization_" + language, mysterious.ToArraySegment().SequenceEqual(expectedMysterious.ToArraySegment()) && BraceletDeathPresentation.BodyHandler(nearby, prisoner.ReferenceHub).RagdollInspectText == localization.Text(prisoner.ReferenceHub, BraceletDeathPresentation.UnknownDeathText));
-                    // Start registers corpses on the next frame; the native
-                    // KillPlayer path has instantiated this one already.
                     var body = UnityEngine.Object.FindObjectsByType<BasicRagdoll>(FindObjectsSortMode.None).Single(r => ReferenceEquals(r.Info.Handler, handler));
                     using var delta = NetworkWriterPool.Get();
                     BraceletDeathPresentation.WriteBodyUpdate(delta, body, prisoner.ReferenceHub);

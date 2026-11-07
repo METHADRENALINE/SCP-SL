@@ -32,7 +32,6 @@ DEPLOYMENT_FILES = {
     'tests/RepositoryPolicy/test_policy.py', 'tests/Deployment/test_install.py',
 }
 
-# Fixed geometry and font metrics only. Any replacement requires a reviewed hash.
 MAP_ASSETS = {
     'src/Methadrenaline.Server/Map/native-cyrillic-advances.bin': '30551bcca47434f96e1d617ae2faa51626286dcd9f2cc9c644bc38ef72eeb87c',
     'src/Methadrenaline.Server/Map/native-room-icons.deflate': 'dd0fc36d209ac3d1256bde7dc61546b1390d568211cfede5fd315a7c4cc68d15',
@@ -78,7 +77,6 @@ PATTERNS = {
     'email address': re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b'),
 }
 IPV4 = re.compile(r'(?<![\w.])(?:\d{1,3}\.){3}\d{1,3}(?![\w.])')
-# Generic addresses used only for loopback operation and synthetic policy tests.
 EXAMPLE_IPS = {'0.0.0.0', '127.0.0.1', '10.0.0.1', '10.0.0.2', '172.16.0.1', '192.168.1.10', '8.8.8.8'}
 EXAMPLE_IDS = {'123456789012345678', '223456789012345678', '18446744073709551616'}
 
@@ -99,7 +97,6 @@ def problems(path: str, data: bytes) -> list[str]:
     numeric_ids = re.findall(r'(?<![\w])\d{17,20}(?![\w])', text)
     if any(value not in EXAMPLE_IDS for value in numeric_ids):
         found.append('non-example account identifier')
-    # Only JSON version fields are version metadata; network fields still get scanned.
     address_text = re.sub(r'"version":\s*"[0-9]+(?:\.[0-9]+){3}"', '', text) if path == 'deployment/manifest.json' else text
     for candidate in IPV4.findall(address_text):
         try:
@@ -107,7 +104,6 @@ def problems(path: str, data: bytes) -> list[str]:
         except ValueError:
             continue
         if candidate not in EXAMPLE_IPS and not address.is_loopback and not any(address in ipaddress.ip_network(net) for net in ('192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24')):
-            # Version strings in build metadata are not network addresses.
             if path.endswith(('.props', '.csproj')):
                 continue
             found.append('non-example network address')
@@ -121,7 +117,6 @@ def value(text: str, key: str) -> str | None:
 
 
 def template_problems(path: str, text: str) -> list[str]:
-    """These fields may only contain public defaults, even without recognizable IDs."""
     expected = {}
     if path == 'configs/game/config_gameplay.txt':
         expected = {'server_ip': 'auto', 'contact_email': 'default', 'query_administrator_password': 'none',

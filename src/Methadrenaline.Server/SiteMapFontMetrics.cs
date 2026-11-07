@@ -6,10 +6,6 @@ namespace Methadrenaline.Server;
 
 internal static class SiteMapFontMetrics
 {
-    // The client's first Cyrillic-capable global fallback is NotoSansCJKsc-RegularDynamic.
-    // Unsupported Cyrillic characters use Noto Sans; using the CJK missing-glyph
-    // advance for Ukrainian letters made those captions needlessly small.
-    // Values are in em units. The dedicated build cannot populate the client atlas.
     private static readonly Dictionary<char, float> Advances = Load();
 
     internal static float Advance(char character) => Advances.TryGetValue(character, out var width) ? width :

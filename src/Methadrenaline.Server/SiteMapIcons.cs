@@ -6,8 +6,6 @@ using System.Reflection;
 
 namespace Methadrenaline.Server;
 
-// Contours derived from the original RoomIdentifier.Icon alpha masks in 14.2.9.
-// Long axis-aligned walls are regularized before sampling; room topology is retained.
 internal sealed class SiteMapIcon
 {
     private static readonly Dictionary<string, SiteMapIcon> Icons = Load();
@@ -29,8 +27,6 @@ internal sealed class SiteMapIcon
         x = x * Size - .5f; y = y * Size - .5f;
         int ix = (int)Math.Floor(x), iy = (int)Math.Floor(y);
         float dx = x - ix, dy = y - iy;
-        // Match the stock sprite's clamped sampling at tile boundaries. Sampling
-        // transparency outside the texture would leave dark seams between rooms.
         float At(int px, int py) => alpha[Math.Min(Size - 1, Math.Max(0, py)) * Size + Math.Min(Size - 1, Math.Max(0, px))];
         return (At(ix, iy) * (1 - dx) + At(ix + 1, iy) * dx) * (1 - dy) +
                (At(ix, iy + 1) * (1 - dx) + At(ix + 1, iy + 1) * dx) * dy;

@@ -3,7 +3,6 @@ using PlayerRoles.Voice;
 
 namespace ScpProximityChat.Core;
 
-/// <summary>Human attenuation for the otherwise logarithmic SpeakerToy.</summary>
 public static class HumanVoiceProfile
 {
     private static AnimationCurve? _curve;
@@ -19,8 +18,6 @@ public static class HumanVoiceProfile
         if (source.rolloffMode != AudioRolloffMode.Custom || source.maxDistance <= 0) return;
         _curve = source.GetCustomCurve(AudioSourceCurveType.CustomRolloff);
         _range = source.maxDistance;
-        // Flatten toy attenuation inside the audible radius, then apply the
-        // native human curve once through the per-listener volume override.
         ProximityChatPlugin.Cfg.AudioSettings = ProximityChatPlugin.Cfg.AudioSettings with
         {
             MinDistance = _range,
@@ -28,7 +25,6 @@ public static class HumanVoiceProfile
         };
     }
 
-    /// <summary>Gets human proximity gain for the listener's current camera.</summary>
     public static float GainFor(SpeakerToy speaker, Player receiver)
     {
         if (_curve == null) return 1;

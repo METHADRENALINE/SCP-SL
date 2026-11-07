@@ -29,8 +29,6 @@ public static class ParavozPresentationPolicy
         return best;
     }
 
-    // Blend the end into the beginning, keeping a whole number of native 10ms
-    // packets. AudioPlayerApi otherwise pads the final partial packet with zeros.
     public static float[] LoopSamples(float[] samples)
     {
         const int packet = 480;

@@ -1,4 +1,3 @@
-# Only source, reviewed public templates and deployment inputs belong here.
 *
 !*/
 !/.gitignore
@@ -33,7 +32,6 @@
 **/references/**
 **/[Rr][Ee][Aa][Dd][Mm][Ee]*
 
-# Reviewed public deployment files. Runtime instances must live outside this checkout.
 !/.gitattributes
 !/configs/game/config_gameplay.txt
 !/configs/game/config_localadmin.txt

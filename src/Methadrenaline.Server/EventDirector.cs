@@ -230,7 +230,6 @@ internal sealed class EventDirector : IDisposable
                 if (!light.Base) return;
                 float remaining = (float)FlickerDuration.GetValue(light.Base);
                 float expected = Math.Max(0, run.Until - Time.realtimeSinceStartup);
-                // A different native blackout retains ownership of its light timer.
                 if (Math.Abs(remaining - expected) < 1f) light.FlickerLights(0);
             });
             light.FlickerLights(run.Duration);
@@ -298,8 +297,6 @@ internal sealed class EventDirector : IDisposable
             run.Scope.Add(() => RestoreGravity(player, run));
             if (levitation) fallGrace.Remove(player);
             player.Gravity = applied;
-            // Positive gravity alone cannot release a grounded character. Native
-            // ForceJump updates both client and server without teleporting players.
             if (levitation) player.Jump(3);
         }
     }
@@ -311,13 +308,11 @@ internal sealed class EventDirector : IDisposable
         if (!player.GameObject) return;
         bool sameLife = player.LifeId == state.Life;
         if (sameLife && AnomalyPolicy.ProtectsFromFall(state.Owner.Name, state.Owner.FromChaos)) fallGrace[player] = new LandingProtection(state.Life);
-        // Gravity is stored per hub, including while spectating. Restore our value
-        // even if the old body has already disappeared, so it cannot leak to a new life.
         if ((FpcGravityController.GetGravity(player.ReferenceHub) - state.Applied).sqrMagnitude < 0.01f)
         {
             player.Gravity = state.Original;
             if (sameLife && player.IsAlive && state.Owner.Name == "levitation" && player.RoleBase is IFpcRole)
-                player.Jump(0); // Clear accumulated upward speed when the event ends.
+                player.Jump(0);
         }
     }
 
@@ -417,7 +412,6 @@ internal sealed class EventDirector : IDisposable
                 passed &= probe.IsOpened == opened;
             }
 
-            // Also cover access restrictions being added after a door was selected.
             probe.Permissions = DoorPermissionFlags.None;
             if (!TryStart("doors", true, out _)) return "keycard door exclusion: FAIL (event did not start)";
             var changing = active["doors"];

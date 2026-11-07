@@ -15,14 +15,8 @@ using SecretAPI.Features;
 using UnityEngine;
 using Logger = LabApi.Features.Console.Logger;
 
-/// <summary>
-/// Debugs base-game prefabs by logging information about them.
-/// </summary>
 internal static class PrefabDebugger
 {
-    /// <summary>
-    /// Loads the prefab debugging.
-    /// </summary>
     [CallOnLoad]
     internal static void Load()
     {
@@ -47,7 +41,6 @@ internal static class PrefabDebugger
 
         foreach (KeyValuePair<uint, GameObject> pair in NetworkClient.prefabs)
         {
-            // Logger.Debug(txt);
             string txt = $"Prefab Key ({pair.Key}) - Value ({pair.Value.name})";
             logTexts.Add(txt);
         }

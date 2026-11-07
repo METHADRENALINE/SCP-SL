@@ -2,7 +2,6 @@ using System;
 
 namespace Methadrenaline.Server.Core;
 
-/// <summary>Stateful 48 kHz mono bass shelf and deliberately overdriven voice.</summary>
 public sealed class ParavozVoiceDsp
 {
     public const int SampleRate = 48000;
@@ -15,8 +14,6 @@ public sealed class ParavozVoiceDsp
 
     public ParavozVoiceDsp()
     {
-        // RBJ low shelf, 250 Hz, slope 1. Keep filter state across packets;
-        // restarting it every 10 ms would introduce clicks and lose the bass.
         double amplitude = Math.Pow(10, BassBoostDb / 40);
         double omega = 2 * Math.PI * 250 / SampleRate;
         double cosine = Math.Cos(omega);
@@ -45,7 +42,6 @@ public sealed class ParavozVoiceDsp
                 samples[i] = 0;
                 continue;
             }
-            // Remove DC/subsonic offset before the strong bass amplification.
             double highPass = input - previousInput + dcDecay * previousHighPass;
             previousInput = input;
             previousHighPass = highPass;

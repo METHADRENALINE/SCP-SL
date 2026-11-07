@@ -64,8 +64,6 @@ internal static class PerkRoundDiagnostics
                     player.AddCustomEffect(new ProbeEffect(() => removed = true));
                     Check("custom_effect_added", CustomEffectManager.Containers[player].ActiveEffects.Count == 1);
                     var spell = new Fireball();
-                    // Construct a fixture for the cleanup probe without
-                    // granting or initializing a disabled class on a player.
                     spell.Init(new Wizard(player.GetPerkInventory()));
                     new Fireball.Projectile(spell, player.Camera.position + Vector3.up, Quaternion.identity, Vector3.zero, 15, player);
                     Check("projectile_created", ProjectileManager.All.Count > 0);
@@ -74,7 +72,7 @@ internal static class PerkRoundDiagnostics
                     var tank = new SwiftArcadeMode.Features.SCPs.Upgrades.Content.SCP173.Tank.Tank(player.GetPerkInventory());
                     player.GetPerkInventory().Perks.Add(tank);
                     tank.Init();
-                    tank.Progress = 1; // Upstream reinitializes the previous stage.
+                    tank.Progress = 1;
                     Timing.CallDelayed(0.05f, RecipeManager.Enable);
                 }
                 controller.Suspend();

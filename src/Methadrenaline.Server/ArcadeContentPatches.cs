@@ -9,7 +9,6 @@ using SwiftArcadeMode.Features.Humans.Perks.Content.Caster;
 
 namespace Methadrenaline.Server;
 
-/// <summary>Keep ordinary perks while excluding the spellcasting classes.</summary>
 internal static class ArcadeContentPolicy
 {
     internal static bool IsExcluded(Type? perk) => perk != null && typeof(CasterBase).IsAssignableFrom(perk);
@@ -29,8 +28,6 @@ internal static class ArcadeContentPolicy
     internal static void FilterModes() => GameModeManager.Registry.RemoveAll(t => typeof(CasterBattle).IsAssignableFrom(t));
 }
 
-// Filter the source registry, so every random selection (including SCP
-// upgrades and later waves) draws from the remaining perks without retries.
 [HarmonyPatch(typeof(PerkManager), nameof(PerkManager.RegisterPerks))]
 internal static class FilterArcadeClassesPatch
 {
@@ -49,8 +46,6 @@ internal static class BlockCasterBattlePatch
     private static bool Prefix(GameModeBase value) => value is not CasterBattle;
 }
 
-// A caller may retain a PerkAttribute obtained before the registry was
-// filtered. Block those references as well as ordinary command/API grants.
 [HarmonyPatch(typeof(PerkInventory), nameof(PerkInventory.AddPerk))]
 internal static class BlockArcadeClassGrantsPatch
 {

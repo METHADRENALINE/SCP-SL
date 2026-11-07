@@ -129,8 +129,6 @@ internal static class LocalizationDiagnostics
                 var element = (Element)AccessTools.Field(stored.GetType(), "Element").GetValue(stored);
                 return Render(element, hub);
             }
-            // Exercise the actual third-party BasicElement creation and RueI
-            // parsing. A nickname identical to a role must stay untranslated.
             hudConfig.PlayerHud = "{nickname} | {role}";
             hudConfig.SpectatorHud = "{nickname} | {role}";
             hudConfig.EnableSpectatorHud = true;
