@@ -10,8 +10,6 @@ using NativeCard = InventorySystem.Items.Keycards.KeycardItem;
 
 namespace Methadrenaline.Server;
 
-/// <summary>Personalizes the native card payload; the server's canonical names,
-/// spell identifiers, permissions, serials and inventory remain unchanged.</summary>
 internal static class SpellCardLocalization
 {
     private static readonly HashSet<string> Names = new(StringComparer.Ordinal)
@@ -25,8 +23,6 @@ internal static class SpellCardLocalization
     {
         if (payload.Count < 2) return false;
         using var reader = NetworkReaderPool.Get(payload);
-        // All custom cards begin with CustomItemNameDetail. The whitelist keeps
-        // ordinary keycards and arbitrary custom cards outside this bridge.
         try { return Names.Contains(reader.ReadString() ?? ""); }
         catch (System.IO.EndOfStreamException) { return false; }
         catch (ArgumentException) { return false; }
@@ -69,7 +65,6 @@ internal static class SpellCardLocalization
         private static bool Prefix(ushort serial, ArraySegment<byte> entry)
         {
             if (Localizer.Current == null || !IsSpell(entry)) return true;
-            // Prepare and validate all variants before touching the native database.
             ArraySegment<byte> uk, ru;
             try
             {

@@ -15,7 +15,6 @@ namespace Methadrenaline.Server;
 
 internal sealed class LocalizationService : IDisposable
 {
-    // Stable IDs and option order are part of the client's saved preferences.
     internal const int LanguageSettingId = 2026102600;
     private const int HeaderId = 2026102599;
     private static readonly MethodInfo CloneObject = typeof(object).GetMethod("MemberwiseClone", BindingFlags.Instance | BindingFlags.NonPublic)!;
@@ -59,7 +58,6 @@ internal sealed class LocalizationService : IDisposable
         ServerLanguage next = LocalizationCatalog.FromIndex(dropdown.SyncSelectionIndexRaw);
         if (languages.TryGetValue(hub, out var current) && current == next) return;
         languages[hub] = next;
-        // Defer until native and other plugins have finished processing this packet.
         Timing.CallDelayed(0.1f, () =>
         {
             if (disposed || hub == null) return;
@@ -106,8 +104,6 @@ internal sealed class LocalizationService : IDisposable
             if (setting.SettingId == HeaderId)
             {
                 label = "<nobr><size=90%>" + label + "</size></nobr>";
-                // The client's ContentSizeFitter can leave too little space for the final Cyrillic glyph.
-                // Measure a wider invisible prefix, then reset the pen before drawing the centered title.
                 if (Language(hub) is ServerLanguage.Ukrainian or ServerLanguage.Russian)
                     label = "<space=9em><color=#00000000>.</color><pos=0>" + label;
             }
@@ -121,8 +117,6 @@ internal sealed class LocalizationService : IDisposable
         }).ToArray();
     }
 
-    // Sort whole sections before translating their labels. Keep each section's
-    // controls, IDs and saved values together, including dynamic player sliders.
     internal static ServerSpecificSettingBase[] OrderForDisplay(ServerSpecificSettingBase[] source)
     {
         var sections = new List<List<ServerSpecificSettingBase>>();

@@ -1,4 +1,3 @@
-# Public template. Keep account assignments and secrets only in the installed copy.
 show_toggled_hint: true
 enabled: Proximity Chat enabled.
 disabled: Proximity Chat disabled.

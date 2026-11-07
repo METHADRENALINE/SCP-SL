@@ -1,9 +1,5 @@
 namespace SecretAPI.SourceGenerators.Generators;
 
-/// <summary>
-/// Code generator for CallOnLoad/CallOnUnload
-/// TODO: Implement IRegister source generation
-/// </summary>
 [Generator]
 public class CallOnLoadGenerator : IIncrementalGenerator
 {
@@ -11,7 +7,6 @@ public class CallOnLoadGenerator : IIncrementalGenerator
     private const string CallOnLoadAttributeLocation = "SecretAPI.Attributes.CallOnLoadAttribute";
     private const string CallOnUnloadAttributeLocation = "SecretAPI.Attributes.CallOnUnloadAttribute";
 
-    /// <inheritdoc/>
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         IncrementalValuesProvider<IMethodSymbol> methodProvider =
@@ -110,7 +105,6 @@ public class CallOnLoadGenerator : IIncrementalGenerator
         if (!loadCalls.Any() && !unloadCalls.Any())
             return;
 
-        // ClassBuilder classBuilder = ClassBuilder.CreateBuilder(pluginInfo.Item2)
         ClassBuilder classBuilder = ClassBuilder.CreateBuilder(ClassDeclaration(GeneratedClassName))
             .AddUsingStatements("System")
             .AddModifiers(SyntaxKind.InternalKeyword, SyntaxKind.StaticKeyword);

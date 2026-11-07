@@ -72,7 +72,6 @@ internal sealed class BraceletController : IDisposable
         Player captor = ev.Player, prisoner = ev.Target;
         if (captor == null || prisoner == null || !captor.IsAlive || !EligibleCaptor(captor) || !prisoner.IsHuman || !prisoner.IsAlive || !prisoner.IsDisarmed || prisoner.DisarmedBy != captor || captor.IsHost || prisoner.IsHost) return;
         if (!Diagnostic && Playtest?.AllowsPair(captor, prisoner) != true && (captor.IsNpc || captor.IsDummy || prisoner.IsNpc || prisoner.IsDummy)) return;
-        // Duplicate cuff events must not replay activation or reset warning state.
         if (Ledger.TryGet(Life(prisoner), out var existing) && (existing.Committed || existing.Captor.Equals(Life(captor)))) return;
         ReleasePrisoner(prisoner.NetworkId);
         if (Ledger.Bind(Life(prisoner), Life(captor), prisoner.Nickname, Vector3.Distance(captor.Position, prisoner.Position)))
@@ -91,8 +90,6 @@ internal sealed class BraceletController : IDisposable
 
     private void Death(PlayerDeathEventArgs ev)
     {
-        // KillPlayer has already changed the victim to Spectator and removed
-        // native cuffs. Match their saved binding, and use the event's old position.
         ReleaseCaptor(ev.Player.NetworkId);
         var binding = Ledger.Active.FirstOrDefault(b => b.Prisoner.NetworkId == ev.Player.NetworkId);
         if (binding != null) Complete(binding, ev.OldPosition, killPrisoner: false);
@@ -102,8 +99,6 @@ internal sealed class BraceletController : IDisposable
     private void ChangedRole(PlayerChangedRoleEventArgs ev)
     {
         ReleaseCaptor(ev.Player.NetworkId);
-        // Native Death follows ChangedRole(Died). Do not discard its bracelet
-        // before the confirmed death event has queued the corpse explosion.
         if (ev.ChangeReason != RoleChangeReason.Died) ReleasePrisoner(ev.Player.NetworkId);
         UpdateHud();
     }
@@ -146,8 +141,6 @@ internal sealed class BraceletController : IDisposable
         Audio.Stop(prisoner);
     }
 
-    // Native cuffs auto-expire after a 90m separation. Preserve only a still
-    // valid bracelet pairing until our next check handles a long teleport.
     internal bool KeepCuffs(DisarmedPlayers.DisarmedEntry entry)
     {
         var binding = Ledger.Active.FirstOrDefault(b => b.Prisoner.NetworkId == entry.DisarmedPlayer && b.Captor.NetworkId == entry.Disarmer);
@@ -170,8 +163,6 @@ internal sealed class BraceletController : IDisposable
                 Player? captor = Resolve(binding.Captor), prisoner = Resolve(binding.Prisoner);
                 if (binding.Committed)
                 {
-                    // Once filling starts, neither range, cuffs nor the owner's
-                    // life can disarm the independent seven-second sequence.
                     if (prisoner == null || !prisoner.IsAlive)
                         Complete(binding, lastPositions.TryGetValue(binding.Prisoner, out var saved) ? saved : Vector3.zero, killPrisoner: false);
                     else
@@ -232,8 +223,6 @@ internal sealed class BraceletController : IDisposable
         executing = binding.Prisoner;
         try
         {
-            // The wearer must die even with AHP, spawn protection or a saving
-            // perk. Everyone around them still goes through native HE damage.
             prisoner.IsGodModeEnabled = false;
             protection.ServerSetState(0);
             prisoner.ReferenceHub.playerStats.DealDamage(BraceletDeathPresentation.WearerDeath());
@@ -249,8 +238,6 @@ internal sealed class BraceletController : IDisposable
 
     internal void DrainExplosions()
     {
-        // Deaths caused by one blast enqueue their own bracelets. Drain them
-        // sequentially, never recursively inside Unity's overlap enumeration.
         while (explosions.Count > 0)
         {
             var blast = explosions.Dequeue();
@@ -285,9 +272,6 @@ internal sealed class BraceletController : IDisposable
             string safeName = BraceletPolicy.SafeName(name);
             string visible = Text("Prisoner: {0} ({1})", safeName, status);
             string content = Text("Prisoner: {0} ({1})", Name(name), status);
-            // RueI measures explicit line breaks, not client-side wrapping.
-            // Keep the existing status on one line, fitting long translations
-            // into its width rather than letting TMP add unmeasured lines.
             float size = Math.Min(25, 1750f / Math.Max(1, new StringInfo(visible).LengthInTextElements));
             return "<size=" + size.ToString("0.##", CultureInfo.InvariantCulture) + "><nobr><color=" + color + ">" + content + "</color></nobr></size>";
         }

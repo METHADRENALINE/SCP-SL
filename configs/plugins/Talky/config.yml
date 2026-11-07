@@ -1,4 +1,3 @@
-# Public template. Keep account assignments and secrets only in the installed copy.
 low_db_threshold: -80
 high_db_threshold: -30
 emotion_reset_time: 500

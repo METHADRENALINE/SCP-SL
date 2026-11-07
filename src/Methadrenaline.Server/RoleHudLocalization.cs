@@ -26,8 +26,6 @@ internal static class RoleHudLocalization
             RoleTypeId.ChaosFlamingo => "CI Flamingo",
             _ => label
         };
-        // This value is a role label, never a nickname. Translate before the
-        // HUD wraps it in <noparse>, without nickname-protection substitutions.
         return localization.Catalog.Translate(label, localization.Language(Viewer ?? subject.ReferenceHub));
     }
 
@@ -40,8 +38,6 @@ internal static class RoleHudLocalization
     }
 }
 
-// These two methods build separate BasicElements for each recipient. Scope the
-// language to that recipient, especially when a spectator watches another user.
 [HarmonyPatch]
 internal static class RoleHudViewerPatch
 {

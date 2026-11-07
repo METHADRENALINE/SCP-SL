@@ -170,8 +170,6 @@ internal sealed class ParavozController : IDisposable
         diagnosticPlayers = diagnostic;
         var players = Participants.ToArray();
         if (players.Length < 2) throw new InvalidOperationException("Paravoz requires at least two players.");
-        // Individual interior doors only; the cell block's shared exit is not
-        // a cell. Use the carrier's randomized native Class-D spawn below.
         var cells = ClassDCellDoors();
         if (cells.Length < 2) throw new InvalidOperationException("Class-D isolation cells are unavailable.");
         Player carrier = firstCarrierOverride ?? players[random.Next(players.Length)];
@@ -190,8 +188,6 @@ internal sealed class ParavozController : IDisposable
         {
             SuspendDecontamination();
             foreach (var player in players) player.SetRole(RoleTypeId.ClassD, RoleChangeReason.RoundStart);
-            // Role spawning is synchronous; avoid placing the carrier into a
-            // fresh body until all round-start listeners have finished.
             Timing.CallDelayed(0.2f, () =>
             {
                 if (!Active || epoch != run) return;
@@ -200,8 +196,6 @@ internal sealed class ParavozController : IDisposable
                     foreach (var player in players.Where(p => p.IsAlive)) player.IsGodModeEnabled = false;
                     Vector3 inside = carrier.Position;
                     var chamber = ClosestCell(cells, inside);
-                    // Native spawns can wrap with a large lobby. Never lock an
-                    // uninfected player in the selected cell with the carrier.
                     foreach (var other in players.Where(p => p != carrier && p.IsAlive && ClosestCell(cells, p.Position) == chamber))
                     {
                         bool relocated = false;
@@ -305,8 +299,6 @@ internal sealed class ParavozController : IDisposable
     internal void YieldDoor(Player player, DoorVariant door)
     {
         if (!IsParavoz(player) || player.NetworkId == initialCarrier && isolation != null) return;
-        // Elevator doors protect an empty shaft when the cabin is elsewhere.
-        // Their chamber alone must control when they open, even while idle.
         if (door is Interactables.Interobjects.ElevatorDoor) return;
         if (door is Interactables.Interobjects.BreakableDoor breakable && !breakable.IsDestroyed)
         {
@@ -430,8 +422,6 @@ internal sealed class ParavozController : IDisposable
         Abilities.Forget(ev.Player.NetworkId);
         Presentation.Forget(ev.Player.NetworkId);
         if (!Active || !initialized || !policy.Members.ContainsKey(ev.Player.NetworkId) || pendingInfections.Contains(ev.Player.NetworkId) || ev.ChangeReason is RoleChangeReason.Died or RoleChangeReason.Escaped) return;
-        // Explicit administrator changes and disconnects must not leave a ghost
-        // participant that prevents the custom round from ever ending.
         if (!ev.Player.IsAlive) { policy.Eliminate(ev.Player.NetworkId); Evaluate(); }
     }
     private void Left(PlayerLeftEventArgs ev)
@@ -451,9 +441,6 @@ internal sealed class ParavozController : IDisposable
     private void RoundEndingConditionsCheck(RoundEndingConditionsCheckEventArgs ev)
     {
         if (!Active) return;
-        // ForceEnd alone is overwritten by native faction counting. Carriers
-        // are Class-D and hunters are MTF, so the mode's result must be used
-        // at the conditions check as well as when selecting the winning team.
         ev.CanEnd = ending;
     }
     private void RoundEnding(RoundEndingEventArgs ev)
@@ -465,9 +452,6 @@ internal sealed class ParavozController : IDisposable
     private void Evaluate()
     {
         if (!Active || !initialized || ending || pendingInfections.Count > 0) return;
-        // An administrator may lock the round before starting a playtest.
-        // Our own mode lock still permits a normal win, but the pre-existing
-        // admin lock must also block this mode's otherwise forced ending.
         if ((diagnosticPlayers == null || SoloActive) && wasLocked && Round.IsLocked) return;
         Result = policy.Winner;
         if (Result == ParavozWinner.None) return;
@@ -500,7 +484,6 @@ internal sealed class ParavozController : IDisposable
             controller.DecontaminationOverride = previous;
         });
         controller.DecontaminationOverride = DecontaminationController.DecontaminationStatus.Disabled;
-        // Clients also advance their own announcement phases from this timestamp.
         controller.NetworkRoundStartTime = 0;
     }
 

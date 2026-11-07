@@ -32,7 +32,6 @@ internal static class ElevatorDiagnostics
         var cabin = lifts.First(c => !ParavozBoundaries.SurfaceLift(c));
         try
         {
-            // A closed landing must stay closed even if its cabin is absent.
             foreach (var door in doors)
             {
                 door.NetworkTargetState = false;
@@ -42,7 +41,7 @@ internal static class ElevatorDiagnostics
             }
             check("elevator_empty_shafts_protected", unmodified);
 
-            human.IsGodModeEnabled = true; // Keep native Spicy from killing the control passenger.
+            human.IsGodModeEnabled = true;
             Vector3 center = cabin.WorldspaceBounds.Bounds.center;
             carrier.Position = center + cabin.transform.right * 0.5f;
             human.Position = center - cabin.transform.right * 0.5f;
@@ -84,7 +83,6 @@ internal static class ElevatorDiagnostics
             check("elevator_departure_doors_stay_closed", departureDoorsClosed);
 
             foreach (var lift in lifts) lift.ServerSetDestination(levels[lift], allowQueueing: false);
-            // Destination synchronization takes one native Update to start.
             yield return Timing.WaitForSeconds(0.1f);
             deadline = Time.realtimeSinceStartup + 60;
             do
@@ -108,8 +106,6 @@ internal static class ElevatorDiagnostics
 
         void Observe()
         {
-            // ElevatorAutoReturn can start a shorter lift's return before a
-            // longer lift arrives. Record each real arrival when it happens.
             foreach (var lift in lifts.Where(c => c.IsReady && c.DestinationLevel != levels[c]))
             {
                 arrived.Add(lift);

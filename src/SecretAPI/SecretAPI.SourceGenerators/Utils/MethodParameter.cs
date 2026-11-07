@@ -1,8 +1,5 @@
 namespace SecretAPI.SourceGenerators.Utils;
 
-/// <summary>
-/// Represents a method parameter used during code generation.
-/// </summary>
 internal readonly struct MethodParameter
 {
     private readonly SyntaxList<AttributeListSyntax> _attributeLists;
@@ -11,14 +8,6 @@ internal readonly struct MethodParameter
     private readonly SyntaxToken _identifier;
     private readonly EqualsValueClauseSyntax? _default;
 
-    /// <summary>
-    /// Creates a new instance of <see cref="MethodParameter"/>.
-    /// </summary>
-    /// <param name="identifier">The name of the parameter.</param>
-    /// <param name="type">The parameter type. May be <see langword="null"/> for implicitly-typed parameters.</param>
-    /// <param name="modifiers">Optional parameter modifiers (e.g. <c>ref</c>, <c>out</c>, <c>in</c>).</param>
-    /// <param name="attributeLists">Optional attribute lists applied to the parameter.</param>
-    /// <param name="default">Optional default value.</param>
     internal MethodParameter(
         string identifier,
         TypeSyntax? type = null,

@@ -109,13 +109,13 @@ public sealed class BraceletTests
         var binding = new BraceletBinding(Prisoner, Captor, "P", 9);
         Assert.Equal(1, binding.ObserveDistance(10, 1));
         Assert.Equal(0, binding.ObserveDistance(9.9, 2));
-        Assert.Equal(0, binding.ObserveDistance(10.1, 3)); // time alone does not rearm
+        Assert.Equal(0, binding.ObserveDistance(10.1, 3));
         Assert.Equal(2, binding.ObserveDistance(15, 3.1));
         Assert.Equal(3, binding.ObserveDistance(18, 3.2));
         Assert.Equal(4, binding.ObserveDistance(20, 3.3));
         Assert.Equal(5, binding.ObserveDistance(22, 3.4));
         Assert.Equal(0, binding.ObserveDistance(21.4, 3.5));
-        Assert.Equal(0, binding.ObserveDistance(22, 3.6)); // cooldown
+        Assert.Equal(0, binding.ObserveDistance(22, 3.6));
         Assert.Equal(0, binding.ObserveDistance(21.4, 5));
         Assert.Equal(5, binding.ObserveDistance(22, 5.1));
     }

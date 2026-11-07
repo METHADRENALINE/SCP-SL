@@ -88,8 +88,6 @@ internal static class BlockArcadeEntryPointsPatch
     private static bool Prefix() => ArcadeGate.Allowed;
 }
 
-/// <summary>Guard at MEC's scheduling implementation: its public convenience
-/// methods can be inlined before Harmony is installed.</summary>
 [HarmonyPatch(typeof(Timing), "RunCoroutineInternal")]
 internal static class GuardArcadeTimersPatch
 {

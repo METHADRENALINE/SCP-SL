@@ -19,7 +19,6 @@ public sealed class LocalizedText
     public string In(ServerLanguage language) => language == ServerLanguage.Ukrainian ? Ukrainian : language == ServerLanguage.Russian ? Russian : English;
 }
 
-/// <summary>Translates presentation strings only; never changes plugin identifiers or saved data.</summary>
 public sealed class LocalizationCatalog
 {
     private static readonly Regex Placeholder = new(@"\{(\d+)\}", RegexOptions.CultureInvariant);
@@ -78,7 +77,6 @@ public sealed class LocalizationCatalog
                 names.Add(name);
                 protectedText = next;
             }
-        // Names use stable placeholders, so cached text never stores a player's name.
         string cacheKey = (int)language + ":" + protectedText;
         if (!cache.TryGetValue(cacheKey, out var translated))
         {
@@ -109,8 +107,6 @@ public sealed class LocalizationCatalog
                 return rule.Entry.VerbatimArguments.Contains(int.Parse(slot.Groups[1].Value)) ? argument : TranslatePart(argument, language, depth + 1);
             }));
         }
-        // Parse only real rich-text tags. Comparisons such as <50 HP and console
-        // arguments such as <number> remain ordinary text.
         if (Tags.IsMatch(text))
         {
             var output = new System.Text.StringBuilder();

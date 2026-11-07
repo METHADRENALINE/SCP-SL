@@ -13,19 +13,14 @@ using Mirror;
 
 namespace ScpProximityChat.SecretAPI;
 
-/// <summary>Empty-server integration checks for local voice settings.</summary>
 [CommandHandler(typeof(GameConsoleCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
 public sealed class ProximityDiagnostics : ICommand
 {
-    /// <inheritdoc/>
     public string Command => "scpproxcheck";
-    /// <inheritdoc/>
     public string[] Aliases => [];
-    /// <inheritdoc/>
     public string Description => "Validate SCP voice volume and spatial settings on an empty server.";
 
-    /// <inheritdoc/>
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
         if (!sender.CheckPermission(PlayerPermissions.FacilityManagement)) { response = "FacilityManagement permission required."; return false; }
@@ -94,8 +89,6 @@ public sealed class ProximityDiagnostics : ICommand
             Check("native_personal_volume_multiplies_master_once", Mathf.Approximately(VolumeHelpers.Personalized(listener, source.UserId), settings.Volume * 0.75f));
             Check("other_listener_unchanged", Mathf.Approximately(VolumeHelpers.Personalized(other, source.UserId), settings.Volume));
             Check("scp_default_speaker_is_not_duplicated", !source.EnableProximityChat());
-            // Native ReadyList excludes dummies. Exercise the same refresh a
-            // real listener receives after joining/updating their settings.
             PersonalizationManager.ConfigureAll(listener);
             var active = (Dictionary<Player, SpeakerToy>)typeof(ProximityChatState).GetProperty("ActiveSpeakers", BindingFlags.NonPublic | BindingFlags.Static)!.GetValue(null)!;
             speaker = active[source];
@@ -106,8 +99,6 @@ public sealed class ProximityDiagnostics : ICommand
             var synchronize = typeof(ProximityChatState).GetMethod("SynchronizePositions", BindingFlags.NonPublic | BindingFlags.Static)!;
             var parentId = typeof(AdminToys.AdminToyBase).GetMethod("ServerParentId", BindingFlags.NonPublic | BindingFlags.Instance)!;
             Check("camera_parent_is_not_network_addressable", (uint)parentId.Invoke(speaker.Base, [source.ReferenceHub.PlayerCameraReference])! == 0);
-            // Exercise the native spawn serializer. Its final uint is the
-            // client parent ID; a server-only transform comparison missed this.
             using (var writer = NetworkWriterPool.Get())
             {
                 speaker.Base.OnSerialize(writer, true);
@@ -125,8 +116,6 @@ public sealed class ProximityDiagnostics : ICommand
             }
             source.Position = originalPosition;
             synchronize.Invoke(null, null);
-            // Run the real LabAPI voice event and the client's audio decoder.
-            // This complements spatial checks; it still needs listening on a client.
             var samples = new float[480];
             for (int i = 0; i < samples.Length; i++) samples[i] = 0.2f * Mathf.Sin(i * 2 * Mathf.PI * 440 / 48000);
             using (var encoder = new VoiceChat.Codec.OpusEncoder(VoiceChat.Codec.Enums.OpusApplicationType.Voip))
@@ -161,8 +150,6 @@ public sealed class ProximityDiagnostics : ICommand
                 listener.Position = speaker.Transform.position + Vector3.right * distance - cameraOffset;
                 PersonalizationManager.ConfigureAll(listener);
                 float actualDistance = Vector3.Distance(speaker.Transform.position, listener.ReferenceHub.PlayerCameraReference.position);
-                // Human matching applies attenuation through the listener's
-                // volume override. Custom ranges leave it to the native toy.
                 float expected = ProximityChatPlugin.Cfg.MatchHumanVoiceDistances
                     ? (actualDistance >= human.maxDistance ? 0 : settings.Volume * Mathf.Clamp01(curve.Evaluate(actualDistance / human.maxDistance)))
                     : settings.Volume;

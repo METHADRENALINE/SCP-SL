@@ -25,8 +25,6 @@ internal static class Localizer
 [HarmonyPatch(typeof(HintDisplay), nameof(HintDisplay.Show))]
 internal static class LocalizedHintPatch
 {
-    // RueI stores the source for the target and its spectators. Translate at its
-    // per-viewer rendering stage, or here only when it leaves native delivery on.
     [HarmonyPriority(Priority.Last)]
     private static void Prefix(HintDisplay __instance, ref Hint hint, bool __runOriginal)
     {
@@ -63,7 +61,6 @@ internal static class LocalizedRemoteAdminPatch
 {
     private static void Prefix(PlayerCommandSender __instance, ref string text)
     {
-        // RA's COMMAND# prefix is a protocol field, not human-readable content.
         int separator = text.IndexOf('#');
         text = separator >= 0 && Regex.IsMatch(text.Substring(0, separator), @"\A[A-Za-z0-9_.:-]+\z") ? text.Substring(0, separator + 1) + Localizer.Text(__instance.ReferenceHub, text.Substring(separator + 1)) : Localizer.Text(__instance.ReferenceHub, text);
     }
@@ -125,15 +122,10 @@ internal static class PreserveSettingsDuringMapEditingPatch
     private static void Prefix(ref ServerSpecificSettingBase[] value)
     {
         if (Localizer.Current == null || value == null || value.Length != 2 || value[0] is not SSGroupHeader || value[0].Label != "MapEditorReborn" || value[1] is not SSDropdownSetting || value[1].SettingId != 0 || value[1].Label != "Schematic Name") return;
-        // ProjectMER 2026.7.6.1 replaces the entire registry with its two entries.
-        // Merge this particular registration without changing normal replacement
-        // and removal semantics used by other plugins.
         value = (ServerSpecificSettingsSync.DefinedSettings ?? Array.Empty<ServerSpecificSettingBase>()).Where(s => !(s is SSGroupHeader && s.Label == "MapEditorReborn") && !(s is SSDropdownSetting && s.SettingId == 0 && s.Label == "Schematic Name")).Concat(value).ToArray();
     }
 }
 
-/// <summary>Translate before RueI parses layout and measures text. Its elements
-/// can be shared by players and spectators; their source and caches stay intact.</summary>
 [HarmonyPatch]
 internal static class LocalizedRueElementPatch
 {

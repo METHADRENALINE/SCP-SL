@@ -6,9 +6,6 @@ using RueI.API.Parsing;
 
 namespace Methadrenaline.Server;
 
-// A self-contained native TMP drawing: its final baseline returns to its start.
-// RueI's ordinary parser deliberately rejects voffset. Supply a trusted parsed
-// element instead; keep all other HUD elements on RueI's normal rendering path.
 internal sealed class SiteMapElement : Element
 {
     private static readonly ConstructorInfo Constructor = typeof(ParsedData)

@@ -1,4 +1,3 @@
-"""Compile native, player-free floor surveys into the map atlas. Requires Pillow."""
 import argparse
 from array import array
 import base64
@@ -132,7 +131,6 @@ def compile_one(plan):
     for cells in groups:
         if len(cells)*step*step < .3:
             for i in cells: ids[i] = 0
-    # Find an interior label anchor in each actual chamber, away from walls.
     distances = array("H", [0]) * len(mask)
     for i in range(len(mask)):
         if not ids[i]: continue

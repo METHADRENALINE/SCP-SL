@@ -13,10 +13,7 @@ internal readonly struct SiteMapInk
 
 internal static class SiteMapRaster
 {
-    // Sample the original sprite at the final UI scale, including its antialiased edge.
     internal const int Density = 2;
-    // Keep subpixel edge coverage instead of thresholding the native sprite into
-    // coarse steps. RueI transports large hints through native string parameters.
     private static byte Quantize(byte alpha) => alpha < 16 ? (byte)0 : alpha < 64 ? (byte)33 :
         alpha < 128 ? (byte)94 : alpha < 192 ? (byte)160 : (byte)255;
 
@@ -51,7 +48,6 @@ internal static class SiteMapRaster
             while (x < width)
             {
                 int start = x;
-                // Preserve translucency in the stock icons and smooth their edges.
                 byte alpha = Quantize(pixels[y * width + x]);
                 do { x++; } while (x < width && Quantize(pixels[y * width + x]) == alpha);
                 if (alpha == 0) continue;

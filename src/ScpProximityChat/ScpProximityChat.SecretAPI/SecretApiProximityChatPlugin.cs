@@ -10,36 +10,27 @@ using RueI.API.Elements.Parameters;
 
 namespace ScpProximityChat.SecretAPI;
 
-/// <summary>An extension plugin for the Core that adds SSSS-based toggling and personalization.</summary>
 public sealed class SecretApiProximityChatPlugin : Plugin<SecretApiProximityChatConfig>
 {
 
-    /// <summary>The setting ID of the toggle keybind.</summary>
-    /// <remarks>Can be used to create an <see cref="SSKeybindHintParameter"/>.</remarks>
     public static int ToggleSettingId => SettingsRegistry.Toggle.Id;
 
     internal static SecretApiProximityChatTranslations Translation { get; private set; } = new();
 
-    /// <inheritdoc/>
     public override string Name => "SSSS Proximity Chat";
 
-    /// <inheritdoc/>
     public override string Description => "SSSS-based Proximity Chat";
 
-    /// <inheritdoc/>
     public override string Author => "Axwabo";
 
-    /// <inheritdoc/>
     public override Version Version => GetType().Assembly.GetName().Version;
 
-    /// <inheritdoc/>
     public override Version RequiredApiVersion { get; } = new(1, 0, 0);
 
     private readonly PersonalizationEventHandlers _handlers = new();
     private static readonly Tag VoiceTipTag = new("scp-proximity.keybind");
     private const string HoldTip = "Hold {0} to talk to nearby players.";
 
-    /// <inheritdoc />
     public override void LoadConfigs()
     {
         base.LoadConfigs();
@@ -47,7 +38,6 @@ public sealed class SecretApiProximityChatPlugin : Plugin<SecretApiProximityChat
         Headers.Reload();
     }
 
-    /// <inheritdoc/>
     public override void Enable()
     {
         PlayerEvents.ChangedRole += OnChangedRole;
@@ -63,7 +53,6 @@ public sealed class SecretApiProximityChatPlugin : Plugin<SecretApiProximityChat
         CustomSetting.Register(SettingsRegistry.PersonalizationVisibility);
     }
 
-    /// <inheritdoc/>
     public override void Disable()
     {
         PlayerEvents.ChangedRole -= OnChangedRole;

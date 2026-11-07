@@ -73,8 +73,6 @@ internal sealed class ParavozPresentation : IDisposable
             emitter.Toys.Add(emitter.Speaker);
             emitter.Speaker.ControllerId = Playback.ControllerID;
             emitter.Speaker.IsSpatial = true;
-            // The spawn message is silent. Only one source receives a nonzero
-            // per-viewer volume, including for late joiners and spectators.
             emitter.Speaker.Volume = 0;
             emitter.Speaker.MinDistance = ParavozPresentationPolicy.MusicNear;
             emitter.Speaker.MaxDistance = ParavozPresentationPolicy.MusicRange;
@@ -134,8 +132,6 @@ internal sealed class ParavozPresentation : IDisposable
             Animate(e, Time.realtimeSinceStartup);
             foreach (var toy in e.Toys) if (!toy.IsDestroyed) SyncTransform(toy);
         }
-        // NPCs are included for native diagnostics; only ready network clients
-        // can receive the target sync or audio packets.
         var viewers = Player.List.Where(p => !p.IsHost && !p.IsDestroyed).ToArray();
         foreach (Player left in selected.Keys.Except(viewers).ToArray())
         {
@@ -176,7 +172,6 @@ internal sealed class ParavozPresentation : IDisposable
             float phase = Mathf.Repeat(now * 0.8f + i * 0.25f, 1);
             float angle = i * 2.4f + phase * 0.9f;
             var ember = e.Embers[i];
-            // Stay below and behind the eyes; no first-person screen overlay.
             ember.Position = head + new Vector3(Mathf.Cos(angle) * 0.28f, -1.1f + phase * 0.75f, -0.22f + Mathf.Sin(angle) * 0.15f);
             float size = Mathf.Lerp(0.08f, 0.025f, phase);
             ember.Scale = new Vector3(size, size * 1.8f, size);

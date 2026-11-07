@@ -1,3 +1,2 @@
-# Public template. Keep account assignments and secrets only in the installed copy.
 is_enabled: true
 unsupported_loading: Default

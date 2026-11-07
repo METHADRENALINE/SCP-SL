@@ -13,8 +13,6 @@ namespace Methadrenaline.Server;
 
 internal static class ParavozVoiceDiagnostics
 {
-    // Dummy-only probe through the actual LabAPI event/Harmony hook and native
-    // Opus libraries. It never transmits synthetic audio to connected clients.
     internal static IReadOnlyDictionary<string, bool> Run(ParavozController mode, Player carrier, Player runner)
     {
         var results = new Dictionary<string, bool>();
@@ -67,7 +65,6 @@ internal static class ParavozVoiceDiagnostics
 
             var cancelled = new VoiceMessage(carrier.ReferenceHub, VoiceChatChannel.Proximity, encoded, 1, false);
             var cancelledEvent = new PlayerSendingVoiceMessageEventArgs(ref cancelled) { IsAllowed = false };
-            // Direct call keeps cancellation independent of unrelated listeners.
             mode.Voice.Process(cancelledEvent);
             results["voice_cancellation_preserved"] = !cancelledEvent.IsAllowed && ReferenceEquals(cancelledEvent.Message.Data, encoded);
 

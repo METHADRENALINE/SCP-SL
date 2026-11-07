@@ -3,25 +3,17 @@ namespace SecretAPI.Features.Effects;
 using CustomPlayerEffects;
 using UnityEngine;
 
-/// <summary>
-/// Custom version of <see cref="TickingEffectBase"/> for <see cref="CustomPlayerEffect"/>.
-/// </summary>
 public abstract class CustomTickingPlayerEffect : CustomPlayerEffect
 {
     private float timeTillTick;
 
-    /// <summary>
-    /// Gets the time that should pass between each tick.
-    /// </summary>
     protected virtual float TimePerTick => 1;
 
-    /// <inheritdoc/>
     public override void Enabled()
     {
         timeTillTick = TimePerTick;
     }
 
-    /// <inheritdoc/>
     public override void OnEffectUpdate()
     {
         base.OnEffectUpdate();
@@ -37,9 +29,6 @@ public abstract class CustomTickingPlayerEffect : CustomPlayerEffect
         OnTick();
     }
 
-    /// <summary>
-    /// Called everytime <see cref="TimePerTick"/> passes.
-    /// </summary>
     public virtual void OnTick()
     {
     }

@@ -66,7 +66,6 @@ internal sealed class SiteMapController : IDisposable
             var locations = new Dictionary<RoomIdentifier, Vector3>();
             foreach (var pose in SafeLocationFinder.GetLocations(null, null))
             {
-                // Stay clear of door leaves and thresholds, on either side of the doorway.
                 Vector3 forward = pose.rotation * Vector3.forward;
                 AddLocation(locations, pose.position + forward * 1.2f);
                 AddLocation(locations, pose.position - forward * 1.2f);
@@ -94,10 +93,8 @@ internal sealed class SiteMapController : IDisposable
         if (!Physics.Raycast(candidate + Vector3.up * 0.8f, Vector3.down, out var floor, 2,
                 FpcStateProcessor.Mask, QueryTriggerInteraction.Ignore) || floor.normal.y < 0.99f) return;
         Vector3 ground = floor.point;
-        // Require standing space: no walls, props or shelves can cover the card.
         if (Physics.CheckCapsule(ground + Vector3.up * 0.36f, ground + Vector3.up * 1.45f, 0.35f,
                 FpcStateProcessor.Mask, QueryTriggerInteraction.Ignore)) return;
-        // Support the entire native keycard footprint, including a random yaw rotation.
         foreach (var offset in new[] { Vector3.forward, Vector3.back, Vector3.left, Vector3.right })
             if (!Physics.Raycast(ground + offset * 0.14f + Vector3.up * 0.1f, Vector3.down, out var edge, 0.13f,
                     FpcStateProcessor.Mask, QueryTriggerInteraction.Ignore) || edge.normal.y < 0.99f ||
@@ -120,8 +117,6 @@ internal sealed class SiteMapController : IDisposable
         {
             if (pickup.PhysicsModule is PickupStandardPhysics physics)
             {
-                // Native physics settles and synchronizes the flat card onto the surface.
-                // Freezing at the spawn offset left the old cards suspended in mid-air.
                 physics.Rb.WakeUp();
             }
             using var writer = NetworkWriterPool.Get();
@@ -131,7 +126,6 @@ internal sealed class SiteMapController : IDisposable
                 else if (detail is CustomTintDetail) writer.WriteColor32(new Color32(31, 100, 116, 255));
                 else detail.WriteDefault(writer);
             }
-            // Native keycards recycle these buffers between rounds.
             var payload = new byte[2048];
             var encoded = writer.ToArraySegment();
             Array.Copy(encoded.Array!, encoded.Offset, payload, 0, encoded.Count);

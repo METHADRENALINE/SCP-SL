@@ -1,4 +1,3 @@
-# Public template. Keep account assignments and secrets only in the installed copy.
 enable_clock: false
 clock: <space=-480><color={color}><size=25><b>Time:</b> {time}</size></color>
 time_zone: 2

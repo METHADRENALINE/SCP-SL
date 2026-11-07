@@ -33,9 +33,6 @@ internal static class SiteMapHintPatch
         if (changed != 1) throw new InvalidOperationException("Unsupported RueI hint-effect serializer.");
     }
 
-    // A paper map is static. It must not carry an animation effect which asks
-    // the client to apply visual effects to the large text mesh every frame.
-    // Keep RueI's original behavior for every display without a map.
     private static void WriteEffect(NetworkWriter writer, HintEffect effect, IEnumerable<Element> elements)
     {
         if (!elements.Any(element => element is SiteMapElement))
@@ -43,7 +40,7 @@ internal static class SiteMapHintPatch
             writer.WriteHintEffect(effect);
             return;
         }
-        writer.Position -= sizeof(int); // Replace the effect count, written immediately before this call.
+        writer.Position -= sizeof(int);
         writer.WriteInt(0);
     }
 }

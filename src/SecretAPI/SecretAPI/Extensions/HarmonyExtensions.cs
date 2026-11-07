@@ -8,19 +8,10 @@ using HarmonyLib;
 using LabApi.Features.Console;
 using SecretAPI.Attributes;
 
-/// <summary>
-/// Handles patching.
-/// </summary>
 public static class HarmonyExtensions
 {
-    /// <param name="harmony">The harmony to use for the patch.</param>
     extension(Harmony harmony)
     {
-        /// <summary>
-        /// Patches all methods with the proper <see cref="HarmonyPatchCategory"/>.
-        /// </summary>
-        /// <param name="category">The category to patch.</param>
-        /// <param name="assembly">The assembly to find patches in.</param>
         public void PatchCategory(string category, Assembly? assembly = null)
         {
             assembly ??= Assembly.GetCallingAssembly();
@@ -33,10 +24,6 @@ public static class HarmonyExtensions
                 .Do(type => SafePatch(harmony, type));
         }
 
-        /// <summary>
-        /// Patches all patches that don't have a <see cref="HarmonyPatchCategory"/>.
-        /// </summary>
-        /// <param name="assembly">The assembly to look for patches.</param>
         public void PatchAllNoCategory(Assembly? assembly = null)
         {
             assembly ??= Assembly.GetCallingAssembly();
@@ -49,10 +36,6 @@ public static class HarmonyExtensions
                 .Do(type => SafePatch(harmony, type));
         }
 
-        /// <summary>
-        /// Attempts to safely patch a <see cref="Type"/>, logging any errors.
-        /// </summary>
-        /// <param name="type">The <see cref="Type"/> to attempt to patch.</param>
         public void SafePatch(Type type)
         {
             try

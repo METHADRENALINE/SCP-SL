@@ -13,9 +13,6 @@ internal static class SiteMapChunkingPatch
 {
     private static MethodBase TargetMethod() => AccessTools.Method("RueI.API.Parsing.ElementCombiner:Combine");
 
-    // RueI 3.1.2 includes the separately written anchor prefix in the loop's
-    // source length. That reads past the written body into pooled-buffer bytes.
-    // Use the body's actual length for both the final slice and loop condition.
     private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
     {
         var code = instructions.ToList();

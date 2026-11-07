@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace ScpProximityChat.SecretAPI.Personalization;
 
-/// <summary>Manages SCP Proximity Chat volume personalization.</summary>
 public static class PersonalizationManager
 {
 
@@ -14,21 +13,11 @@ public static class PersonalizationManager
     private static readonly Dictionary<string, Player> Sources = [];
     private static float _nextUpdate;
 
-    /// <summary>
-    /// Gets the personalized volume setting ID for the given user ID.
-    /// </summary>
-    /// <param name="userId">The user ID to get the setting ID for.</param>
-    /// <returns>The setting ID.</returns>
     public static int IdFor(string userId)
         => IdHashes.TryGetValue(userId, out var hash)
             ? hash
             : IdHashes[userId] = $"Volume for: {userId}".GetStableHashCode();
 
-    /// <summary>
-    /// Gets the label for the personalized volume setting for the given user ID.
-    /// </summary>
-    /// <param name="name">The user ID to get the label for.</param>
-    /// <returns>The label.</returns>
     public static string LabelFor(string name) => $"{Translation.VolumeFor}{name}";
 
     private static bool IsPersonalized(CustomSetting setting) => setting is PersonalizedVolume;
@@ -45,10 +34,6 @@ public static class PersonalizationManager
             CustomSetting.ResyncServer();
     }
 
-    /// <summary>
-    /// Adds the player to the personalization list.
-    /// </summary>
-    /// <param name="player">The player to create a personalized volume entry for.</param>
     public static void Register(Player player)
     {
         if (!player.IsReady || string.IsNullOrEmpty(player.UserId))
@@ -60,10 +45,6 @@ public static class PersonalizationManager
         CustomSetting.ResyncServer();
     }
 
-    /// <summary>
-    /// Unregisters the player from the personalization list.
-    /// </summary>
-    /// <param name="player">The player to remove the personalized volume entry of.</param>
     public static void Unregister(Player player)
     {
         if (string.IsNullOrEmpty(player.UserId))
@@ -78,11 +59,6 @@ public static class PersonalizationManager
         CustomSetting.ResyncServer();
     }
 
-    /// <summary>
-    /// Registers a <see cref="SpeakerPersonalization"/> instance and configures the initial volume for others.
-    /// </summary>
-    /// <param name="source">The source of audio.</param>
-    /// <param name="personalization">The <see cref="SpeakerPersonalization"/> instance to register.</param>
     public static void RegisterPersonalization(Player source, SpeakerPersonalization personalization)
     {
         if (!source.IsReady || string.IsNullOrEmpty(source.UserId))
@@ -94,22 +70,12 @@ public static class PersonalizationManager
                 Apply(personalization, target, VolumeHelpers.Personalized(target, source.UserId));
     }
 
-    /// <summary>
-    /// Configures a specific source's volume for a specific receiver.
-    /// </summary>
-    /// <param name="receiver">The player receiving audio.</param>
-    /// <param name="sourceId">The user ID of the source of audio.</param>
-    /// <param name="volume">The volume to set.</param>
     public static void Configure(Player receiver, string sourceId, float volume)
     {
         if (PersonalizationInstances.TryGetValue(sourceId, out var personalization) && IsCurrent(sourceId, personalization))
             Apply(personalization, receiver, volume * VolumeHelpers.Master(receiver));
     }
 
-    /// <summary>
-    /// Configures all sources for a specific receiver.
-    /// </summary>
-    /// <param name="receiver">The player receiving audio.</param>
     public static void ConfigureAll(Player receiver)
     {
         foreach (var kvp in PersonalizationInstances)

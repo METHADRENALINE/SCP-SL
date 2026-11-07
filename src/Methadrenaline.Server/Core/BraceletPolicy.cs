@@ -74,7 +74,6 @@ public sealed class BraceletBinding(BraceletLife prisoner, BraceletLife captor, 
         int warning = Committed ? 0 : BraceletPolicy.WarningCrossing(PreviousDistance, current);
         PreviousDistance = current;
         if (warning == 0 || warned[warning - 1] || now - lastWarningAt[warning - 1] < BraceletPolicy.WarningCooldown) return 0;
-        // A teleport plays only the highest crossed warning, never five cues.
         for (int i = 0; i < warning; i++) { warned[i] = true; lastWarningAt[i] = now; }
         return warning;
     }
@@ -101,7 +100,6 @@ public sealed class BraceletDeathNotice(BraceletBinding binding, double expiresA
     public double ExpiresAt { get; } = expiresAt;
 }
 
-/// <summary>Life-scoped ownership and one-shot detonation, independent of Unity.</summary>
 public sealed class BraceletLedger
 {
     private readonly Dictionary<BraceletLife, BraceletBinding> active = new();

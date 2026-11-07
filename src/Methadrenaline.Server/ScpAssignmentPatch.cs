@@ -19,7 +19,6 @@ internal static class ScpAssignmentPatch
     private static bool Prefix(ref int targetScpNumber)
     {
         var plugin = ServerPlugin.Instance;
-        // Keep the native fallback (including disabled preferences) capped too.
         targetScpNumber = Math.Min(targetScpNumber, 1);
         if (plugin == null || !plugin.Config.PreferredScpRoles) return true;
         bool committed = false;
@@ -45,7 +44,6 @@ internal static class ScpAssignmentPatch
             var assignments = RolePolicy.Allocate(ballots, pool.Keys.ToArray(), Random,
                 (role, previous) => pool[role].GetSpawnChance(previous.Select(r => (RoleTypeId)r).ToList()) > 0);
 
-            // Never fall back to a second spawn pass after any roles have been applied.
             committed = true;
             foreach (var assignment in assignments.OrderBy(pair => pool[pair.Value].GetSpawnChance(new List<RoleTypeId>()) > 0 ? 0 : 1))
                 chosen[assignment.Key].roleManager.ServerSetRole((RoleTypeId)assignment.Value, RoleChangeReason.RoundStart);

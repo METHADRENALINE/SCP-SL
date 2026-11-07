@@ -6,8 +6,6 @@ public static class BraceletSignal
 {
     public const int SampleRate = 48000;
 
-    // Original short electronic cues, generated once as mono PCM. No downloads,
-    // external audio files, transcoding processes or playback loops are needed.
     public static float[] CreateConfirmation() => ToneTrain(1, 1, 1, 880, 0.14, 0.035);
 
     public static float[] CreateWarning(int level)
@@ -54,8 +52,6 @@ public static class BraceletSignal
             if (pulseTime >= onTime) continue;
             double envelope = Math.Min(1, Math.Min(pulseTime / 0.002, (onTime - pulseTime) / 0.002));
             envelope *= Math.Min(1, Math.Min(t / 0.005, (BraceletPolicy.SequenceSeconds - t) / 0.005));
-            // Alternating pitches create a frantic alarm. The second phase has
-            // more than twice the pulse rate, with a rising carrier underneath.
             double pitchPhase = 2 * Math.PI * ((detonating ? 2100 : 1500) * phaseTime + 50 * phaseTime * phaseTime);
             double warble = 3 * Math.Sin(2 * Math.PI * 8 * phaseTime);
             samples[i] = (float)(0.24 * envelope * Math.Sin(pitchPhase + warble));

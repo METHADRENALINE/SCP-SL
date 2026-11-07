@@ -20,12 +20,10 @@ internal sealed class ParavozCamping<TRoom> where TRoom : notnull
         (int Rooms, float Deadline)? penalty = null;
         for (int rooms = 1; rooms <= Math.Min(recent.Count, 4); rooms++)
         {
-            // A visit outside the most recent rooms resets time confined to them.
             float since = recent.Count > rooms ? recent[rooms].LastVisit : started;
             float warningAt = since + (rooms switch { 3 => 40, 4 => 55, _ => 25 });
             if (now < warningAt) continue;
             float deadline = warningAt + WarningSeconds;
-            // Prefer the first penalty due, then the smallest route already overdue.
             if (penalty == null || penalty.Value.Deadline > now && deadline < penalty.Value.Deadline)
                 penalty = (rooms, deadline);
         }

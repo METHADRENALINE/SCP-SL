@@ -13,8 +13,6 @@ namespace Methadrenaline.Server;
 
 internal sealed class SiteMapLayout
 {
-    // RueI splits large hints into native string parameters. Bound the total work
-    // independently of the 16-bit limit on each individual network string.
     internal const int MaximumBytes = 768 * 1024;
     private const int MapWidth = 1110;
     private const int BodyHeight = 620;
@@ -132,8 +130,6 @@ internal sealed class SiteMapLayout
         if (!highlights.TryGetValue(current, out string highlight))
             highlights[current] = highlight = SiteMapPainter.Paint(font, selectedInk[current], Gold, originX, originY);
 
-        // Labels are explicit zero-height lines. A nonbreaking space prevents
-        // client fallback fonts from moving a word to the beginning of the line.
         text.Append("<width=32767><margin=0><indent=0><line-indent=0><line-height=0><align=left><font=\"LiberationSans SDF\" material=\"LiberationSans SDF - Outline\">");
         Label(0, 42, 15, "A0CBD6", localize(SiteMapController.CardName));
         Label(42, 42, 35, "F3F9FA", localize(SiteMapNames.Zone(current.Zone)), true);
@@ -192,8 +188,6 @@ internal sealed class SiteMapLayout
                 }
                 float labelWidth = lines.Max(line => Measure(line, size));
                 float labelHeight = lines.Length * size * 1.1f;
-                // Keep every name inside its own tile, including rooms sharing an
-                // elevator column. Text remains upright when the room rotates.
                 Vector2 center = shared.Length == 1 ? centers[index] : (group.Key + Vector2.one * .5f) * side;
                 Vector2 anchor = labels[index];
                 anchor.x = Mathf.Clamp(anchor.x, center.x - (availableWidth - labelWidth) / 2, center.x + (availableWidth - labelWidth) / 2);

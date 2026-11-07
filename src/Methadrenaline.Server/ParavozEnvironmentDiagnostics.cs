@@ -71,7 +71,7 @@ internal static class ParavozEnvironmentDiagnostics
                 plugin.Paravoz.Abilities.Forget(carrier.NetworkId);
 
                 plugin.SiteMaps!.BeginRound();
-                yield return Timing.WaitForSeconds(.3f); // Native pickup wrappers register on Start.
+                yield return Timing.WaitForSeconds(.3f);
                 Check("normal_round_has_maps", Pickup.List.Count(p => plugin.SiteMaps.IsMap(p.Type, p.Serial)) == 15);
                 Check("normal_round_map_equips", plugin.SiteMaps.GiveTo(carrier) == "Site-02 Map equipped.");
                 ushort serial = carrier.CurrentItem!.Serial;
