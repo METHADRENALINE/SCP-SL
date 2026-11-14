@@ -138,6 +138,7 @@ internal static class GameplayDiagnostics
                 double deconStart = decon.NetworkRoundStartTime;
                 plugin.Paravoz!.BeginRound(players);
                 plugin.SiteMaps!.BeginRound();
+                Check("paravoz_has_no_site_maps", !Pickup.List.Any(pickup => plugin.SiteMaps.IsMap(pickup.Type, pickup.Serial)));
                 decon.DecontaminationOverride = DecontaminationController.DecontaminationStatus.Forced;
                 Check("paravoz_decontamination_disabled_and_client_timer_cleared",
                     decon.DecontaminationOverride == DecontaminationController.DecontaminationStatus.Disabled &&
@@ -147,8 +148,6 @@ internal static class GameplayDiagnostics
                 if (EventDirector.Participants.Any()) yield break;
                 Player carrier = players.Single(plugin.Paravoz.IsParavoz);
                 var runners = players.Where(p => p != carrier).ToArray();
-                using (var mapProbe = SiteMapDiagnostics.Probe(plugin.SiteMaps, plugin.Localization!, runners[0], HudOnDisplay, Check))
-                    while (mapProbe.MoveNext()) yield return mapProbe.Current;
                 using (var controls = ParavozSurfacePassDiagnostics.Probe(runners[0], Check))
                     while (controls.MoveNext()) yield return controls.Current;
                 foreach (var inventoryCheck in ParavozRadioInventoryDiagnostics.Run(carrier, runners[0]))
