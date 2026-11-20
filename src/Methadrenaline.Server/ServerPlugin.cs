@@ -27,12 +27,15 @@ public sealed class ServerPlugin : Plugin<Config>
     internal BraceletController? Bracelets { get; private set; }
     internal ParavozController? Paravoz { get; private set; }
     internal ModeVotingController? ModeVoting { get; private set; }
+    internal BlackoutRound Blackout { get; } = new();
     internal SiteMapController? SiteMaps { get; private set; }
+    internal EscortRound Escort { get; } = new();
+    internal bool RestrictNavigationItems => IsParavozRound || Escort.Active || PerkRounds?.Policy.Mode == Methadrenaline.Server.Core.CommunityRoundMode.Escort;
     internal bool IsParavozRound => Paravoz?.Active == true || PerkRounds?.Policy.Mode == Methadrenaline.Server.Core.CommunityRoundMode.Paravoz;
     public override string Name => "METHADRENALINE";
     public override string Author => "Wechirok";
     public override string Description => "Private community gameplay and temporary facility anomalies.";
-    public override Version Version => new(1, 22, 2);
+    public override Version Version => new(1, 24, 0);
     public override LabApi.Loader.Features.Plugins.Enums.LoadPriority Priority => LabApi.Loader.Features.Plugins.Enums.LoadPriority.Lowest;
     public override Version RequiredApiVersion => new(1, 1, 7);
 
@@ -54,7 +57,10 @@ public sealed class ServerPlugin : Plugin<Config>
             PerkRounds.Initialize();
             Bracelets.Enable();
             Paravoz.Enable();
+            Escort.Enable();
             SiteMaps.Enable();
+            Blackout.Audio.Load(Config.BlackoutPrivateAmbienceFile, Config.BlackoutEffectsDirectory);
+            InventorySystem.Items.Pickups.ItemPickupBase.OnPickupAdded += Blackout.PickupAdded;
             if (Config.ModeVotingEnabled)
             {
                 ModeVoting = new ModeVotingController(Config, Localization);
@@ -69,12 +75,13 @@ public sealed class ServerPlugin : Plugin<Config>
             WarheadEvents.Starting += WarheadStarting;
             PlayerEvents.ChangedRole += ChangedRole;
             PlayerEvents.ChangingRole += ChangingRole;
+            PlayerEvents.Joined += Joined;
             PlayerEvents.Left += Left;
             PlayerEvents.Hurting += Hurting;
             PlayerEvents.InteractingDoor += InteractingDoor;
             PlayerEvents.UsingRadio += UsingRadio;
             PlayerEvents.ChangingRadioRange += ChangingRadioRange;
-            Logger.Info($"[METHADRENALINE] Enabled: preferences={Config.PreferredScpRoles}, maximum SCPs=1, radios={Config.RadiosForHumans}, events={Config.EventsEnabled}, chaos=1-2 bundles/round, chaos notifications=off; modes=Vanilla (almost)/Perks/Paravoz; radios=infinite; random_grenades=off.");
+            Logger.Info($"[METHADRENALINE] Enabled: preferences={Config.PreferredScpRoles}, maximum SCPs=1, radios={Config.RadiosForHumans}, events={Config.EventsEnabled}, chaos=1-2 bundles/round, chaos notifications=off; modes=Vanilla (almost)/Perks/Paravoz/Blackout/Escort; radios=infinite; random_grenades=off.");
         }
         catch
         {
@@ -94,15 +101,20 @@ public sealed class ServerPlugin : Plugin<Config>
         WarheadEvents.Starting -= WarheadStarting;
         PlayerEvents.ChangedRole -= ChangedRole;
         PlayerEvents.ChangingRole -= ChangingRole;
+        PlayerEvents.Joined -= Joined;
         PlayerEvents.Left -= Left;
         PlayerEvents.Hurting -= Hurting;
         PlayerEvents.InteractingDoor -= InteractingDoor;
         PlayerEvents.UsingRadio -= UsingRadio;
         PlayerEvents.ChangingRadioRange -= ChangingRadioRange;
+        InventorySystem.Items.Pickups.ItemPickupBase.OnPickupAdded -= Blackout.PickupAdded;
+        Blackout.Reset();
+        Blackout.Audio.Dispose();
         ModeVoting?.Dispose();
         ModeVoting = null;
         SiteMaps?.Dispose();
         SiteMaps = null;
+        Escort.Disable();
         Paravoz?.Dispose();
         Paravoz = null;
         Director?.Dispose();
@@ -122,6 +134,8 @@ public sealed class ServerPlugin : Plugin<Config>
         var mode = PerkRounds?.Policy.Mode;
         Director.BeginRound(mode);
         if (mode == Methadrenaline.Server.Core.CommunityRoundMode.Paravoz) Paravoz!.BeginRound();
+        if (mode == Methadrenaline.Server.Core.CommunityRoundMode.Blackout) Blackout.Begin();
+        if (mode == Methadrenaline.Server.Core.CommunityRoundMode.Escort) Paravoz!.RemoveSurfacePasses();
         SiteMaps!.BeginRound();
         ConfigureRespawns();
     }
@@ -140,8 +154,17 @@ public sealed class ServerPlugin : Plugin<Config>
                 wave.TimeLeft = Config.SmallServerRespawnLimit;
         }
     }
-    private void RoundEnded(RoundEndedEventArgs _) => Reset();
-    private void Reset() { Director.Reset(); Paravoz?.Reset(); SiteMaps?.Reset(); }
+    private void RoundEnded(RoundEndedEventArgs _) => ResetRound(keepBlackoutAnnouncementsMuted: true);
+    private void Reset() => ResetRound(keepBlackoutAnnouncementsMuted: false);
+
+    private void ResetRound(bool keepBlackoutAnnouncementsMuted)
+    {
+        Escort.Reset();
+        Director.Reset();
+        Blackout.Reset(keepBlackoutAnnouncementsMuted);
+        Paravoz?.Reset();
+        SiteMaps?.Reset();
+    }
     private void UsingRadio(PlayerUsingRadioEventArgs ev) { ev.Drain = 0; }
     private void ChangingRadioRange(PlayerChangingRadioRangeEventArgs ev) { ev.IsAllowed = false; }
     private void DecontaminationStarting(LczDecontaminationStartingEventArgs _) => Director.Stop();
@@ -155,7 +178,12 @@ public sealed class ServerPlugin : Plugin<Config>
         Director.Stop();
     }
     private void ChangingRole(PlayerChangingRoleEventArgs ev) => Director.ForgetPlayer(ev.Player);
-    private void Left(PlayerLeftEventArgs ev) => Director.ForgetPlayer(ev.Player);
+    private void Joined(PlayerJoinedEventArgs ev) => Blackout.Soundtrack.Apply(ev.Player);
+    private void Left(PlayerLeftEventArgs ev)
+    {
+        Director.ForgetPlayer(ev.Player);
+        Blackout.Soundtrack.Forget(ev.Player);
+    }
     private void InteractingDoor(PlayerInteractingDoorEventArgs ev) => Director.DoorTouched(ev.Door);
 
     private void Hurting(PlayerHurtingEventArgs ev)
@@ -177,15 +205,18 @@ public sealed class ServerPlugin : Plugin<Config>
         });
         Timing.CallDelayed(0.25f, () =>
         {
-            if (Instance != this || !player.GameObject || !player.IsHuman || player.IsTutorial || player.LifeId != life || player.IsHost || player.IsNpc || player.IsDummy) return;
+            if (Instance != this || !player.GameObject || !player.IsHuman || player.IsTutorial || player.LifeId != life || player.IsHost) return;
+            if ((player.IsNpc || player.IsDummy) && !Blackout.Active) return;
             if (Paravoz?.IsParavoz(player) == true) return;
             try
             {
-                if (Config.RadiosForHumans && !player.Items.Any(item => item.Type == ItemType.Radio))
+                if (Blackout.Active) Blackout.Equip(player);
+                else if (Config.RadiosForHumans && !player.Items.Any(item => item.Type == ItemType.Radio))
                 {
                     if (player.AddItem(ItemType.Radio) == null)
                         Pickup.Create(ItemType.Radio, player.Position + Vector3.up * 0.3f);
                 }
+                if (player.IsNpc || player.IsDummy) return;
                 if (Config.ClassDStartingCard && player.Role == RoleTypeId.ClassD && !player.Items.Any(item => item.Type.ToString().StartsWith("Keycard", StringComparison.Ordinal)))
                     player.AddItem(ItemType.KeycardScientist);
             }
@@ -253,7 +284,7 @@ public sealed class CommunityCommand : ICommand
                 }
                 if (arguments.Count == 3 && arguments.Array![arguments.Offset + 1].Equals("next", StringComparison.OrdinalIgnoreCase) &&
                     Enum.TryParse<Methadrenaline.Server.Core.CommunityRoundMode>(arguments.Array[arguments.Offset + 2], true, out var nextMode) && Enum.IsDefined(typeof(Methadrenaline.Server.Core.CommunityRoundMode), nextMode))
-                { plugin.PerkRounds!.NextMode = nextMode; response = "Next round mode: " + nextMode; return true; }
+                { if (nextMode == Methadrenaline.Server.Core.CommunityRoundMode.Escort && EventDirector.Participants.Count() < Methadrenaline.Server.Core.ModeVotePolicy.EscortMinimum) { response = "Escort requires at least three players."; return false; } plugin.PerkRounds!.NextMode = nextMode; response = "Next round mode: " + nextMode; return true; }
                 response = plugin.Paravoz!.Status + "; next=" + (plugin.PerkRounds!.NextMode?.ToString() ?? "random"); return true;
             case "grenade":
                 if (!Round.IsRoundInProgress) { response = "An active round is required."; return false; }

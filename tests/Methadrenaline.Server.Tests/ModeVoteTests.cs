@@ -76,7 +76,36 @@ public sealed class ModeVoteTests
         Assert.True(policy.Open);
         Assert.Equal(135, policy.Deadline);
         Assert.True(Guid.TryParseExact(policy.PollId, "D", out _));
-        Assert.Equal(new[] { CommunityRoundMode.Plain, CommunityRoundMode.Perks, CommunityRoundMode.Paravoz }, policy.Available);
+        Assert.Equal(new[] { CommunityRoundMode.Plain, CommunityRoundMode.Perks, CommunityRoundMode.Paravoz, CommunityRoundMode.Blackout }, policy.Available);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void EscortRequiresThreeEvenAfterSelection(bool admin)
+    {
+        var policy = Lobby(3);
+        Assert.Contains(CommunityRoundMode.Escort, policy.Available);
+        Assert.Equal("accepted", policy.Vote(policy.PollId, "123", CommunityRoundMode.Escort, 101));
+        if (admin) policy.Override(CommunityRoundMode.Escort);
+        else policy.Tick(3, true, 130, _ => 0);
+        Assert.Equal(CommunityRoundMode.Escort, policy.Selected);
+        policy.Tick(2, true, 131, _ => 0);
+        Assert.DoesNotContain(CommunityRoundMode.Escort, policy.Available);
+        Assert.NotEqual(CommunityRoundMode.Escort, policy.Finish(_ => 0));
+    }
+
+    [Fact]
+    public void LostEscortVoteCanBeRecastAndRandomOnlyUsesEligibleModes()
+    {
+        var policy = Lobby(3);
+        policy.Vote(policy.PollId, "123", CommunityRoundMode.Escort, 101);
+        policy.Tick(2, true, 102, _ => 0);
+        Assert.Equal("closed", policy.Vote(policy.PollId, "123", CommunityRoundMode.Escort, 103));
+        Assert.Equal("accepted", policy.Vote(policy.PollId, "123", CommunityRoundMode.Blackout, 103));
+        Assert.Equal(CommunityRoundMode.Blackout, policy.Finish(_ => 0));
+        Assert.Equal(CommunityRoundMode.Escort, Lobby(3).Finish(n => n - 1));
+        Assert.Equal(CommunityRoundMode.Blackout, Lobby(2).Finish(n => n - 1));
     }
 
     [Fact]
@@ -144,10 +173,11 @@ public sealed class ModeVoteTests
     [InlineData(0, CommunityRoundMode.Plain)]
     [InlineData(1, CommunityRoundMode.Perks)]
     [InlineData(2, CommunityRoundMode.Paravoz)]
+    [InlineData(3, CommunityRoundMode.Blackout)]
     public void NoVotesDrawsFromAllAvailableModes(int index, CommunityRoundMode expected)
     {
         var policy = Lobby();
-        policy.Tick(2, true, 130, count => { Assert.Equal(3, count); return index; });
+        policy.Tick(2, true, 130, count => { Assert.Equal(4, count); return index; });
         Assert.Equal(expected, policy.Selected);
     }
 

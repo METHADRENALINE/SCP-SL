@@ -72,6 +72,11 @@ internal sealed class BraceletController : IDisposable
         Player captor = ev.Player, prisoner = ev.Target;
         if (captor == null || prisoner == null || !captor.IsAlive || !EligibleCaptor(captor) || !prisoner.IsHuman || !prisoner.IsAlive || !prisoner.IsDisarmed || prisoner.DisarmedBy != captor || captor.IsHost || prisoner.IsHost) return;
         if (!Diagnostic && Playtest?.AllowsPair(captor, prisoner) != true && (captor.IsNpc || captor.IsDummy || prisoner.IsNpc || prisoner.IsDummy)) return;
+        Bind(captor, prisoner);
+    }
+
+    internal void Bind(Player captor, Player prisoner)
+    {
         if (Ledger.TryGet(Life(prisoner), out var existing) && (existing.Committed || existing.Captor.Equals(Life(captor)))) return;
         ReleasePrisoner(prisoner.NetworkId);
         if (Ledger.Bind(Life(prisoner), Life(captor), prisoner.Nickname, Vector3.Distance(captor.Position, prisoner.Position)))

@@ -4,6 +4,8 @@ namespace Methadrenaline.Server;
 
 public sealed class Config
 {
+    public string BlackoutPrivateAmbienceFile { get; set; } = "";
+    public string BlackoutEffectsDirectory { get; set; } = "";
     public bool ModeVotingEnabled { get; set; } = false;
     public string ModeVotingBindAddress { get; set; } = "127.0.0.1";
     public int ModeVotingPort { get; set; } = 8790;

@@ -53,7 +53,7 @@ internal sealed class SiteMapController : IDisposable
     internal void BeginRound()
     {
         Reset();
-        if (ServerPlugin.Instance?.IsParavozRound == true) return;
+        if (ServerPlugin.Instance?.RestrictNavigationItems == true) return;
         try
         {
             var rooms = RoomIdentifier.AllRoomIdentifiers.Where(room => room &&
@@ -144,7 +144,7 @@ internal sealed class SiteMapController : IDisposable
 
     internal string GiveTo(Player player)
     {
-        if (ServerPlugin.Instance?.IsParavozRound == true) return "Site-02 Maps are unavailable in Paravoz mode.";
+        if (ServerPlugin.Instance?.RestrictNavigationItems == true) return "Site-02 Maps are unavailable in this mode.";
         if (!player.IsAlive || !player.IsHuman) return "A living human player is required.";
         var item = player.Items.FirstOrDefault(item => IsMap(item.Type, item.Serial));
         if (item == null)

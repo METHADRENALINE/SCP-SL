@@ -4416,6 +4416,24 @@
     "ru": "Паравоз!"
   },
   {
+    "source": "Escort",
+    "en": "Escort",
+    "uk": "Конвоїр",
+    "ru": "Конвоир"
+  },
+  {
+    "source": "Blackout",
+    "en": "Блэкаут",
+    "uk": "Блэкаут",
+    "ru": "Блэкаут"
+  },
+  {
+    "source": "Danger. SCP-079 has disabled main power.<split>It is now in charge.<split>Emergency power is available for this announcement only.<split>Turn on your light and proceed to the nearest exit.",
+    "en": "Danger. SCP-079 has disabled main power.<split>It is now in charge.<split>Emergency power is available for this announcement only.<split>Turn on your light and proceed to the nearest exit.",
+    "uk": "Небезпека. SCP-079 вимкнув основне живлення.<split>Тепер усім керує комп’ютер.<split>Резервного живлення вистачить лише на це оголошення.<split>Увімкніть ліхтарик і прямуйте до найближчого виходу.",
+    "ru": "Опасность. SCP-079 отключил основное питание.<split>Теперь тут командует компьютер.<split>Резервного питания хватит только на это объявление.<split>Включите фонарик и идите к ближайшему выходу."
+  },
+  {
     "source": "Paravoz",
     "en": "Paravoz",
     "uk": "Паровоз",
