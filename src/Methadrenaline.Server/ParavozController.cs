@@ -285,7 +285,7 @@ internal sealed class ParavozController : IDisposable
 
     internal void RemoveSurfacePasses()
     {
-        if (!Active) return;
+        if (ServerPlugin.Instance?.RestrictNavigationItems != true) return;
         foreach (var pickup in Pickup.List.Where(p => p.Type == ItemType.SurfaceAccessPass).ToArray()) pickup.Destroy();
         foreach (var player in Player.List)
             foreach (var item in player.Items.Where(i => i.Type == ItemType.SurfaceAccessPass).ToArray()) player.RemoveItem(item);
@@ -293,7 +293,7 @@ internal sealed class ParavozController : IDisposable
 
     private void PickupAdded(ItemPickupBase pickup)
     {
-        if (Active && pickup.Info.ItemId == ItemType.SurfaceAccessPass) pickup.DestroySelf();
+        if (ServerPlugin.Instance?.RestrictNavigationItems == true && pickup.Info.ItemId == ItemType.SurfaceAccessPass) pickup.DestroySelf();
     }
 
     internal void YieldDoor(Player player, DoorVariant door)

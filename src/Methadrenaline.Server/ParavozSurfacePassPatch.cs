@@ -13,9 +13,9 @@ internal static class NoParavozSurfacePassGrantPatch
     private static bool Prefix(Inventory __0, ItemType type, ref ItemBase __result)
     {
         var mode = ServerPlugin.Instance?.Paravoz;
-        if (mode?.Active != true) return true;
+        if (ServerPlugin.Instance?.RestrictNavigationItems != true) return true;
         bool denied = type == ItemType.SurfaceAccessPass;
-        if (mode.IsParavoz(Player.Get(__0.gameObject)))
+        if (mode?.IsParavoz(Player.Get(__0.gameObject)) == true)
             denied |= type != ItemType.Radio || __0.UserInventory.Items.Values.Any(i => i.ItemTypeId == ItemType.Radio);
         if (!denied) return true;
         __result = null!;

@@ -13,7 +13,7 @@ public sealed class GameModeCommand : ICommand
 {
     public string Command => "gamemode";
     public string[] Aliases => Array.Empty<string>();
-    public string Description => "Override the upcoming round mode: gamemode vanilla|perks|paravoz.";
+    public string Description => "Override the upcoming round mode: gamemode vanilla|perks|paravoz|blackout|escort.";
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
         if (!sender.CheckPermission(PlayerPermissions.RoundEvents, out response)) return false;
@@ -27,6 +27,8 @@ public sealed class GameModeCommand : ICommand
         { response = "Choose a mode in the lobby, before the round starts."; return false; }
         if (mode == CommunityRoundMode.Paravoz && System.Linq.Enumerable.Count(EventDirector.Participants) < 2)
         { response = "Paravoz requires at least two players."; return false; }
+        if (mode == CommunityRoundMode.Escort && System.Linq.Enumerable.Count(EventDirector.Participants) < ModeVotePolicy.EscortMinimum)
+        { response = "Escort requires at least three players."; return false; }
         plugin.PerkRounds!.NextMode = mode;
         plugin.ModeVoting?.OverrideMode(mode);
         ServerLogs.AddLog(ServerLogs.Modules.Administrative, sender.LogName + " selected round mode: " + value, ServerLogs.ServerLogType.RemoteAdminActivity_GameChanging);

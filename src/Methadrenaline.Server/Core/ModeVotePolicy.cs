@@ -18,13 +18,36 @@ public sealed class ModeVotePolicy
     public bool InLobby { get; private set; }
     public bool AdminSelected { get; private set; }
     public bool Open => InLobby && Players >= MinimumPlayers && PollId != null && !Selected.HasValue;
+    public const int EscortMinimum = 3;
+    private static CommunityRoundMode[] Eligible(int players) => players >= EscortMinimum
+        ? new[] { CommunityRoundMode.Plain, CommunityRoundMode.Perks, CommunityRoundMode.Paravoz, CommunityRoundMode.Blackout, CommunityRoundMode.Escort }
+        : players >= MinimumPlayers
+        ? new[] { CommunityRoundMode.Plain, CommunityRoundMode.Perks, CommunityRoundMode.Paravoz, CommunityRoundMode.Blackout }
+        : new[] { CommunityRoundMode.Plain, CommunityRoundMode.Perks, CommunityRoundMode.Blackout };
+
+    internal static CommunityRoundMode RandomMode(int players, Func<int, int> random)
+    {
+        var modes = Eligible(players);
+        return modes[random(modes.Length)];
+    }
+
     public CommunityRoundMode[] Available => Players < MinimumPlayers ? Array.Empty<CommunityRoundMode>()
-        : new[] { CommunityRoundMode.Plain, CommunityRoundMode.Perks, CommunityRoundMode.Paravoz };
+        : Eligible(Players);
 
     public void Tick(int players, bool inLobby, double now, Func<int, int> random)
     {
         Players = Math.Max(0, players);
         InLobby = inLobby;
+        if (inLobby && Players < EscortMinimum)
+        {
+            foreach (var voter in votes.Where(v => v.Value == CommunityRoundMode.Escort).Select(v => v.Key).ToArray())
+                votes.Remove(voter);
+            if (Selected == CommunityRoundMode.Escort)
+            {
+                AdminSelected = false;
+                Selected = Choose(random);
+            }
+        }
         if (AdminSelected) return;
         if (Players < MinimumPlayers) { Reset(); Players = Math.Max(0, players); InLobby = inLobby; return; }
         if (!inLobby) return;
@@ -63,8 +86,7 @@ public sealed class ModeVotePolicy
 
     private CommunityRoundMode Choose(Func<int, int> random)
     {
-        var available = Available;
-        if (available.Length == 0) available = new[] { CommunityRoundMode.Plain, CommunityRoundMode.Perks };
+        var available = Eligible(Players);
         int maximum = available.Max(m => votes.Values.Count(v => v == m));
         var tied = available.Where(m => votes.Values.Count(v => v == m) == maximum).ToArray();
         return tied[random(tied.Length)];
@@ -82,7 +104,7 @@ public sealed class ModeVotePolicy
     }
 
     public static string Id(CommunityRoundMode mode) => mode.ToString().ToLowerInvariant();
-    public static string Label(CommunityRoundMode mode) => mode == CommunityRoundMode.Plain ? "Vanilla (almost)" : mode == CommunityRoundMode.Perks ? "Perks" : "Paravoz";
+    public static string Label(CommunityRoundMode mode) => mode == CommunityRoundMode.Plain ? "Vanilla (almost)" : mode.ToString();
     public static bool TryMode(string? value, out CommunityRoundMode mode)
     {
         mode = CommunityRoundMode.Plain;
@@ -90,6 +112,8 @@ public sealed class ModeVotePolicy
         {
             case "plain": return true;
             case "perks": mode = CommunityRoundMode.Perks; return true;
+            case "escort": mode = CommunityRoundMode.Escort; return true;
+            case "blackout": mode = CommunityRoundMode.Blackout; return true;
             case "paravoz": mode = CommunityRoundMode.Paravoz; return true;
             default: return false;
         }

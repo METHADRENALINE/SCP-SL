@@ -10,7 +10,10 @@ internal static class PreserveBraceletRangePatch
 {
     private static void Postfix(DisarmedPlayers.DisarmedEntry entry, ref bool __result)
     {
-        if (!__result && ServerPlugin.Instance?.Bracelets?.KeepCuffs(entry) == true) __result = true;
+        if (__result) return;
+        var plugin = ServerPlugin.Instance;
+        if (plugin?.Escort.Locked(LabApi.Features.Wrappers.Player.Get(entry.DisarmedPlayer)) == true ||
+            plugin?.Bracelets?.KeepCuffs(entry) == true) __result = true;
     }
 }
 

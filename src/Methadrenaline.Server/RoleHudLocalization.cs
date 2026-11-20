@@ -16,6 +16,7 @@ internal static class RoleHudLocalization
         if (subject.Role == RoleTypeId.None) return "";
         var localization = Localizer.Current;
         if (localization == null) return label;
+        if (ServerPlugin.Instance?.Escort.IsGuard(subject) == true) label = "Escort";
         if (label == subject.Role.ToString()) label = subject.Role switch
         {
             RoleTypeId.CustomRole => "Custom role",

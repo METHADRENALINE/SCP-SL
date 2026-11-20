@@ -27,7 +27,7 @@ internal sealed class EventDirector : IDisposable
     private ChaosRoundPlan? plan;
     private float roundStartedAt;
     private int generation;
-    private bool paravozRound;
+    private CommunityRoundMode? mode;
     private bool disposed;
 
     public EventDirector(Config config)
@@ -45,8 +45,8 @@ internal sealed class EventDirector : IDisposable
     public void BeginRound(CommunityRoundMode? mode)
     {
         Reset();
-        paravozRound = mode == CommunityRoundMode.Paravoz;
-        if (paravozRound) return;
+        this.mode = mode;
+        if (mode is CommunityRoundMode.Paravoz or CommunityRoundMode.Blackout) return;
         roundStartedAt = Time.realtimeSinceStartup;
         plan = new ChaosRoundPlan(random, config.FirstChaosMinimumDelay, config.FirstChaosMaximumDelay, config.MinimumChaosGap, config.MaximumChaosGap);
         if (config.EventsEnabled) scheduler = Timing.RunCoroutine(Schedule(generation));
@@ -59,7 +59,7 @@ internal sealed class EventDirector : IDisposable
         Stop();
         fallGrace.Clear();
         plan = null;
-        paravozRound = false;
+        mode = null;
         Paused = false;
     }
 
@@ -97,9 +97,9 @@ internal sealed class EventDirector : IDisposable
 
     public bool TryStart(string name, bool diagnostic, out string result)
     {
-        if (paravozRound && !diagnostic)
+        if (!diagnostic && (mode is CommunityRoundMode.Paravoz or CommunityRoundMode.Blackout))
         {
-            result = "Facility events are disabled in Paravoz rounds.";
+            result = $"Facility events are disabled in {mode} rounds.";
             return false;
         }
         return name == "chaos" ? TryStartChaos(diagnostic, out result) : TryStartEffect(name, diagnostic, false, out result);
