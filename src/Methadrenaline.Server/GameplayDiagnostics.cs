@@ -435,7 +435,12 @@ internal static class GameplayDiagnostics
                 Check("native_fire_infects", plugin.Paravoz.IsParavoz(runners[1]) && runners[1].IsAlive && runners[1].Role == RoleTypeId.ClassD);
                 Check("infected_paravoz_has_only_radio", runners[1].Items.Count() == 1 && runners[1].Items.Single().Type == ItemType.Radio);
                 plugin.Paravoz.Presentation.RefreshNow();
-                Check("infected_player_gets_visuals_and_shared_music", plugin.Paravoz.Presentation.Emitters.ContainsKey(runners[1].NetworkId) && plugin.Paravoz.Presentation.Playback?.ClipsById.Count == 1);
+                var emitters = plugin.Paravoz.Presentation.Emitters;
+                Check("infected_player_gets_visuals_and_own_music",
+                    emitters.TryGetValue(runners[1].NetworkId, out var infectedEmitter) &&
+                    infectedEmitter.Playback is { } infectedAudio && infectedAudio.ClipsById.Count == 1 &&
+                    infectedAudio.ControllerID != emitters[carrier.NetworkId].Playback?.ControllerID);
+                var paravozAudio = emitters.Values.Select(e => e.Playback).ToArray();
                 Check("human_escape_winner", plugin.Paravoz.Result == ParavozWinner.Humans);
                 var winningConditions = new RoundEndingConditionsCheckEventArgs(false);
                 ServerEvents.OnRoundEndingConditionsCheck(winningConditions);
@@ -476,7 +481,8 @@ internal static class GameplayDiagnostics
                     decon.DecontaminationOverride == deconMode && decon.NetworkRoundStartTime == deconStart);
                 ProbeWarheadTimers(paravoz: false);
                 Check("carrier_abilities_cleaned_on_reset", !plugin.Paravoz.Abilities.Enabled(carrier) && carrier.GetEffect<MovementBoost>()!.Intensity == 0 && !carrier.GetEffect<Invigorated>()!.IsEnabled);
-                Check("presentation_and_music_cleaned_on_reset", plugin.Paravoz.Presentation.Emitters.Count == 0 && plugin.Paravoz.Presentation.Playback == null);
+                Check("presentation_and_music_cleaned_on_reset", emitters.Count == 0 &&
+                    paravozAudio.All(audio => audio == null || audio.ClipsById.Count == 0));
                 var grenade = LabApi.Features.Wrappers.TimedGrenadeProjectile.SpawnActive(runners[0].Position + Vector3.down * 0.7f, ItemType.GrenadeHE, owner: runners[0]);
                 Check("active_native_grenade", grenade != null && grenade.Base.TargetTime > NetworkTime.time);
                 float grenadeHealth = runners[0].Health;

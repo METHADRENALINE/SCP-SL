@@ -27,13 +27,13 @@ internal static class ParavozPresentationDiagnostics
         var presentation = mode.Presentation;
         var original = new[] { carrier.Position, second.Position, listener.Position };
         var players = new[] { carrier, second, listener };
-        var audio = presentation.Playback!;
         try
         {
             presentation.RefreshNow();
             var emitter = presentation.Emitters[carrier.NetworkId];
+            var audio = emitter.Playback!;
             var clip = audio.ClipsById.Values.Single();
-            var data = AudioClipStorage.AudioClips[presentation.ClipName];
+            var data = AudioClipStorage.AudioClips[presentation.ClipName(emitter)];
             checks["music_mono_48k_and_packet_aligned"] = data.SampleRate == 48000 && data.Channels == 1 && data.Samples.Length % 480 == 0;
             checks["music_one_independent_loop"] = clip.Loop && !clip.DestroyOnEnd && !audio.DestroyWhenAllClipsPlayed && !audio.SendSoundGlobally && audio.Condition != null;
             var braceletAudio = ServerPlugin.Instance!.Bracelets!.Audio;
@@ -70,16 +70,32 @@ internal static class ParavozPresentationDiagnostics
             }
             carrier.Position = original[0];
             second.Position = carrier.Position + Vector3.right * 20;
+            var initialTrack = emitter.TrackIndex;
+            UnityEngine.Random.State seed;
+            int selectedTrack;
+            do
+            {
+                seed = UnityEngine.Random.state;
+                selectedTrack = UnityEngine.Random.Range(0, presentation.TrackCount);
+            } while (presentation.TrackCount > 1 && selectedTrack == initialTrack);
+            UnityEngine.Random.state = seed;
             presentation.Apply(second);
             listener.Position = carrier.Position + Vector3.right;
             presentation.RefreshNow();
             var other = presentation.Emitters[second.NetworkId];
-            checks["multiple_carriers_share_one_encoded_track"] = ReferenceEquals(audio, presentation.Playback) && audio.ClipsById.Count == 1 && emitter.Speaker.ControllerId == other.Speaker.ControllerId;
-            checks["listener_hears_one_nearest_carrier"] = emitter.Personalization[listener]?.Volume > 0 && other.Personalization[listener]?.Volume == 0;
+            var otherAudio = other.Playback!;
+            var otherClip = otherAudio.ClipsById.Values.Single();
+            checks["new_carrier_draws_own_starting_track"] = other.TrackIndex == selectedTrack && emitter.TrackIndex == initialTrack;
+            checks["multiple_carriers_have_separate_playback"] = audio.ControllerID != otherAudio.ControllerID &&
+                emitter.Speaker.ControllerId == audio.ControllerID && other.Speaker.ControllerId == otherAudio.ControllerID;
+            checks["listener_hears_one_nearest_carrier"] = emitter.Personalization[listener]?.Volume > 0 && other.Personalization[listener]?.Volume == 0 &&
+                audio.Condition!(listener.ReferenceHub) && !otherAudio.Condition!(listener.ReferenceHub);
             checks["each_carrier_hears_only_own_music"] = emitter.Personalization[carrier]?.Volume > 0 && other.Personalization[carrier]?.Volume == 0 && other.Personalization[second]?.Volume > 0 && emitter.Personalization[second]?.Volume == 0;
             listener.Position = second.Position + Vector3.right;
             presentation.RefreshNow();
-            checks["nearest_handover_does_not_restart_track"] = other.Personalization[listener]?.Volume > 0 && emitter.Personalization[listener]?.Volume == 0 && ReferenceEquals(audio.ClipsById.Values.Single(), clip);
+            checks["nearest_handover_does_not_restart_track"] = other.Personalization[listener]?.Volume > 0 && emitter.Personalization[listener]?.Volume == 0 &&
+                otherAudio.Condition!(listener.ReferenceHub) && !audio.Condition!(listener.ReferenceHub) &&
+                ReferenceEquals(audio.ClipsById.Values.Single(), clip) && ReferenceEquals(otherAudio.ClipsById.Values.Single(), otherClip);
             listener.Position = carrier.Position + Vector3.right * 100;
             presentation.RefreshNow();
             checks["out_of_range_listener_receives_no_music"] = !audio.Condition!(listener.ReferenceHub) && emitter.Personalization[listener]?.Volume == 0 && other.Personalization[listener]?.Volume == 0;
@@ -115,7 +131,7 @@ internal static class ParavozPresentationDiagnostics
                 var ev = new PlayerSendingVoiceMessageEventArgs(ref message);
                 PlayerEvents.OnSendingVoiceMessage(ev);
                 checks["carrier_radio_channel_is_not_replaced_by_music"] = ev.IsAllowed && ev.Message.Channel == VoiceChatChannel.Radio && ev.Message.Speaker == carrier.ReferenceHub;
-                checks["radio_transmission_keeps_music_playback_and_position"] = ReferenceEquals(presentation.Playback, audio) && ReferenceEquals(audio.ClipsById.Values.Single(), clip) && clip.ReadPosition == 480 && clip.Loop;
+                checks["radio_transmission_keeps_music_playback_and_position"] = ReferenceEquals(emitter.Playback, audio) && ReferenceEquals(audio.ClipsById.Values.Single(), clip) && clip.ReadPosition == 480 && clip.Loop;
             }
             finally { clip.ReadPosition = read; }
             if (presentation.TrackCount > 1)
@@ -128,30 +144,32 @@ internal static class ParavozPresentationDiagnostics
                     AccessTools.Method(typeof(ServerSpecificSettingsSync), "ServerProcessClientResponseMsg")
                         .Invoke(null, new object[] { player.Connection, new SSSClientResponse(key) });
                 }
-                var first = presentation.ClipName;
+                var first = presentation.ClipName(emitter);
                 Key(listener, true);
-                checks["non_carrier_cannot_change_music"] = presentation.ClipName == first;
+                checks["non_carrier_cannot_change_music"] = presentation.ClipName(emitter) == first;
                 Key(carrier, true);
-                var next = presentation.ClipName;
-                checks["track_key_changes_the_shared_loop_on_the_same_controller"] = next != first &&
-                    ReferenceEquals(audio, presentation.Playback) && audio.ClipsById.Count == 1 &&
-                    audio.ClipsById.Values.Single().Loop && emitter.Speaker.ControllerId == other.Speaker.ControllerId;
+                var next = presentation.ClipName(emitter);
+                checks["track_key_changes_only_the_carriers_loop"] = next != first &&
+                    ReferenceEquals(audio, emitter.Playback) && audio.ClipsById.Count == 1 &&
+                    audio.ClipsById.Values.Single().Loop && other.TrackIndex == selectedTrack &&
+                    ReferenceEquals(otherAudio.ClipsById.Values.Single(), otherClip);
                 Key(carrier, true);
-                checks["held_track_key_changes_only_once"] = presentation.ClipName == next;
+                checks["held_track_key_changes_only_once"] = presentation.ClipName(emitter) == next;
                 Key(carrier, false);
                 var seen = new HashSet<string> { first, next };
                 for (int i = 1; i < presentation.TrackCount; i++)
                 {
                     Key(carrier, true);
-                    seen.Add(presentation.ClipName);
+                    seen.Add(presentation.ClipName(emitter));
                     Key(carrier, false);
                 }
-                checks["playlist_visits_all_tracks_and_wraps"] = seen.Count == presentation.TrackCount && presentation.ClipName == first;
+                checks["playlist_visits_all_tracks_and_wraps"] = seen.Count == presentation.TrackCount && presentation.ClipName(emitter) == first;
             }
             uint[] flameIds = other.Flames.Select(f => f.Base.netId).ToArray();
             presentation.Forget(second.NetworkId);
             presentation.RefreshNow();
-            checks["removed_carrier_does_not_leave_an_audio_source"] = presentation.Emitters.Count == 1 && !presentation.Emitters.ContainsKey(second.NetworkId) && audio.ClipsById.Count == 1;
+            checks["removed_carrier_does_not_leave_an_audio_source"] = presentation.Emitters.Count == 1 && !presentation.Emitters.ContainsKey(second.NetworkId) &&
+                audio.ClipsById.Count == 1 && otherAudio.ClipsById.Count == 0 && !otherAudio.Condition!(listener.ReferenceHub);
             checks["removed_carrier_leaves_no_flame_objects"] = flameIds.All(id => !NetworkServer.spawned.ContainsKey(id));
         }
         finally

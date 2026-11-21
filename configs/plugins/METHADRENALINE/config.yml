@@ -20,6 +20,6 @@ maximum_affected_rooms: 16
 maximum_affected_doors: 32
 door_pulse_interval: 1.5
 signal_pulse_interval: 5
-blackout_private_ambience_file: ''
+warhead_audio_directory: ''
 blackout_effects_directory: ''
 paravoz_tracks_directory: ''

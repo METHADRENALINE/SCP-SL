@@ -23,6 +23,7 @@
 !/tools/LocalizationCatalog/Program.cs
 !/tools/LocalizationCatalog/LocalizationCatalog.csproj
 !/tools/RepositoryPolicy/check.py
+!/tools/WarheadAudio/mix.py
 
 **/bin/**
 **/obj/**

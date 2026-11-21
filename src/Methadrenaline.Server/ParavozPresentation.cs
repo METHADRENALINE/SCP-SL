@@ -31,6 +31,8 @@ internal sealed class ParavozPresentation : IDisposable
         internal readonly Player Player = player;
         internal readonly int Life = player.LifeId;
         internal readonly List<AdminToy> Toys = new();
+        internal AudioPlayer? Playback;
+        internal int TrackIndex;
         internal SpeakerToy Speaker = null!;
         internal SpeakerPersonalization Personalization = null!;
         internal LightToy Light = null!;
@@ -41,15 +43,13 @@ internal sealed class ParavozPresentation : IDisposable
 
     private readonly string clipPrefix = "md-paravoz-" + Guid.NewGuid().ToString("N");
     private readonly List<string> clips = new();
-    private int trackIndex;
     private readonly Dictionary<uint, Emitter> emitters = new();
     private readonly Dictionary<Player, uint?> selected = new();
-    private readonly HashSet<ReferenceHub> audible = new();
+    private readonly Dictionary<ReferenceHub, uint> audible = new();
     private float nextUpdate;
     private bool enabled;
-    internal AudioPlayer? Playback { get; private set; }
     internal IReadOnlyDictionary<uint, Emitter> Emitters => emitters;
-    internal string ClipName => clips[trackIndex];
+    internal string ClipName(Emitter emitter) => clips[emitter.TrackIndex];
     internal int TrackCount => clips.Count;
 
     internal void Enable(string directory)
@@ -103,37 +103,36 @@ internal sealed class ParavozPresentation : IDisposable
     private void TrackSettingReceived(ReferenceHub hub, ServerSpecificSettingBase setting)
     {
         if (setting.SettingId != TrackSettingId || setting is not SSKeybindSetting key || TrackCount < 2 ||
-            Playback == null || !emitters.TryGetValue(hub.netId, out var emitter) ||
+            !emitters.TryGetValue(hub.netId, out var emitter) || emitter.Playback is not { } playback ||
             !emitter.Player.IsAlive || emitter.Player.LifeId != emitter.Life) return;
         if (emitter.TrackKeyPressed == key.SyncIsPressed) return;
         emitter.TrackKeyPressed = key.SyncIsPressed;
         if (!key.SyncIsPressed) return;
 
-        int next = (trackIndex + 1) % TrackCount;
-        var previous = Playback.ClipsById.Keys.Single();
-        Playback.AddClip(clips[next], loop: true, destroyOnEnd: false);
-        Playback.RemoveClipById(previous);
-        trackIndex = next;
+        int next = (emitter.TrackIndex + 1) % TrackCount;
+        int previous = playback.ClipsById.Keys.Single();
+        playback.AddClip(clips[next], loop: true, destroyOnEnd: false);
+        playback.RemoveClipById(previous);
+        emitter.TrackIndex = next;
     }
 
     internal void Apply(Player player)
     {
         if (!enabled) throw new InvalidOperationException("Paravoz presentation is not enabled.");
         Forget(player.NetworkId);
-        if (Playback == null)
-        {
-            Playback = AudioPlayer.Create(clipPrefix, destroyWhenAllClipsPlayed: false, sendSoundGlobally: false,
-                condition: hub => audible.Contains(hub));
-            if (Playback == null) throw new InvalidOperationException("No audio controller available for Paravoz music.");
-            Playback.AddClip(ClipName, loop: true, destroyOnEnd: false);
-        }
-        var emitter = new Emitter(player);
+        uint source = player.NetworkId;
+        var emitter = new Emitter(player) { TrackIndex = UnityEngine.Random.Range(0, TrackCount) };
         try
         {
+            emitter.Playback = AudioPlayer.Create(clipPrefix + "-" + Guid.NewGuid().ToString("N"),
+                destroyWhenAllClipsPlayed: false, sendSoundGlobally: false,
+                condition: hub => audible.TryGetValue(hub, out uint chosen) && chosen == source)
+                ?? throw new InvalidOperationException("No audio controller available for Paravoz music.");
+            emitter.Playback.AddClip(ClipName(emitter), loop: true, destroyOnEnd: false);
             Transform parent = player.ReferenceHub.transform;
             emitter.Speaker = SpeakerToy.Create(Vector3.zero, parent, networkSpawn: false);
             emitter.Toys.Add(emitter.Speaker);
-            emitter.Speaker.ControllerId = Playback.ControllerID;
+            emitter.Speaker.ControllerId = emitter.Playback.ControllerID;
             emitter.Speaker.IsSpatial = true;
             emitter.Speaker.Volume = 0;
             emitter.Speaker.MinDistance = ParavozPresentationPolicy.MusicNear;
@@ -178,7 +177,6 @@ internal sealed class ParavozPresentation : IDisposable
         {
             emitters.Remove(player.NetworkId);
             Destroy(emitter);
-            if (emitters.Count == 0) StopPlayback();
             throw;
         }
     }
@@ -217,7 +215,7 @@ internal sealed class ParavozPresentation : IDisposable
             selected.TryGetValue(viewer, out uint? previous);
             uint? chosen = ParavozPresentationPolicy.Select(target.NetworkId, previous, distances);
             selected[viewer] = chosen;
-            if (chosen.HasValue) audible.Add(viewer.ReferenceHub);
+            if (chosen.HasValue) audible.Add(viewer.ReferenceHub, chosen.Value);
             foreach (var pair in emitters)
                 pair.Value.Personalization.Override(viewer, new SpeakerSettings
                 {
@@ -259,33 +257,29 @@ internal sealed class ParavozPresentation : IDisposable
         emitters.Remove(id);
         if (!e.Player.IsDestroyed) RueDisplay.Get(e.Player).Remove(TrackTip);
         Destroy(e);
-        if (emitters.Count == 0) StopPlayback();
+        if (emitters.Count == 0)
+        {
+            audible.Clear();
+            selected.Clear();
+        }
     }
 
     private static void Destroy(Emitter e)
     {
+        if (e.Playback != null)
+        {
+            e.Playback.Condition = _ => false;
+            foreach (int id in e.Playback.ClipsById.Keys.ToArray()) e.Playback.RemoveClipById(id);
+            e.Playback.Destroy();
+        }
         if (e.Personalization != null)
             foreach (Player player in Player.List) e.Personalization.ClearOverride(player);
         foreach (AdminToy toy in e.Toys) if (!toy.IsDestroyed) toy.Destroy();
     }
 
-    private void StopPlayback()
-    {
-        audible.Clear();
-        selected.Clear();
-        if (Playback == null) return;
-        Playback.Condition = _ => false;
-        Playback.SendSoundGlobally = false;
-        foreach (int id in Playback.ClipsById.Keys.ToArray()) Playback.RemoveClipById(id);
-        Playback.Destroy();
-        Playback = null;
-    }
-
     internal void Reset()
     {
         foreach (uint id in emitters.Keys.ToArray()) Forget(id);
-        StopPlayback();
-        trackIndex = 0;
     }
 
     public void Dispose()

@@ -28,6 +28,7 @@ public sealed class ServerPlugin : Plugin<Config>
     internal ParavozController? Paravoz { get; private set; }
     internal ModeVotingController? ModeVoting { get; private set; }
     internal BlackoutRound Blackout { get; } = new();
+    internal WarheadAudio WarheadPlayback { get; } = new();
     internal SiteMapController? SiteMaps { get; private set; }
     internal EscortRound Escort { get; } = new();
     internal bool RestrictNavigationItems => IsParavozRound || Escort.Active || PerkRounds?.Policy.Mode == Methadrenaline.Server.Core.CommunityRoundMode.Escort;
@@ -35,7 +36,7 @@ public sealed class ServerPlugin : Plugin<Config>
     public override string Name => "METHADRENALINE";
     public override string Author => "Wechirok";
     public override string Description => "Private community gameplay and temporary facility anomalies.";
-    public override Version Version => new(1, 24, 4);
+    public override Version Version => new(1, 25, 5);
     public override LabApi.Loader.Features.Plugins.Enums.LoadPriority Priority => LabApi.Loader.Features.Plugins.Enums.LoadPriority.Lowest;
     public override Version RequiredApiVersion => new(1, 1, 7);
 
@@ -59,7 +60,8 @@ public sealed class ServerPlugin : Plugin<Config>
             Paravoz.Enable();
             Escort.Enable();
             SiteMaps.Enable();
-            Blackout.Audio.Load(Config.BlackoutPrivateAmbienceFile, Config.BlackoutEffectsDirectory);
+            Blackout.Audio.Load(Config.BlackoutEffectsDirectory);
+            WarheadPlayback.Enable(Config.WarheadAudioDirectory);
             InventorySystem.Items.Pickups.ItemPickupBase.OnPickupAdded += Blackout.PickupAdded;
             if (Config.ModeVotingEnabled)
             {
@@ -108,6 +110,7 @@ public sealed class ServerPlugin : Plugin<Config>
         PlayerEvents.UsingRadio -= UsingRadio;
         PlayerEvents.ChangingRadioRange -= ChangingRadioRange;
         InventorySystem.Items.Pickups.ItemPickupBase.OnPickupAdded -= Blackout.PickupAdded;
+        WarheadPlayback.Dispose();
         Blackout.Reset();
         Blackout.Audio.Dispose();
         ModeVoting?.Dispose();

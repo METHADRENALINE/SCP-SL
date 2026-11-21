@@ -30,6 +30,7 @@ internal sealed class BlackoutRound
         if (Active) return;
         Active = true;
         SuppressAnnouncements = true;
+        ServerPlugin.Instance?.WarheadPlayback.Reset();
         BlackoutWarnings.RefreshClients();
         timer = Timing.CallDelayed(Delay, CutPower);
         foreach (var pickup in Pickup.List.Where(p => p.Type == ItemType.Radio).ToArray())
