@@ -11,31 +11,16 @@ namespace Methadrenaline.Server;
 internal sealed class BlackoutAudio : IDisposable
 {
     private const int Rate = 48000;
-    private const int AmbienceSeconds = 60;
-    private const int FadeSeconds = 3;
     internal const float SpeakerWarmup = .15f;
     private readonly string prefix = "md-blackout-" + Guid.NewGuid().ToString("N") + "-";
     private readonly List<string> intrusions = new();
-    private AudioPlayer? outagePlayer, ambiencePlayer, intrusionPlayer;
+    private AudioPlayer? outagePlayer, intrusionPlayer;
     private int previousIntrusion = -1;
     internal bool HasIntrusions => intrusions.Count != 0;
     internal float OpeningSpeechSeconds { get; private set; }
 
-    internal void Load(string privateFile, string effectsDirectory)
+    internal void Load(string effectsDirectory)
     {
-        string ambience = prefix + "lcz";
-        if (LoadClip(ambience, privateFile))
-        {
-            var source = AudioClipStorage.AudioClips[ambience].Samples;
-            var samples = new float[(AmbienceSeconds + FadeSeconds) * Rate];
-            for (int i = 0; i < samples.Length; i++)
-            {
-                float fade = Math.Min(1f, (samples.Length - 1 - i) / (float)(FadeSeconds * Rate));
-                samples[i] = source[i % source.Length] * fade * Math.Min(1f, i / (Rate * .25f));
-            }
-            AudioClipStorage.AudioClips[ambience] = new AudioClipData(ambience, Rate, 1, samples);
-        }
-
         if (string.IsNullOrWhiteSpace(effectsDirectory)) return;
         LoadClip(prefix + "power-trip", Path.Combine(effectsDirectory, "power-trip.ogg"));
         string openingSpeech = prefix + "079-speech";
@@ -71,10 +56,7 @@ internal sealed class BlackoutAudio : IDisposable
     }
 
     internal void PlayOutage()
-    {
-        outagePlayer = PlayClip(prefix + "power-trip", .95f, InFacility);
-        ambiencePlayer = PlayClip(prefix + "lcz", .72f, InLightZone);
-    }
+        => outagePlayer = PlayClip(prefix + "power-trip", .95f, InFacility);
 
     internal void PlayOpeningSpeech()
         => intrusionPlayer = PlayClip(prefix + "079-speech", .88f, HumanInFacility);
@@ -88,9 +70,6 @@ internal sealed class BlackoutAudio : IDisposable
         previousIntrusion = index;
         intrusionPlayer = PlayClip(intrusions[index], .76f, HumanInFacility);
     }
-
-    internal static bool InLightZone(ReferenceHub hub)
-        => Player.Get(hub)?.IsAlive == true && hub.GetCurrentZone() == FacilityZone.LightContainment;
 
     private static bool InFacility(ReferenceHub hub)
         => Player.Get(hub)?.IsAlive == true && hub.GetCurrentZone() is
@@ -128,9 +107,8 @@ internal sealed class BlackoutAudio : IDisposable
     internal void Stop()
     {
         if (outagePlayer != null) outagePlayer.Destroy();
-        if (ambiencePlayer != null) ambiencePlayer.Destroy();
         if (intrusionPlayer != null) intrusionPlayer.Destroy();
-        outagePlayer = ambiencePlayer = intrusionPlayer = null;
+        outagePlayer = intrusionPlayer = null;
         previousIntrusion = -1;
     }
 
@@ -139,7 +117,7 @@ internal sealed class BlackoutAudio : IDisposable
         Stop();
         foreach (var name in intrusions) AudioClipStorage.DestroyClip(name);
         intrusions.Clear();
-        foreach (var name in new[] { prefix + "lcz", prefix + "power-trip", prefix + "079-speech" })
+        foreach (var name in new[] { prefix + "power-trip", prefix + "079-speech" })
             if (AudioClipStorage.AudioClips.ContainsKey(name)) AudioClipStorage.DestroyClip(name);
     }
 }

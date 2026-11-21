@@ -34,7 +34,8 @@ class PublicationPolicyTests(unittest.TestCase):
                      'configs/plugins/preferences.json', 'deployment/player-names.yml',
                      'deployment/status.json', 'logs/round.txt', 'data/votes.json',
                      'backups/server.zip', 'src/Methadrenaline.Server/Audio/music.ogg',
-                     'deployment/.env', 'configs/game/../players.json']:
+                     'tools/WarheadAudio/start-90.ogg', 'tools/WarheadAudio/warhead-finale.wav',
+                     'tools/WarheadAudio/music-cues.tsv', 'deployment/.env', 'configs/game/../players.json']:
             with self.subTest(name=name):
                 self.assertTrue(policy.problems(name, b'private runtime content'))
 
@@ -54,7 +55,8 @@ class PublicationPolicyTests(unittest.TestCase):
         text = (ROOT / name).read_text()
         for old, new in [('basic_asn_exempt_user_ids: []', 'basic_asn_exempt_user_ids: [someone]'),
                          ('mode_voting_enabled: false', 'mode_voting_enabled: true'),
-                         ("mode_voting_token_file: ''", 'mode_voting_token_file: /private/token')]:
+                         ("mode_voting_token_file: ''", 'mode_voting_token_file: /private/token'),
+                         ("warhead_audio_directory: ''", 'warhead_audio_directory: /private/audio')]:
             self.assertTrue(policy.problems(name, text.replace(old, new).encode()))
 
     def test_duplicate_sensitive_fields_are_rejected(self):

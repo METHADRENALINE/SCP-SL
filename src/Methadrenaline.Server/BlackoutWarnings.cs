@@ -6,6 +6,7 @@ using HarmonyLib;
 using LightContainmentZoneDecontamination;
 using PlayerRoles.Spectating;
 using Subtitles;
+using UnityEngine;
 using Utils.Networking;
 
 namespace Methadrenaline.Server;
@@ -23,6 +24,35 @@ internal static class BlackoutWarnings
             decon.SetSyncVarDirtyBit(1UL);
         if (AlphaWarheadController.Singleton is { } warhead && warhead)
             warhead.SetSyncVarDirtyBit(1UL);
+    }
+}
+
+[HarmonyPatch(typeof(RoomLightController), nameof(RoomLightController.SerializeSyncVars))]
+internal static class WarheadEmergencyLighting
+{
+    private static bool Active => !BlackoutWarnings.Muted &&
+        ServerPlugin.Instance?.WarheadPlayback.EmergencyLights == true;
+
+    private static bool Enabled(RoomLightController light)
+        => Active || light.LightsEnabled;
+
+    private static Color LightColor(RoomLightController light)
+        => Active ? Color.red : light.OverrideColor;
+
+    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    {
+        var enabled = AccessTools.Field(typeof(RoomLightController), nameof(RoomLightController.LightsEnabled));
+        var color = AccessTools.Field(typeof(RoomLightController), nameof(RoomLightController.OverrideColor));
+        foreach (var instruction in instructions)
+        {
+            if (instruction.LoadsField(enabled) || instruction.LoadsField(color))
+            {
+                var method = Equals(instruction.operand, enabled) ? nameof(Enabled) : nameof(LightColor);
+                instruction.opcode = OpCodes.Call;
+                instruction.operand = AccessTools.Method(typeof(WarheadEmergencyLighting), method);
+            }
+            yield return instruction;
+        }
     }
 }
 
@@ -97,5 +127,18 @@ internal static class BlackoutClientWarningState
         => BlackoutWarnings.Muted ? 0d : decon.RoundStartTime;
 
     private static AlphaWarheadSyncInfo ClientWarheadInfo(AlphaWarheadController warhead)
-        => BlackoutWarnings.Muted ? default : warhead.Info;
+    {
+        if (BlackoutWarnings.Muted) return default;
+        if (warhead.AlreadyDetonated) return warhead.Info;
+        var playback = ServerPlugin.Instance?.WarheadPlayback;
+        if (playback?.OverridesCountdown(warhead) == true)
+            return playback.ShowsFinale ? warhead.Info : default;
+        return warhead.Info;
+    }
+}
+
+[HarmonyPatch(typeof(AlphaWarheadController), nameof(AlphaWarheadController.RpcShake))]
+internal static class BlackoutWarheadShake
+{
+    private static bool Prefix() => !BlackoutWarnings.Muted;
 }

@@ -4,8 +4,8 @@ namespace Methadrenaline.Server;
 
 public sealed class Config
 {
+    public string WarheadAudioDirectory { get; set; } = "";
     public string ParavozTracksDirectory { get; set; } = "";
-    public string BlackoutPrivateAmbienceFile { get; set; } = "";
     public string BlackoutEffectsDirectory { get; set; } = "";
     public bool ModeVotingEnabled { get; set; } = false;
     public string ModeVotingBindAddress { get; set; } = "127.0.0.1";

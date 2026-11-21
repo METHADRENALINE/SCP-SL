@@ -60,6 +60,7 @@ def allowed(path: str) -> bool:
         return True
     if path in {'.gitignore', '.github/workflows/verify.yml', 'LICENSE', 'README.md', 'tools/RepositoryPolicy/check.py',
                 'tools/LocalizationCatalog/Program.cs', 'tools/LocalizationCatalog/LocalizationCatalog.csproj',
+                'tools/WarheadAudio/mix.py',
                 'src/Methadrenaline.Server/Localization/catalog.json'}:
         return True
     if path in {'src/SecretAPI/LICENSE', 'src/ScpProximityChat/LICENSE',
@@ -133,6 +134,10 @@ def template_problems(path: str, text: str) -> list[str]:
     elif path == 'configs/plugins/METHADRENALINE/config.yml':
         expected = {'basic_asn_exempt_user_ids': '[]', 'mode_voting_enabled': 'false',
                     'mode_voting_bind_address': '127.0.0.1', 'mode_voting_token_file': "''"}
+        for key in ('warhead_audio_directory', 'paravoz_tracks_directory',
+                    'blackout_effects_directory', 'blackout_private_ambience_file'):
+            if re.search(r'^' + key + r':', text, re.M):
+                expected[key] = "''"
     elif path == 'configs/plugins/InventoryControl/config.yml':
         expected = {'inventory_rank': '{}'}
     elif path == 'configs/game/hoster_policy.txt':
