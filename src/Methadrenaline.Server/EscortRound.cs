@@ -75,7 +75,8 @@ internal sealed class EscortRound
         int slot = 0;
         foreach (var prisoner in humans.Where(p => p != officer))
         {
-            prisoner.SetRole(RoleTypeId.ClassD, RoleChangeReason.RoundStart, RoleSpawnFlags.AssignInventory);
+            prisoner.SetRole(RoleTypeId.ClassD, RoleChangeReason.RoundStart, RoleSpawnFlags.None);
+            prisoner.ClearInventory();
             prisoner.Position = places[++slot % places.Count];
             prisoner.DisarmedBy = officer;
             prisoners.Add(BraceletController.Life(prisoner));
