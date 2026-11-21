@@ -30,15 +30,18 @@ internal sealed class LocalizationService : IDisposable
         ownSettings = new ServerSpecificSettingBase[]
         {
             new SSGroupHeader(HeaderId, "Localization"),
-            new SSDropdownSetting(LanguageSettingId, "🌐", new[] { "English", "Українська", "Русский" }, hint: "Language for perks, messages and server settings.")
+            new SSDropdownSetting(LanguageSettingId, "🌐", new[] { "English", "Українська", "Русский" }, hint: "Language for perks, messages and server settings."),
+            new SSGroupHeader(ParavozPresentation.TrackHeaderId, "Paravoz Music"),
+            new SSKeybindSetting(ParavozPresentation.TrackSettingId, "Next track", UnityEngine.KeyCode.G, true, false)
         };
     }
 
     internal void Enable()
     {
         var existing = ServerSpecificSettingsSync.DefinedSettings ?? Array.Empty<ServerSpecificSettingBase>();
-        if (existing.Any(s => s.SettingId == LanguageSettingId || s.SettingId == HeaderId) || CustomSetting.CustomSettings.Any(s => s.Id == LanguageSettingId || s.Id == HeaderId))
-            throw new InvalidOperationException("Localization setting ID is already registered.");
+        var ids = new HashSet<int>(ownSettings.Select(s => s.SettingId));
+        if (existing.Any(s => ids.Contains(s.SettingId)) || CustomSetting.CustomSettings.Any(s => ids.Contains(s.Id)))
+            throw new InvalidOperationException("A community setting ID is already registered.");
         ServerSpecificSettingsSync.DefinedSettings = ownSettings.Concat(existing).ToArray();
         ServerSpecificSettingsSync.ServerOnSettingValueReceived += Received;
         PlayerEvents.Left += Left;

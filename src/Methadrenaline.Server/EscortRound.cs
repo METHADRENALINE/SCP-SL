@@ -19,14 +19,21 @@ internal sealed class EscortRound
 {
     private readonly System.Random random = new();
     private readonly HashSet<BraceletLife> prisoners = new();
+    private readonly HashSet<uint> pendingEscapes = new();
+    private readonly HashSet<BraceletLife> evacuees = new();
     private BraceletLife? guard;
+    private bool guardKilled;
     internal bool Active { get; private set; }
 
     internal void Enable()
     {
         ServerEvents.WaveRespawning += WaveRespawning;
+        ServerEvents.RoundEndingConditionsCheck += CheckEnding;
+        ServerEvents.RoundEnding += RoundEnding;
         PlayerEvents.Uncuffing += Uncuffing;
         PlayerEvents.ChangingRole += ChangingRole;
+        PlayerEvents.Escaping += Escaping;
+        PlayerEvents.Escaped += Escaped;
     }
 
     internal void Spawn(Player[] players)
@@ -82,6 +89,57 @@ internal sealed class EscortRound
     internal bool IsGuard(Player player) => Active && player.Role == RoleTypeId.FacilityGuard &&
         guard.HasValue && guard.Value.Equals(BraceletController.Life(player));
 
+    internal bool IsGuardIdentity(Player player) => Active && guard?.NetworkId == player.NetworkId;
+    internal bool IsPrisoner(BraceletLife life) => prisoners.Contains(life);
+    internal void MarkGuardKilled() => guardKilled = true;
+
+    private static bool IsAlive(BraceletLife life, Team team) =>
+        Player.Get(life.NetworkId) is { IsAlive: true } player && player.Team == team && player.LifeId == life.LifeId;
+
+    private RoundSummary.LeadingTeam? Result(out bool livingPrisoners)
+    {
+        livingPrisoners = prisoners.Any(life => IsAlive(life, Team.ClassD));
+        if (livingPrisoners || prisoners.Count == 0) return null;
+        if (!evacuees.Any(life => IsAlive(life, Team.FoundationForces))) return RoundSummary.LeadingTeam.Anomalies;
+        if (evacuees.Count == prisoners.Count && guard is { } officer && IsAlive(officer, Team.FoundationForces))
+            return RoundSummary.LeadingTeam.FacilityForces;
+        return null;
+    }
+
+    private void CheckEnding(RoundEndingConditionsCheckEventArgs ev)
+    {
+        if (!Active) return;
+        if (Result(out bool livingPrisoners).HasValue) ev.CanEnd = true;
+        else if (guardKilled && livingPrisoners) ev.CanEnd = false;
+    }
+
+    private void RoundEnding(RoundEndingEventArgs ev)
+    {
+        if (!Active) return;
+        if (Result(out bool livingPrisoners) is { } winner) ev.LeadingTeam = winner;
+        else if (guardKilled && livingPrisoners) ev.IsAllowed = false;
+    }
+
+    private void Escaping(PlayerEscapingEventArgs ev)
+    {
+        if (!Active || ev.OldRole != RoleTypeId.ClassD) return;
+        var player = ev.Player;
+        pendingEscapes.Remove(player.NetworkId);
+        if (!ev.IsAllowed || guard is not { } officer || !Locked(player) ||
+            ServerPlugin.Instance?.Bracelets?.Ledger.TryGet(BraceletController.Life(player), out var binding) != true ||
+            !binding.Captor.Equals(officer)) return;
+        if (binding.Committed) { ev.IsAllowed = false; return; }
+        if (ev.EscapeScenario == Escape.EscapeScenarioType.CuffedClassD) pendingEscapes.Add(player.NetworkId);
+    }
+
+    private void Escaped(PlayerEscapedEventArgs ev)
+    {
+        if (!Active || !pendingEscapes.Remove(ev.Player.NetworkId)) return;
+        if (ev.EscapeScenarioType == Escape.EscapeScenarioType.CuffedClassD &&
+            ev.Player.IsAlive && ev.Player.Role == ev.NewRole && ev.Player.Team == Team.FoundationForces)
+            evacuees.Add(BraceletController.Life(ev.Player));
+    }
+
     internal bool Locked(Player? target) => Active && target?.Role == RoleTypeId.ClassD &&
         prisoners.Contains(BraceletController.Life(target)) && target.DisarmedBy is { } owner && IsGuard(owner);
 
@@ -106,14 +164,21 @@ internal sealed class EscortRound
     {
         Active = false;
         prisoners.Clear();
+        pendingEscapes.Clear();
+        evacuees.Clear();
         guard = null;
+        guardKilled = false;
     }
 
     internal void Disable()
     {
         ServerEvents.WaveRespawning -= WaveRespawning;
+        ServerEvents.RoundEndingConditionsCheck -= CheckEnding;
+        ServerEvents.RoundEnding -= RoundEnding;
         PlayerEvents.Uncuffing -= Uncuffing;
         PlayerEvents.ChangingRole -= ChangingRole;
+        PlayerEvents.Escaping -= Escaping;
+        PlayerEvents.Escaped -= Escaped;
         Reset();
     }
 }

@@ -11,6 +11,7 @@ using Mirror;
 using PlayerRoles;
 using PlayerRoles.Voice;
 using UnityEngine;
+using UserSettings.ServerSpecific;
 using VoiceChat;
 using VoiceChat.Codec;
 using VoiceChat.Codec.Enums;
@@ -117,6 +118,36 @@ internal static class ParavozPresentationDiagnostics
                 checks["radio_transmission_keeps_music_playback_and_position"] = ReferenceEquals(presentation.Playback, audio) && ReferenceEquals(audio.ClipsById.Values.Single(), clip) && clip.ReadPosition == 480 && clip.Loop;
             }
             finally { clip.ReadPosition = read; }
+            if (presentation.TrackCount > 1)
+            {
+                void Key(Player player, bool pressed)
+                {
+                    var key = new SSKeybindSetting(ParavozPresentation.TrackSettingId, "Next track");
+                    AccessTools.PropertySetter(typeof(SSKeybindSetting), nameof(SSKeybindSetting.SyncIsPressed))
+                        .Invoke(key, new object[] { pressed });
+                    AccessTools.Method(typeof(ServerSpecificSettingsSync), "ServerProcessClientResponseMsg")
+                        .Invoke(null, new object[] { player.Connection, new SSSClientResponse(key) });
+                }
+                var first = presentation.ClipName;
+                Key(listener, true);
+                checks["non_carrier_cannot_change_music"] = presentation.ClipName == first;
+                Key(carrier, true);
+                var next = presentation.ClipName;
+                checks["track_key_changes_the_shared_loop_on_the_same_controller"] = next != first &&
+                    ReferenceEquals(audio, presentation.Playback) && audio.ClipsById.Count == 1 &&
+                    audio.ClipsById.Values.Single().Loop && emitter.Speaker.ControllerId == other.Speaker.ControllerId;
+                Key(carrier, true);
+                checks["held_track_key_changes_only_once"] = presentation.ClipName == next;
+                Key(carrier, false);
+                var seen = new HashSet<string> { first, next };
+                for (int i = 1; i < presentation.TrackCount; i++)
+                {
+                    Key(carrier, true);
+                    seen.Add(presentation.ClipName);
+                    Key(carrier, false);
+                }
+                checks["playlist_visits_all_tracks_and_wraps"] = seen.Count == presentation.TrackCount && presentation.ClipName == first;
+            }
             uint[] flameIds = other.Flames.Select(f => f.Base.netId).ToArray();
             presentation.Forget(second.NetworkId);
             presentation.RefreshNow();

@@ -4,6 +4,7 @@ namespace Methadrenaline.Server;
 
 public sealed class Config
 {
+    public string ParavozTracksDirectory { get; set; } = "";
     public string BlackoutPrivateAmbienceFile { get; set; } = "";
     public string BlackoutEffectsDirectory { get; set; } = "";
     public bool ModeVotingEnabled { get; set; } = false;

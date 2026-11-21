@@ -123,7 +123,7 @@ internal sealed class ParavozController : IDisposable
 
     internal void Enable()
     {
-        Presentation.Enable();
+        Presentation.Enable(ServerPlugin.Instance!.Config.ParavozTracksDirectory);
         ItemPickupBase.OnPickupAdded += PickupAdded;
         PlayerEvents.Escaping += Escaping;
         PlayerEvents.Escaped += Escaped;
