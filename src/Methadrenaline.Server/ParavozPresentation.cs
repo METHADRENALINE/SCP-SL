@@ -2,13 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AdminToys;
 using LabApi.Features.Wrappers;
 using Methadrenaline.Server.Core;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
+using RueI.API;
+using RueI.API.Elements;
+using RueI.API.Elements.Parameters;
 using SecretLabNAudio.Core;
 using UnityEngine;
+using UserSettings.ServerSpecific;
 using LightToy = LabApi.Features.Wrappers.LightSourceToy;
 using PrimitiveToy = LabApi.Features.Wrappers.PrimitiveObjectToy;
 using SpeakerToy = LabApi.Features.Wrappers.SpeakerToy;
@@ -17,6 +22,10 @@ namespace Methadrenaline.Server;
 
 internal sealed class ParavozPresentation : IDisposable
 {
+    internal const int TrackHeaderId = 2026102601;
+    internal const int TrackSettingId = 2026102602;
+    private static readonly Tag TrackTip = new("methadrenaline.paravoz.track");
+
     internal sealed class Emitter(Player player)
     {
         internal readonly Player Player = player;
@@ -27,9 +36,12 @@ internal sealed class ParavozPresentation : IDisposable
         internal LightToy Light = null!;
         internal readonly List<PrimitiveToy> Embers = new();
         internal readonly List<PrimitiveToy> Flames = new();
+        internal bool TrackKeyPressed;
     }
 
-    private readonly string clipName = "md-paravoz-" + Guid.NewGuid().ToString("N");
+    private readonly string clipPrefix = "md-paravoz-" + Guid.NewGuid().ToString("N");
+    private readonly List<string> clips = new();
+    private int trackIndex;
     private readonly Dictionary<uint, Emitter> emitters = new();
     private readonly Dictionary<Player, uint?> selected = new();
     private readonly HashSet<ReferenceHub> audible = new();
@@ -37,21 +49,71 @@ internal sealed class ParavozPresentation : IDisposable
     private bool enabled;
     internal AudioPlayer? Playback { get; private set; }
     internal IReadOnlyDictionary<uint, Emitter> Emitters => emitters;
-    internal string ClipName => clipName;
+    internal string ClipName => clips[trackIndex];
+    internal int TrackCount => clips.Count;
 
-    internal void Enable()
+    internal void Enable(string directory)
     {
         using var source = typeof(ServerPlugin).Assembly.GetManifestResourceStream("Methadrenaline.Server.Audio.paravoz-track.ogg")
             ?? throw new InvalidOperationException("Paravoz music resource is missing.");
         using var bytes = new MemoryStream();
         source.CopyTo(bytes);
-        if (!AudioClipStorage.LoadClip(bytes.ToArray(), clipName)) throw new InvalidOperationException("Paravoz music could not be decoded.");
-        var clip = AudioClipStorage.AudioClips[clipName];
-        if (clip.SampleRate != ParavozPresentationPolicy.SampleRate || clip.Channels != 1)
-            throw new InvalidOperationException("Paravoz music must be 48000 Hz mono Vorbis.");
-        AudioClipStorage.AudioClips[clipName] = new AudioClipData(clipName, clip.SampleRate, 1, ParavozPresentationPolicy.LoopSamples(clip.Samples));
+        LoadTrack(bytes.ToArray(), "01");
+        if (!string.IsNullOrWhiteSpace(directory)) LoadAdditionalTracks(directory);
+        LabApi.Features.Console.Logger.Info($"[METHADRENALINE] Paravoz music: {TrackCount} track(s).");
         enabled = true;
+        ServerSpecificSettingsSync.ServerOnSettingValueReceived += TrackSettingReceived;
         StaticUnityMethods.OnFixedUpdate += Update;
+    }
+
+    private void LoadAdditionalTracks(string directory)
+    {
+        try
+        {
+            foreach (string file in Directory.GetFiles(directory, "paravoz-track-*.ogg").OrderBy(Path.GetFileName, StringComparer.Ordinal))
+            {
+                var name = Regex.Match(Path.GetFileName(file), @"^paravoz-track-(0[2-9]|[1-9][0-9])\.ogg$");
+                if (!name.Success) continue;
+                try { LoadTrack(File.ReadAllBytes(file), name.Groups[1].Value); }
+                catch (Exception error) { LabApi.Features.Console.Logger.Warn($"Paravoz track {name.Groups[1].Value} skipped: {error.Message}"); }
+            }
+        }
+        catch (Exception error) { LabApi.Features.Console.Logger.Warn("Paravoz playlist unavailable: " + error.Message); }
+    }
+
+    private void LoadTrack(byte[] bytes, string number)
+    {
+        string name = clipPrefix + "-" + number;
+        try
+        {
+            if (!AudioClipStorage.LoadClip(bytes, name)) throw new InvalidDataException("Invalid Ogg Vorbis.");
+            var clip = AudioClipStorage.AudioClips[name];
+            if (clip.SampleRate != ParavozPresentationPolicy.SampleRate || clip.Channels != 1)
+                throw new InvalidDataException("Paravoz music must be 48000 Hz mono Vorbis.");
+            AudioClipStorage.AudioClips[name] = new AudioClipData(name, clip.SampleRate, 1, ParavozPresentationPolicy.LoopSamples(clip.Samples));
+            clips.Add(name);
+        }
+        catch
+        {
+            if (AudioClipStorage.AudioClips.ContainsKey(name)) AudioClipStorage.DestroyClip(name);
+            throw;
+        }
+    }
+
+    private void TrackSettingReceived(ReferenceHub hub, ServerSpecificSettingBase setting)
+    {
+        if (setting.SettingId != TrackSettingId || setting is not SSKeybindSetting key || TrackCount < 2 ||
+            Playback == null || !emitters.TryGetValue(hub.netId, out var emitter) ||
+            !emitter.Player.IsAlive || emitter.Player.LifeId != emitter.Life) return;
+        if (emitter.TrackKeyPressed == key.SyncIsPressed) return;
+        emitter.TrackKeyPressed = key.SyncIsPressed;
+        if (!key.SyncIsPressed) return;
+
+        int next = (trackIndex + 1) % TrackCount;
+        var previous = Playback.ClipsById.Keys.Single();
+        Playback.AddClip(clips[next], loop: true, destroyOnEnd: false);
+        Playback.RemoveClipById(previous);
+        trackIndex = next;
     }
 
     internal void Apply(Player player)
@@ -60,10 +122,10 @@ internal sealed class ParavozPresentation : IDisposable
         Forget(player.NetworkId);
         if (Playback == null)
         {
-            Playback = AudioPlayer.Create(clipName, destroyWhenAllClipsPlayed: false, sendSoundGlobally: false,
+            Playback = AudioPlayer.Create(clipPrefix, destroyWhenAllClipsPlayed: false, sendSoundGlobally: false,
                 condition: hub => audible.Contains(hub));
             if (Playback == null) throw new InvalidOperationException("No audio controller available for Paravoz music.");
-            Playback.AddClip(clipName, loop: true, destroyOnEnd: false);
+            Playback.AddClip(ClipName, loop: true, destroyOnEnd: false);
         }
         var emitter = new Emitter(player);
         try
@@ -105,6 +167,12 @@ internal sealed class ParavozPresentation : IDisposable
             }
             emitters.Add(player.NetworkId, emitter);
             RefreshNow();
+            if (TrackCount > 1)
+                RueDisplay.Get(player).Show(TrackTip, new DynamicElement(58, () =>
+                    "<align=center><size=34><nobr>" + Localizer.Text(player.ReferenceHub, "Press {0} to play the next track.") + "</nobr></size></align>")
+                {
+                    Parameters = [new KeybindParameter(TrackSettingId, "<b>{0}</b>")]
+                }, 30f);
         }
         catch
         {
@@ -189,6 +257,7 @@ internal sealed class ParavozPresentation : IDisposable
     {
         if (!emitters.TryGetValue(id, out var e)) return;
         emitters.Remove(id);
+        if (!e.Player.IsDestroyed) RueDisplay.Get(e.Player).Remove(TrackTip);
         Destroy(e);
         if (emitters.Count == 0) StopPlayback();
     }
@@ -216,13 +285,16 @@ internal sealed class ParavozPresentation : IDisposable
     {
         foreach (uint id in emitters.Keys.ToArray()) Forget(id);
         StopPlayback();
+        trackIndex = 0;
     }
 
     public void Dispose()
     {
         StaticUnityMethods.OnFixedUpdate -= Update;
+        ServerSpecificSettingsSync.ServerOnSettingValueReceived -= TrackSettingReceived;
         enabled = false;
         Reset();
-        if (AudioClipStorage.AudioClips.ContainsKey(clipName)) AudioClipStorage.DestroyClip(clipName);
+        foreach (string clip in clips) AudioClipStorage.DestroyClip(clip);
+        clips.Clear();
     }
 }

@@ -22,3 +22,4 @@ door_pulse_interval: 1.5
 signal_pulse_interval: 5
 blackout_private_ambience_file: ''
 blackout_effects_directory: ''
+paravoz_tracks_directory: ''

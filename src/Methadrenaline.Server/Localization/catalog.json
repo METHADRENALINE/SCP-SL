@@ -4422,6 +4422,24 @@
     "ru": "Конвоир"
   },
   {
+    "source": "Paravoz Music",
+    "en": "Paravoz Music",
+    "uk": "Музика Паровоза",
+    "ru": "Музыка Паравоза"
+  },
+  {
+    "source": "Next track",
+    "en": "Next track",
+    "uk": "Наступний трек",
+    "ru": "Следующий трек"
+  },
+  {
+    "source": "Press {0} to play the next track.",
+    "en": "Press {0} to play the next track.",
+    "uk": "Натисни {0}, щоб змінити трек.",
+    "ru": "Нажми {0}, чтобы сменить трек."
+  },
+  {
     "source": "Blackout",
     "en": "Блэкаут",
     "uk": "Блэкаут",

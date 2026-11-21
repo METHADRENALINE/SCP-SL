@@ -95,6 +95,13 @@ internal sealed class BraceletController : IDisposable
 
     private void Death(PlayerDeathEventArgs ev)
     {
+        if (ServerPlugin.Instance?.Escort is { } escort && escort.IsGuardIdentity(ev.Player))
+        {
+            escort.MarkGuardKilled();
+            foreach (var tied in Ledger.Active.Where(b => b.Captor.NetworkId == ev.Player.NetworkId && escort.IsPrisoner(b.Prisoner)))
+                if (Resolve(tied.Prisoner) is { IsAlive: true } prisoner)
+                    BeginDetonation(tied, ev.Player, prisoner, Now);
+        }
         ReleaseCaptor(ev.Player.NetworkId);
         var binding = Ledger.Active.FirstOrDefault(b => b.Prisoner.NetworkId == ev.Player.NetworkId);
         if (binding != null) Complete(binding, ev.OldPosition, killPrisoner: false);
@@ -103,7 +110,8 @@ internal sealed class BraceletController : IDisposable
 
     private void ChangedRole(PlayerChangedRoleEventArgs ev)
     {
-        ReleaseCaptor(ev.Player.NetworkId);
+        if (ev.ChangeReason != RoleChangeReason.Died || ServerPlugin.Instance?.Escort.IsGuardIdentity(ev.Player) != true)
+            ReleaseCaptor(ev.Player.NetworkId);
         if (ev.ChangeReason != RoleChangeReason.Died) ReleasePrisoner(ev.Player.NetworkId);
         UpdateHud();
     }
@@ -189,11 +197,7 @@ internal sealed class BraceletController : IDisposable
                 double distance = Vector3.Distance(captor.Position, prisoner.Position);
                 if (distance < binding.PreviousDistance) Audio.CancelPendingWarning(binding.Prisoner);
                 int warning = binding.ObserveDistance(distance, now);
-                if (BraceletPolicy.MustDetonate(distance) && binding.BeginSequence(now))
-                {
-                    sequenceOwners[binding.Prisoner] = new Footprint(captor.ReferenceHub);
-                    Audio.PlaySequence(prisoner);
-                }
+                if (BraceletPolicy.MustDetonate(distance)) BeginDetonation(binding, captor, prisoner, now);
                 else if (warning != 0) Audio.Play(prisoner, warning);
                 Audio.Flush(binding.Prisoner, distance);
             }
@@ -205,6 +209,13 @@ internal sealed class BraceletController : IDisposable
     }
 
     internal void CheckNow() { nextCheck = 0; Tick(); }
+
+    private void BeginDetonation(BraceletBinding binding, Player captor, Player prisoner, float now)
+    {
+        if (!binding.BeginSequence(now)) return;
+        sequenceOwners[binding.Prisoner] = new Footprint(captor.ReferenceHub);
+        Audio.PlaySequence(prisoner);
+    }
     internal void AdvanceDiagnosticTime(float seconds)
     {
         if (!Diagnostic || seconds < 0) throw new InvalidOperationException("A diagnostic clock requires an active diagnostic.");
@@ -228,7 +239,7 @@ internal sealed class BraceletController : IDisposable
         executing = binding.Prisoner;
         try
         {
-            prisoner.IsGodModeEnabled = false;
+            if (godMode) prisoner.IsGodModeEnabled = false;
             protection.ServerSetState(0);
             prisoner.ReferenceHub.playerStats.DealDamage(BraceletDeathPresentation.WearerDeath());
             if (prisoner.IsAlive) throw new InvalidOperationException("The bracelet execution did not kill its wearer.");
@@ -236,7 +247,7 @@ internal sealed class BraceletController : IDisposable
         finally
         {
             executing = null;
-            prisoner.IsGodModeEnabled = godMode;
+            if (godMode) prisoner.IsGodModeEnabled = true;
             if (prisoner.IsAlive && intensity > 0) protection.ServerSetState(intensity, duration);
         }
     }
