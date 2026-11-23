@@ -96,6 +96,7 @@ def main():
     stems = {name: read_mono(args.stems / (name + ".wav")) for name in names}
     song = read_mono(args.song)
     impact = impact_stem(stems)
+    write_ogg(args.output / "blast.ogg", impact)
     cues = []
     for mode, variants in [("start", range(70, 121, 10)), ("resume", range(30, 101, 10)),
                            ("deadman", [90])]:

@@ -59,6 +59,17 @@ Logs are in `/srv/scpsl/logs`. Game and plugin data are in `/srv/scpsl/state`. T
 
 If startup stays at `Central server public key is not loaded. Waiting...`, check connectivity to Northwood's authentication service and restart the instance.
 
+## Fortune Coin voice
+
+Install the packages from `tools/FortuneCoin/requirements.txt` in a Python environment and place the Piper model `ru_RU-irina-medium.onnx` and its matching `.onnx.json` in a model directory. Set `fortune_coin_voice_command` to an executable wrapper that takes the port as its first argument:
+
+```sh
+#!/bin/sh
+exec /path/to/venv/bin/python /path/to/tools/FortuneCoin/voice.py /path/to/models "$1"
+```
+
+Set `fortune_coin_misfortune_file` to the optional local audio cue. The voice worker listens on loopback.
+
 ## Shelley voting
 
 Voting is off by default. To enable it, edit the installed `LabAPI/configs/7777/METHADRENALINE/config.yml`:

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using HarmonyLib;
 using Cassie;
 using InventorySystem;
@@ -164,4 +165,17 @@ internal static class BlackoutRadioGrantPatch
 {
     private static bool Prefix(ItemType type)
         => type != ItemType.Radio || ServerPlugin.Instance?.Blackout.Active != true;
+}
+
+[HarmonyPatch]
+internal static class BlackoutTeslaPatch
+{
+    private static IEnumerable<MethodBase> TargetMethods()
+    {
+        yield return AccessTools.Method(typeof(TeslaGate), nameof(TeslaGate.ServerSideCode));
+        yield return AccessTools.Method(typeof(TeslaGate), "RpcDoIdle");
+        yield return AccessTools.Method(typeof(TeslaGate), nameof(TeslaGate.RpcInstantBurst));
+    }
+
+    private static bool Prefix() => !BlackoutWarnings.Muted;
 }

@@ -66,7 +66,7 @@ internal sealed class ModeVotingController : IDisposable
         Tick();
         if (AdministrativeStart)
         {
-            policy.Override(policy.Finish(random.Next));
+            policy.ForceFinish(random.Next);
             ReleaseLock();
             Tick();
         }
@@ -96,9 +96,10 @@ internal sealed class ModeVotingController : IDisposable
             deadlinePoll = policy.PollId;
             deadline = policy.PollId == null ? null : DateTimeOffset.UtcNow.AddSeconds(Math.Max(0, policy.Deadline - now)).ToString("O", CultureInfo.InvariantCulture);
         }
-        bridge.Drain(request => request.BootId == bootId && ModeVotePolicy.TryMode(request.Mode, out var mode)
-            ? policy.Vote(request.PollId, request.UserId, mode, clock.Elapsed.TotalSeconds) : "closed");
+        bridge.Drain(request => request.BootId == bootId
+            ? policy.Vote(request.PollId, request.UserId, request.Mode, clock.Elapsed.TotalSeconds) : "closed");
         CommunityRoundMode? selected = players.Length == 0 ? null : waiting ? policy.Selected : ServerPlugin.Instance?.PerkRounds?.Policy.Mode;
+        bool perks = waiting ? policy.Perks == true : ServerPlugin.Instance?.PerkRounds?.Policy.HasPerks == true;
         bridge.Publish(new ModeVoteStatus
         {
             BootId = bootId,
@@ -107,13 +108,20 @@ internal sealed class ModeVotingController : IDisposable
             OnlineNames = players.Take(128).Select(p => ModeVoteNames.PlayerName(p.Nickname, p.DisplayName)).ToArray(),
             Phase = restarting ? "restarting" : players.Length == 0 ? "empty" : waiting ? policy.Open ? "voting" : "countdown" : ended ? "ended" : "round",
             Mode = selected.HasValue ? ModeVotePolicy.Id(selected.Value) : null,
-            ModeNameRu = selected.HasValue ? RussianName(selected.Value) : null,
-            AvailableModes = policy.Available.Select(m => new ModeVoteOption { Id = ModeVotePolicy.Id(m), NameRu = RussianName(m) }).ToArray(),
-            Poll = new ModeVotePoll { Id = policy.PollId, Deadline = deadline, Open = policy.Open }
+            ModeNameRu = selected.HasValue ? RussianName(selected.Value) + (perks ? " + перки" : "") : null,
+            AvailableModes = policy.Open && policy.VotingPerks ? PerkOptions : policy.Available.Select(m => new ModeVoteOption { Id = ModeVotePolicy.Id(m), NameRu = RussianName(m) }).ToArray(),
+            Poll = new ModeVotePoll { Kind = policy.Open && policy.VotingPerks ? "perks" : "mode", Id = policy.PollId, Deadline = deadline, Open = policy.Open }
         });
-        UpdateHud(waiting && players.Length >= ModeVotePolicy.MinimumPlayers ? players : Array.Empty<Player>());
+        UpdateHud(waiting && (policy.Open || policy.Selected.HasValue) ? players : Array.Empty<Player>());
     }
 
+    private static readonly ModeVoteOption[] PerkOptions =
+    {
+        new() { Id = ModeVotePolicy.PerksOn, NameRu = "С перками" },
+        new() { Id = ModeVotePolicy.PerksOff, NameRu = "Без перков" }
+    };
+
+    internal bool SelectedPerks => policy.Perks == true;
     private string RussianName(CommunityRoundMode mode) => localization.Catalog.Translate(ModeVotePolicy.Label(mode), ServerLanguage.Russian);
 
     internal CommunityRoundMode SelectedMode()
@@ -133,7 +141,7 @@ internal sealed class ModeVotingController : IDisposable
     {
         if (!policy.Open) return;
         bool locked = Round.IsLobbyLocked;
-        policy.Override(policy.Finish(random.Next));
+        policy.ForceFinish(random.Next);
         ownsLock = false;
         Round.IsLobbyLocked = locked;
         Tick();
@@ -141,7 +149,7 @@ internal sealed class ModeVotingController : IDisposable
 
     private string Hud(Player player)
     {
-        if (!waiting || policy.Players < ModeVotePolicy.MinimumPlayers || disposed) return "";
+        if (!waiting || disposed) return "";
         var language = localization.Language(player.ReferenceHub);
         string line = policy.Open
             ? string.Format(CultureInfo.InvariantCulture, localization.Catalog.Translate(ModeVotePolicy.VotingLabel, language), Math.Max(0, (int)Math.Ceiling(policy.Deadline - clock.Elapsed.TotalSeconds)))

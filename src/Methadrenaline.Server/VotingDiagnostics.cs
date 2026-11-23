@@ -32,7 +32,9 @@ internal static class VotingDiagnostics
             Check("automatic_start_still_waits", !CharacterClassManager.ForceRoundStart());
             policy.Tick(2, true, 0, _ => 0);
             policy.Tick(2, true, 31, _ => 0);
-            Check("gamemode_after_poll_closes", command.Execute(args, ServerConsole.Scs, out _) && policy.Selected == CommunityRoundMode.Perks);
+            Check("compatible_mode_starts_perk_poll", policy.Open && policy.VotingPerks);
+            policy.Tick(2, true, 61, _ => 0);
+            Check("gamemode_after_poll_closes", command.Execute(args, ServerConsole.Scs, out _) && policy.Selected == CommunityRoundMode.Plain && policy.Perks == true);
             Check("gamemode_replaces_countdown_selection", command.Execute(new ArraySegment<string>(new[] { "vanilla" }), ServerConsole.Scs, out _) && policy.Selected == CommunityRoundMode.Plain);
             Check("paravoz_requires_two_players", !command.Execute(new ArraySegment<string>(new[] { "paravoz" }), ServerConsole.Scs, out _));
             Check("invalid_mode_keeps_selection", !command.Execute(new ArraySegment<string>(new[] { "invalid" }), ServerConsole.Scs, out _) && policy.Selected == CommunityRoundMode.Plain);

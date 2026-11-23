@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using CustomPlayerEffects;
 using HarmonyLib;
 using Interactables.Interobjects.DoorUtils;
 using LabApi.Features.Enums;
@@ -22,6 +23,7 @@ internal sealed class EventDirector : IDisposable
     private readonly System.Random random = new();
     private readonly Dictionary<string, ActiveEvent> active = new(StringComparer.Ordinal);
     private readonly Dictionary<Player, GravityState> gravity = new();
+    private readonly Dictionary<Player, JumpState> jumpBoosts = new();
     private readonly Dictionary<Player, LandingProtection> fallGrace = new();
     private CoroutineHandle scheduler;
     private ChaosRoundPlan? plan;
@@ -38,6 +40,7 @@ internal sealed class EventDirector : IDisposable
     public bool Paused { get; private set; }
     public string Status => $"event={(active.Count == 0 ? "none" : string.Join(",", active.Keys.OrderBy(name => name)))}; paused={Paused}; rollback={active.Values.Sum(run => run.Scope.Count)}; gravity={gravity.Count}; chaos_used={plan?.StartedCount ?? 0}/{plan?.PlannedCount ?? 0}; next_chaos_in={(plan?.NextAt is double at ? Math.Max(0, at - RoundElapsed).ToString("0") : "none")}";
     private double RoundElapsed => Math.Max(0, Time.realtimeSinceStartup - roundStartedAt);
+    private bool AllowsFacilityEvents => mode is not (CommunityRoundMode.Paravoz or CommunityRoundMode.Blackout or CommunityRoundMode.Escort);
     public static IEnumerable<Player> Participants => Player.List.Where(p => !p.IsHost && !p.IsNpc && !p.IsDummy && p.IsReady);
     private static IEnumerable<Player> Alive => Participants.Where(p => p.IsAlive);
     private static bool Indoor(Room room) => room.Zone is FacilityZone.LightContainment or FacilityZone.HeavyContainment or FacilityZone.Entrance;
@@ -46,7 +49,7 @@ internal sealed class EventDirector : IDisposable
     {
         Reset();
         this.mode = mode;
-        if (mode is CommunityRoundMode.Paravoz or CommunityRoundMode.Blackout) return;
+        if (!AllowsFacilityEvents) return;
         roundStartedAt = Time.realtimeSinceStartup;
         plan = new ChaosRoundPlan(random, config.FirstChaosMinimumDelay, config.FirstChaosMaximumDelay, config.MinimumChaosGap, config.MaximumChaosGap);
         if (config.EventsEnabled) scheduler = Timing.RunCoroutine(Schedule(generation));
@@ -90,14 +93,14 @@ internal sealed class EventDirector : IDisposable
         yield return Timing.WaitForSeconds(1);
         while (!disposed && epoch == generation && Round.IsRoundInProgress && !current.Completed)
         {
-            if (CanRun() && current.IsDue(RoundElapsed)) TryStartChaos(false, out _);
+            if (CanRun() && current.IsDue(RoundElapsed)) TryStartChaos(false, out _, current);
             yield return Timing.WaitForSeconds(1);
         }
     }
 
     public bool TryStart(string name, bool diagnostic, out string result)
     {
-        if (!diagnostic && (mode is CommunityRoundMode.Paravoz or CommunityRoundMode.Blackout))
+        if (!diagnostic && !AllowsFacilityEvents)
         {
             result = $"Facility events are disabled in {mode} rounds.";
             return false;
@@ -105,12 +108,12 @@ internal sealed class EventDirector : IDisposable
         return name == "chaos" ? TryStartChaos(diagnostic, out result) : TryStartEffect(name, diagnostic, false, out result);
     }
 
-    private bool TryStartChaos(bool diagnostic, out string result)
+    private bool TryStartChaos(bool diagnostic, out string result, ChaosRoundPlan? scheduled = null)
     {
         if (disposed || active.Count > 0) { result = "A facility event is already active or the director is disabled."; return false; }
-        if (!diagnostic && (!CanRun() || plan == null || plan.Completed))
+        if (!diagnostic && !CanRun())
         {
-            result = "Chaos requires an eligible active round and an unused round budget.";
+            result = "Chaos requires an active round with living players, a resumed director, and no warhead evacuation.";
             return false;
         }
         foreach (string effect in AnomalyPolicy.ChaosEffects)
@@ -120,7 +123,7 @@ internal sealed class EventDirector : IDisposable
             result = "Chaos bundle failed and was rolled back: " + detail;
             return false;
         }
-        if (!diagnostic) plan!.TryRecordStart(RoundElapsed, allowEarly: true);
+        scheduled?.TryRecordStart(RoundElapsed);
         Logger.Info($"[METHADRENALINE] Chaos bundle started: four simultaneous effects; subtitles=None; {Status}");
         result = "Started chaos bundle; " + Status;
         return true;
@@ -129,7 +132,11 @@ internal sealed class EventDirector : IDisposable
     private bool TryStartEffect(string name, bool diagnostic, bool fromChaos, out string result)
     {
         if (disposed) { result = "The director is disabled."; return false; }
-        if (!AnomalyPolicy.Names.Contains(name)) { result = "Events: " + string.Join(", ", AnomalyPolicy.Names); return false; }
+        if (!AnomalyPolicy.Names.Contains(name) && !(fromChaos && name == AnomalyPolicy.ChaosJump))
+        {
+            result = "Events: " + string.Join(", ", AnomalyPolicy.Names);
+            return false;
+        }
         if (!AnomalyPolicy.CanStart(name, active.Keys, AnomalyPolicy.ChaosEffects.Count))
         {
             result = "Event limit reached, duplicate event, or conflicting gravity event.";
@@ -149,10 +156,12 @@ internal sealed class EventDirector : IDisposable
             switch (name)
             {
                 case "gravity":
-                    UpdateGravity(run);
-                    break;
                 case "levitation":
                     UpdateGravity(run);
+                    break;
+                case AnomalyPolicy.ChaosJump:
+                    run.Scope.Add(RestoreJumpBoosts);
+                    UpdateJumpBoosts();
                     break;
                 case "blackout":
                     Blackout(run, rooms);
@@ -188,6 +197,7 @@ internal sealed class EventDirector : IDisposable
             try
             {
                 if (AnomalyPolicy.IsGravity(run.Name)) UpdateGravity(run);
+                else if (run.Name == AnomalyPolicy.ChaosJump) UpdateJumpBoosts();
                 else if (run.Name == "doors" && Time.realtimeSinceStartup >= run.NextPulse) PulseDoors(run);
                 else if (run.Name == "signals" && Time.realtimeSinceStartup >= run.NextPulse) PulseSignals(run);
             }
@@ -274,6 +284,32 @@ internal sealed class EventDirector : IDisposable
         if (active.TryGetValue("doors", out var run) && run.Doors.TryGetValue(door, out var state)) state.Touched = true;
     }
 
+    private void UpdateJumpBoosts()
+    {
+        foreach (var player in Alive)
+        {
+            if (player.RoleBase is not IFpcRole || player.GetEffect<Lightweight>() is not { } effect) continue;
+            if (jumpBoosts.TryGetValue(player, out var owned) && owned.Matches(player)) continue;
+            jumpBoosts.Remove(player);
+            if (effect.Intensity >= AnomalyPolicy.ChaosJumpIntensity) continue;
+            var previous = new JumpState(player.LifeId, effect, effect.Intensity, effect.Duration);
+            effect.Intensity = AnomalyPolicy.ChaosJumpIntensity;
+            if (previous.Matches(player)) jumpBoosts.Add(player, previous);
+        }
+    }
+
+    private void RestoreJumpBoost(Player player)
+    {
+        if (!jumpBoosts.TryGetValue(player, out var previous)) return;
+        jumpBoosts.Remove(player);
+        if (!player.IsDestroyed && previous.Matches(player)) previous.Effect.Intensity = previous.Intensity;
+    }
+
+    private void RestoreJumpBoosts()
+    {
+        foreach (var player in jumpBoosts.Keys.ToArray()) RestoreJumpBoost(player);
+    }
+
     private void UpdateGravity(ActiveEvent run)
     {
         bool levitation = run.Name == "levitation";
@@ -336,6 +372,7 @@ internal sealed class EventDirector : IDisposable
     {
         if (player == null) return;
         RestoreGravity(player);
+        RestoreJumpBoost(player);
         fallGrace.Remove(player);
     }
 
@@ -347,7 +384,11 @@ internal sealed class EventDirector : IDisposable
         run.Scope.Dispose();
         Logger.Info($"[METHADRENALINE] Event ended: {run.Name}; rollback complete; remaining={active.Count}.");
         if (run.FromChaos && !active.Values.Any(other => other.FromChaos))
+        {
+            foreach (var player in Alive)
+                if (player.RoleBase is IFpcRole) fallGrace[player] = new LandingProtection(player.LifeId);
             Logger.Info("[METHADRENALINE] Chaos bundle ended; all effects restored.");
+        }
     }
 
     public void Stop()
@@ -364,7 +405,7 @@ internal sealed class EventDirector : IDisposable
         var results = new List<string>();
         bool Restored(Dictionary<LightsController, bool> lights, Dictionary<Door, bool> doors)
             => lights.All(pair => !pair.Key.Base || pair.Key.LightsEnabled == pair.Value) &&
-               doors.All(pair => pair.Key.IsDestroyed || pair.Key.IsOpened == pair.Value) && active.Count == 0 && gravity.Count == 0;
+               doors.All(pair => pair.Key.IsDestroyed || pair.Key.IsOpened == pair.Value) && active.Count == 0 && gravity.Count == 0 && jumpBoosts.Count == 0;
         try
         {
             foreach (string name in AnomalyPolicy.Names)
@@ -384,7 +425,7 @@ internal sealed class EventDirector : IDisposable
             results.Add($"chaos bundle and cleanup: {(overlapping && Restored(lightsBefore, doorsBefore) ? "PASS" : "FAIL")}");
             results.Add($"signal subtitles: {(SignalPayload("attention").SubtitleSource == global::Cassie.CassieTtsPayload.SubtitleMode.None ? "PASS (None)" : "FAIL")}");
             results.Add(KeycardDoorDiagnostics());
-            results.Add("gravity and levitation movement/ceiling collision require an in-game client");
+            results.Add("gravity, levitation and boosted jump movement/ceiling collision require an in-game client");
             return string.Join("\n", results);
         }
         finally { Stop(); Pause(wasPaused); }
@@ -467,6 +508,14 @@ internal sealed class EventDirector : IDisposable
         public bool Original { get; }
         public bool? Applied { get; set; }
         public bool Touched { get; set; }
+    }
+
+    private sealed class JumpState(int life, Lightweight effect, byte intensity, float duration)
+    {
+        internal Lightweight Effect { get; } = effect;
+        internal byte Intensity { get; } = intensity;
+        internal bool Matches(Player player) => player.LifeId == life && Effect &&
+            Effect.Intensity == AnomalyPolicy.ChaosJumpIntensity && Effect.Duration == duration;
     }
 
     private sealed class GravityState

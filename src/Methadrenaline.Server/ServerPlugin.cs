@@ -3,6 +3,7 @@ using System.Linq;
 using CommandSystem;
 using HarmonyLib;
 using LabApi.Events.Arguments.PlayerEvents;
+using LabApi.Events.Arguments.Scp079Events;
 using LabApi.Events.Arguments.ServerEvents;
 using LabApi.Events.Handlers;
 using LabApi.Features.Console;
@@ -30,13 +31,14 @@ public sealed class ServerPlugin : Plugin<Config>
     internal BlackoutRound Blackout { get; } = new();
     internal WarheadAudio WarheadPlayback { get; } = new();
     internal SiteMapController? SiteMaps { get; private set; }
+    internal FortuneCoin Coin { get; } = new();
     internal EscortRound Escort { get; } = new();
     internal bool RestrictNavigationItems => IsParavozRound || Escort.Active || PerkRounds?.Policy.Mode == Methadrenaline.Server.Core.CommunityRoundMode.Escort;
     internal bool IsParavozRound => Paravoz?.Active == true || PerkRounds?.Policy.Mode == Methadrenaline.Server.Core.CommunityRoundMode.Paravoz;
     public override string Name => "METHADRENALINE";
     public override string Author => "Wechirok";
     public override string Description => "Private community gameplay and temporary facility anomalies.";
-    public override Version Version => new(1, 25, 5);
+    public override Version Version => new(1, 26, 0);
     public override LabApi.Loader.Features.Plugins.Enums.LoadPriority Priority => LabApi.Loader.Features.Plugins.Enums.LoadPriority.Lowest;
     public override Version RequiredApiVersion => new(1, 1, 7);
 
@@ -60,7 +62,8 @@ public sealed class ServerPlugin : Plugin<Config>
             Paravoz.Enable();
             Escort.Enable();
             SiteMaps.Enable();
-            Blackout.Audio.Load(Config.BlackoutEffectsDirectory);
+            Coin.Enable(Config);
+            Blackout.Audio.Load(Config.BlackoutPrivateAmbienceFile, Config.BlackoutEffectsDirectory);
             WarheadPlayback.Enable(Config.WarheadAudioDirectory);
             InventorySystem.Items.Pickups.ItemPickupBase.OnPickupAdded += Blackout.PickupAdded;
             if (Config.ModeVotingEnabled)
@@ -80,6 +83,9 @@ public sealed class ServerPlugin : Plugin<Config>
             PlayerEvents.Joined += Joined;
             PlayerEvents.Left += Left;
             PlayerEvents.Hurting += Hurting;
+            PlayerEvents.IdlingTesla += IdlingTesla;
+            PlayerEvents.TriggeringTesla += TriggeringTesla;
+            Scp079Events.UsingTesla += UsingTesla;
             PlayerEvents.InteractingDoor += InteractingDoor;
             PlayerEvents.UsingRadio += UsingRadio;
             PlayerEvents.ChangingRadioRange += ChangingRadioRange;
@@ -106,6 +112,9 @@ public sealed class ServerPlugin : Plugin<Config>
         PlayerEvents.Joined -= Joined;
         PlayerEvents.Left -= Left;
         PlayerEvents.Hurting -= Hurting;
+        PlayerEvents.IdlingTesla -= IdlingTesla;
+        PlayerEvents.TriggeringTesla -= TriggeringTesla;
+        Scp079Events.UsingTesla -= UsingTesla;
         PlayerEvents.InteractingDoor -= InteractingDoor;
         PlayerEvents.UsingRadio -= UsingRadio;
         PlayerEvents.ChangingRadioRange -= ChangingRadioRange;
@@ -117,6 +126,7 @@ public sealed class ServerPlugin : Plugin<Config>
         ModeVoting = null;
         SiteMaps?.Dispose();
         SiteMaps = null;
+        Coin.Dispose();
         Escort.Disable();
         Paravoz?.Dispose();
         Paravoz = null;
@@ -139,7 +149,8 @@ public sealed class ServerPlugin : Plugin<Config>
         if (mode == Methadrenaline.Server.Core.CommunityRoundMode.Paravoz) Paravoz!.BeginRound();
         if (mode == Methadrenaline.Server.Core.CommunityRoundMode.Blackout) Blackout.Begin();
         if (mode == Methadrenaline.Server.Core.CommunityRoundMode.Escort) Paravoz!.RemoveSurfacePasses();
-        SiteMaps!.BeginRound();
+        if (Coin.BeginRound(RestrictNavigationItems)) SiteMaps!.Reset();
+        else SiteMaps!.BeginRound();
         ConfigureRespawns();
     }
 
@@ -167,6 +178,7 @@ public sealed class ServerPlugin : Plugin<Config>
         Blackout.Reset(keepBlackoutAnnouncementsMuted);
         Paravoz?.Reset();
         SiteMaps?.Reset();
+        Coin.Reset();
     }
     private void UsingRadio(PlayerUsingRadioEventArgs ev) { ev.Drain = 0; }
     private void ChangingRadioRange(PlayerChangingRadioRangeEventArgs ev) { ev.IsAllowed = false; }
@@ -189,8 +201,28 @@ public sealed class ServerPlugin : Plugin<Config>
     }
     private void InteractingDoor(PlayerInteractingDoorEventArgs ev) => Director.DoorTouched(ev.Door);
 
+    private static void IdlingTesla(PlayerIdlingTeslaEventArgs ev)
+    {
+        if (BlackoutWarnings.Muted) ev.IsAllowed = false;
+    }
+
+    private static void TriggeringTesla(PlayerTriggeringTeslaEventArgs ev)
+    {
+        if (BlackoutWarnings.Muted) ev.IsAllowed = false;
+    }
+
+    private static void UsingTesla(Scp079UsingTeslaEventArgs ev)
+    {
+        if (BlackoutWarnings.Muted) ev.IsAllowed = false;
+    }
+
     private void Hurting(PlayerHurtingEventArgs ev)
     {
+        if (BlackoutWarnings.Muted && ev.DamageHandler is UniversalDamageHandler shock && shock.TranslationId == DeathTranslations.Tesla.Id)
+        {
+            ev.IsAllowed = false;
+            return;
+        }
         Paravoz?.Hurt(ev);
         if (ev.DamageHandler is UniversalDamageHandler damage && damage.TranslationId == DeathTranslations.Falldown.Id && Director.ProtectFromFall(ev.Player))
             ev.IsAllowed = false;
@@ -235,7 +267,7 @@ public sealed class CommunityCommand : ICommand
 {
     public string Command => "md";
     public string[] Aliases => Array.Empty<string>();
-    public string Description => "Facility events: status, event <name>, stop, pause, resume, diagnose, localization.";
+    public string Description => "Facility events: status, event <name>, map <player ID>, coin <player ID>, stop, pause, resume, diagnose, localization.";
 
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
@@ -248,6 +280,7 @@ public sealed class CommunityCommand : ICommand
             case "environmentcheck": response = ParavozEnvironmentDiagnostics.Run(plugin); return response == "Environment diagnostics started.";
             case "mapcheck": response = SiteMapOnlyDiagnostics.Run(plugin); return response == "Site map diagnostics started.";
             case "map":
+                if (plugin.Coin.Selected) { response = "Site-02 Maps are unavailable in a Fortune Coin round."; return false; }
                 if (arguments.Count != 2 || !int.TryParse(arguments.Array![arguments.Offset + 1], out int mapPlayerId))
                 { response = "Usage: md map <player ID>"; return false; }
                 var mapPlayer = Player.Get(mapPlayerId);
@@ -255,6 +288,14 @@ public sealed class CommunityCommand : ICommand
                 { response = "Player not found."; return false; }
                 response = plugin.SiteMaps?.GiveTo(mapPlayer) ?? "Site-02 Map is disabled.";
                 return response == "Site-02 Map equipped.";
+            case "coin":
+                if (arguments.Count != 2 || !int.TryParse(arguments.Array![arguments.Offset + 1], out int coinPlayerId))
+                { response = "Usage: md coin <player ID>"; return false; }
+                var coinPlayer = Player.Get(coinPlayerId);
+                if (coinPlayer == null || coinPlayer.IsHost || coinPlayer.IsNpc || coinPlayer.IsDummy)
+                { response = "Player not found."; return false; }
+                response = plugin.Coin.GiveTo(coinPlayer);
+                return response == FortuneCoin.Equipped;
             case "status":
                 bool patched = Harmony.GetPatchInfo(AccessTools.Method(typeof(PlayerRoles.RoleAssign.ScpSpawner), nameof(PlayerRoles.RoleAssign.ScpSpawner.SpawnScps)))?.Prefixes.Any(p => p.owner == "methadrenaline.server") == true;
                 response = $"{plugin.Director.Status}; role_patch={patched}; mtf_wait={RespawnWaves.PrimaryMtfWave?.TimeLeft:0}; chaos_wait={RespawnWaves.PrimaryChaosWave?.TimeLeft:0}; {plugin.PerkRounds?.Status}; {plugin.Bracelets?.Status}; {plugin.Paravoz?.Status}";

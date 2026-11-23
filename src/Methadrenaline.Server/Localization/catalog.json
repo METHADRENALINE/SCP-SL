@@ -4446,10 +4446,10 @@
     "ru": "Блэкаут"
   },
   {
-    "source": "Danger. SCP-079 has disabled main power.<split>It is now in charge.<split>Emergency power is available for this announcement only.<split>Turn on your light and proceed to the nearest exit.",
-    "en": "Danger. SCP-079 has disabled main power.<split>It is now in charge.<split>Emergency power is available for this announcement only.<split>Turn on your light and proceed to the nearest exit.",
-    "uk": "Небезпека. SCP-079 вимкнув основне живлення.<split>Тепер усім керує комп’ютер.<split>Резервного живлення вистачить лише на це оголошення.<split>Увімкніть ліхтарик і прямуйте до найближчого виходу.",
-    "ru": "Опасность. SCP-079 отключил основное питание.<split>Теперь тут командует компьютер.<split>Резервного питания хватит только на это объявление.<split>Включите фонарик и идите к ближайшему выходу."
+    "source": "Danger, SCP-079 has disabled main power.<split>Control of facility systems has been lost.<split>Emergency power is available only for this announcement and for door and elevator operation.<split>Use an external light source and proceed to the nearest exit.",
+    "en": "Danger, SCP-079 has disabled main power.<split>Control of facility systems has been lost.<split>Emergency power is available only for this announcement and for door and elevator operation.<split>Use an external light source and proceed to the nearest exit.",
+    "uk": "Небезпека, SCP-079 вимкнув основне живлення.<split>Контроль над системами комплексу втрачено.<split>Резервне живлення призначене лише для передачі цього повідомлення та роботи приводів дверей і ліфтів.<split>Скористайтеся автономним джерелом освітлення та прямуйте до найближчого виходу.",
+    "ru": "Опасность, SCP-079 отключил основное питание.<split>Контроль над системами комплекса утрачен.<split>Резервное питание выделено только на передачу этого сообщения и работу приводов дверей и лифтов.<split>Используйте автономный источник освещения и следуйте к ближайшему выходу."
   },
   {
     "source": "Paravoz",
@@ -4762,5 +4762,263 @@
     "en": "Elevator",
     "uk": "Ліфт",
     "ru": "Лифт"
+  },
+  {
+    "source": "Fortune Coin",
+    "en": "Fortune Coin",
+    "uk": "Монета Фортуни",
+    "ru": "Монета Фортуны"
+  },
+  {
+    "source": "Flip the coin for a way out.",
+    "en": "Flip the coin for a way out.",
+    "uk": "Підкинь монету, щоб дізнатися шлях до виходу.",
+    "ru": "Подбрось монету, чтобы узнать дорогу к выходу."
+  },
+  {
+    "source": "I can't place you inside the facility.",
+    "en": "I can't place you inside the facility.",
+    "uk": "Не бачу, де ти в комплексі.",
+    "ru": "Не вижу, где ты в комплексе."
+  },
+  {
+    "source": "m",
+    "en": "m",
+    "uk": "м",
+    "ru": "м"
+  },
+  {
+    "source": "Recent fighting",
+    "en": "Recent fighting",
+    "uk": "Щойно був бій",
+    "ru": "Недавно был бой"
+  },
+  {
+    "source": "Close together",
+    "en": "Close together",
+    "uk": "Стоять поруч",
+    "ru": "Стоят рядом"
+  },
+  {
+    "source": "Watch {0}; {1}.",
+    "en": "Watch {0}; {1}.",
+    "uk": "Обережно біля {0}. Там {1}.",
+    "ru": "Осторожно возле {0}. Там {1}."
+  },
+  {
+    "source": "Nobody else detected in this zone.",
+    "en": "Nobody else detected in this zone.",
+    "uk": "У цій зоні більше нікого не бачу.",
+    "ru": "В этой зоне больше никого не вижу."
+  },
+  {
+    "source": "Surface",
+    "en": "Surface",
+    "uk": "Поверхня",
+    "ru": "Поверхность"
+  },
+  {
+    "source": "Your role can't escape. I can still point you to the surface.",
+    "en": "Your role can't escape. I can still point you to the surface.",
+    "uk": "За твій клас втечу не зарахують. Але шлях на поверхню покажу.",
+    "ru": "За твой класс побег не засчитают. Но путь на поверхность покажу."
+  },
+  {
+    "source": "You're cuffed. Have your escort open the doors.",
+    "en": "You're cuffed. Have your escort open the doors.",
+    "uk": "Ти в кайданках. Хай конвоїр відчиняє двері.",
+    "ru": "Ты связан. Пусть конвоир открывает двери."
+  },
+  {
+    "source": "I can't find a way out from here.",
+    "en": "I can't find a way out from here.",
+    "uk": "Звідси я не бачу виходу.",
+    "ru": "Отсюда я не вижу выхода."
+  },
+  {
+    "source": "This is the evacuation point. Keep moving through it.",
+    "en": "This is the evacuation point. Keep moving through it.",
+    "uk": "Це точка евакуації. Пройди крізь неї.",
+    "ru": "Это точка эвакуации. Пройди через неё."
+  },
+  {
+    "source": "Head to the evacuation point. It's roughly {0} from here.",
+    "en": "Head to the evacuation point. It's roughly {0} from here.",
+    "uk": "Іди до точки евакуації. Вона приблизно {0}.",
+    "ru": "Иди к точке эвакуации. Она примерно {0}."
+  },
+  {
+    "source": "Take {0} toward the surface.",
+    "en": "Take {0} toward the surface.",
+    "uk": "Шлях на поверхню: {0}.",
+    "ru": "Путь на поверхность: {0}."
+  },
+  {
+    "source": "in this room, {0}",
+    "en": "in this room, {0}",
+    "uk": "у цій кімнаті, {0}",
+    "ru": "в этой комнате, {0}"
+  },
+  {
+    "source": "in {0}; first take {1}",
+    "en": "in {0}; first take {1}",
+    "uk": "тут: {0}. Спочатку йди сюди: {1}",
+    "ru": "здесь: {0}. Сначала иди сюда: {1}"
+  },
+  {
+    "source": "Pick up the keycard {0}. Then flip me again.",
+    "en": "Pick up the keycard {0}. Then flip me again.",
+    "uk": "Підбери картку {0}. Потім підкинь мене ще раз.",
+    "ru": "Подбери карточку {0}. Потом подбрось меня ещё раз."
+  },
+  {
+    "source": "Use SCP-914 to upgrade your keycard. Flip me again when it's ready.",
+    "en": "Use SCP-914 to upgrade your keycard. Flip me again when it's ready.",
+    "uk": "Покращ картку в SCP-914. Як буде готова, підкинь мене ще раз.",
+    "ru": "Улучши карточку в SCP-914. Как будет готова, подбрось меня ещё раз."
+  },
+  {
+    "source": "Upgrade your keycard at SCP-914. Start by taking {0}.",
+    "en": "Upgrade your keycard at SCP-914. Start by taking {0}.",
+    "uk": "Покращ картку в SCP-914. Почни звідси: {0}.",
+    "ru": "Улучши карточку в SCP-914. Начни отсюда: {0}."
+  },
+  {
+    "source": "Follow your escort toward the gates. Your cuffs won't open them.",
+    "en": "Follow your escort toward the gates. Your cuffs won't open them.",
+    "uk": "Іди за конвоїром до воріт. Кайданками їх не відчиниш.",
+    "ru": "Иди за конвоиром к воротам. Наручниками их не откроешь."
+  },
+  {
+    "source": "I can't find an open route or a reachable keycard that opens it. Look for a gate keycard.",
+    "en": "I can't find an open route or a reachable keycard that opens it. Look for a gate keycard.",
+    "uk": "Не бачу відкритого шляху чи доступної картки до воріт. Шукай картку з доступом до воріт.",
+    "ru": "Не вижу открытого пути или доступной карточки от ворот. Ищи карту с допуском к воротам."
+  },
+  {
+    "source": "the lift {0}",
+    "en": "the lift {0}",
+    "uk": "ліфт {0}",
+    "ru": "лифт {0}"
+  },
+  {
+    "source": "the door {0} into {1}",
+    "en": "the door {0} into {1}",
+    "uk": "двері {0}. За ними {1}",
+    "ru": "дверь {0}. За ней {1}"
+  },
+  {
+    "source": "behind you",
+    "en": "behind you",
+    "uk": "позаду",
+    "ru": "сзади"
+  },
+  {
+    "source": "on your right",
+    "en": "on your right",
+    "uk": "праворуч",
+    "ru": "справа"
+  },
+  {
+    "source": "on your left",
+    "en": "on your left",
+    "uk": "ліворуч",
+    "ru": "слева"
+  },
+  {
+    "source": "ahead of you",
+    "en": "ahead of you",
+    "uk": "попереду",
+    "ru": "впереди"
+  },
+  {
+    "source": "Let's get you out of here. I hate this place.",
+    "en": "Let's get you out of here. I hate this place.",
+    "uk": "Ходімо звідси. Терпіти не можу це місце.",
+    "ru": "Давай выбираться. Терпеть не могу это место."
+  },
+  {
+    "source": "Try to keep up. I've only got two sides.",
+    "en": "Try to keep up. I've only got two sides.",
+    "uk": "Не відставай. У мене й так лише два боки.",
+    "ru": "Не отставай. У меня и так всего две стороны."
+  },
+  {
+    "source": "Uh-oh. That one's on me.",
+    "en": "Uh-oh. That one's on me.",
+    "uk": "Ой. Це вже мій косяк.",
+    "ru": "Ой. Это уже мой косяк."
+  },
+  {
+    "source": "Directions are from where you landed, facing the same way.",
+    "en": "Directions are from where you landed, facing the same way.",
+    "uk": "Уяви циферблат від місця приземлення. Дванадцять там, куди ти дивився при появі.",
+    "ru": "Представь циферблат на месте приземления. Двенадцать там, куда ты смотрел при появлении."
+  },
+  {
+    "source": "Ha ha! Fine, go to {0} o'clock.",
+    "en": "Ha ha! Fine, go to {0} o'clock.",
+    "uk": "Ха-ха! Гаразд, тобі на позначку {0}.",
+    "ru": "Ха-ха! Ладно, тебе на отметку {0}."
+  },
+  {
+    "source": "Wait, wait! I was kidding. Go to {0} o'clock.",
+    "en": "Wait, wait! I was kidding. Go to {0} o'clock.",
+    "uk": "Стій, стій! Я пожартувала. Тобі на позначку {0}.",
+    "ru": "Стой, стой! Я пошутила. Тебе на отметку {0}."
+  },
+  {
+    "source": "Okay, for real this time. {0} o'clock. That's your way out.",
+    "en": "Okay, for real this time. {0} o'clock. That's your way out.",
+    "uk": "Гаразд, тепер серйозно. На позначку {0}. Там вихід.",
+    "ru": "Ладно, теперь серьёзно. На отметку {0}. Там выход."
+  },
+  {
+    "source": "Evacuation point",
+    "en": "Evacuation point",
+    "uk": "Точка евакуації",
+    "ru": "Точка эвакуации"
+  },
+  {
+    "source": "Near {0}",
+    "en": "Near {0}",
+    "uk": "Поблизу: {0}",
+    "ru": "Рядом: {0}"
+  },
+  {
+    "source": "{0} near {1}",
+    "en": "{0} near {1}",
+    "uk": "{0} і {1} поруч",
+    "ru": "{0} и {1} рядом"
+  },
+  {
+    "source": "Start with {0}. Then follow {1}.",
+    "en": "Start with {0}. Then follow {1}.",
+    "uk": "Спочатку сюди: {0}. Далі через {1}.",
+    "ru": "Сначала сюда: {0}. Дальше через {1}."
+  },
+  {
+    "source": "{0}. I see {1}.",
+    "en": "{0}. I see {1}.",
+    "uk": "{0}. Бачу {1}.",
+    "ru": "{0}. Вижу {1}."
+  },
+  {
+    "source": "the gate {0}, then the lift",
+    "en": "the gate {0}, then the lift",
+    "uk": "ворота {0}, далі ліфт",
+    "ru": "ворота {0}, дальше лифт"
+  },
+  {
+    "source": "the passage {0} into {1}",
+    "en": "the passage {0} into {1}",
+    "uk": "прохід {0}. Далі {1}",
+    "ru": "проход {0}. Дальше {1}"
+  },
+  {
+    "source": "Your keycard is good. The way out is blocked right now.",
+    "en": "Your keycard is good. The way out is blocked right now.",
+    "uk": "Картка підходить. Шлях до виходу зараз перекрито.",
+    "ru": "Карточка подходит. Путь к выходу сейчас перекрыт."
   }
 ]

@@ -15,7 +15,7 @@ public sealed class ModeVoteRequest
     [JsonPropertyName("mode")] public string Mode { get; set; } = "";
     [JsonIgnore]
     public bool Valid => Guid.TryParseExact(BootId, "D", out _) && Guid.TryParseExact(PollId, "D", out _)
-        && ModeVotePolicy.ValidUser(UserId) && ModeVotePolicy.TryMode(Mode, out _);
+        && ModeVotePolicy.ValidUser(UserId) && (ModeVotePolicy.TryMode(Mode, out _) || Mode is ModeVotePolicy.PerksOn or ModeVotePolicy.PerksOff);
 }
 
 public sealed class ModeVoteStatus
@@ -42,6 +42,7 @@ public sealed class ModeVotePoll
 {
     [JsonPropertyName("id")] public string? Id { get; set; }
     [JsonPropertyName("deadline")] public string? Deadline { get; set; }
+    [JsonPropertyName("kind")] public string Kind { get; set; } = "mode";
     [JsonPropertyName("open")] public bool Open { get; set; }
 }
 

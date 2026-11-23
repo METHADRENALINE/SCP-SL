@@ -22,4 +22,8 @@ door_pulse_interval: 1.5
 signal_pulse_interval: 5
 warhead_audio_directory: ''
 blackout_effects_directory: ''
+blackout_private_ambience_file: ''
+fortune_coin_voice_command: ''
+fortune_coin_voice_port: 18791
+fortune_coin_misfortune_file: ''
 paravoz_tracks_directory: ''

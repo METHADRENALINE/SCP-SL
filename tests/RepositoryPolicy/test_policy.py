@@ -35,6 +35,7 @@ class PublicationPolicyTests(unittest.TestCase):
                      'deployment/status.json', 'logs/round.txt', 'data/votes.json',
                      'backups/server.zip', 'src/Methadrenaline.Server/Audio/music.ogg',
                      'tools/WarheadAudio/start-90.ogg', 'tools/WarheadAudio/warhead-finale.wav',
+                     'tools/FortuneCoin/coin.wav', 'tools/FortuneCoin/voice.onnx',
                      'tools/WarheadAudio/music-cues.tsv', 'deployment/.env', 'configs/game/../players.json']:
             with self.subTest(name=name):
                 self.assertTrue(policy.problems(name, b'private runtime content'))
@@ -56,6 +57,8 @@ class PublicationPolicyTests(unittest.TestCase):
         for old, new in [('basic_asn_exempt_user_ids: []', 'basic_asn_exempt_user_ids: [someone]'),
                          ('mode_voting_enabled: false', 'mode_voting_enabled: true'),
                          ("mode_voting_token_file: ''", 'mode_voting_token_file: /private/token'),
+                         ("fortune_coin_voice_command: ''", 'fortune_coin_voice_command: /private/worker'),
+                         ("fortune_coin_misfortune_file: ''", 'fortune_coin_misfortune_file: /private/coin.ogg'),
                          ("warhead_audio_directory: ''", 'warhead_audio_directory: /private/audio')]:
             self.assertTrue(policy.problems(name, text.replace(old, new).encode()))
 

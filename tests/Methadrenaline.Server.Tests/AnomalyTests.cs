@@ -28,9 +28,9 @@ public sealed class AnomalyTests
     [Fact]
     public void MaximumChaosSupportsFourDistinctEffectsWithOneGravityOwner()
     {
-        Assert.True(AnomalyPolicy.CanStart("signals", new[] { "levitation", "blackout", "doors" }, 4));
-        Assert.False(AnomalyPolicy.CanStart("gravity", new[] { "levitation", "blackout", "doors" }, 4));
-        Assert.False(AnomalyPolicy.CanStart("doors", new[] { "levitation", "blackout", "doors" }, 4));
+        Assert.True(AnomalyPolicy.CanStart("signals", new[] { "jump", "blackout", "doors" }, 4));
+        Assert.False(AnomalyPolicy.CanStart("gravity", new[] { "jump", "blackout", "doors" }, 4));
+        Assert.False(AnomalyPolicy.CanStart("doors", new[] { "jump", "blackout", "doors" }, 4));
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public sealed class AnomalyTests
         Assert.Equal(20, AnomalyPolicy.Duration("levitation", 40));
         Assert.False(AnomalyPolicy.ProtectsFromFall("levitation"));
         Assert.True(AnomalyPolicy.ProtectsFromFall("gravity"));
-        Assert.True(AnomalyPolicy.ProtectsFromFall("levitation", fromChaos: true));
+        Assert.True(AnomalyPolicy.ProtectsFromFall("jump", fromChaos: true));
         Assert.Equal(20, AnomalyPolicy.Duration("levitation", 22));
         Assert.Equal(22, AnomalyPolicy.Duration("blackout", 22));
     }
@@ -102,7 +102,7 @@ public sealed class AnomalyTests
             Assert.True(AnomalyPolicy.CanStart(name, running, 4));
             running.Add(name);
         }
-        Assert.Equal(new[] { "levitation", "blackout", "doors", "signals" }, running);
+        Assert.Equal(new[] { "jump", "blackout", "doors", "signals" }, running);
         Assert.True(config.MinimumChaosGap > config.EventDuration);
         Assert.True(config.FirstChaosMaximumDelay >= config.FirstChaosMinimumDelay);
         Assert.True(config.MaximumAffectedDoors > 4);

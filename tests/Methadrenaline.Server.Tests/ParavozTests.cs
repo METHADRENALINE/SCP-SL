@@ -24,8 +24,9 @@ public sealed class ParavozTests
     public void ThreeModeChoiceIsMadeOnlyOnce(CommunityRoundMode mode)
     {
         var policy = new PerkRoundPolicy();
-        Assert.Equal(mode, policy.BeginMode(() => mode));
-        Assert.Equal(mode, policy.BeginMode(() => throw new Exception("Already selected")));
+        var expected = mode == CommunityRoundMode.Perks ? CommunityRoundMode.Plain : mode;
+        Assert.Equal(expected, policy.BeginMode(() => mode));
+        Assert.Equal(expected, policy.BeginMode(() => throw new Exception("Already selected")));
         Assert.Equal(mode == CommunityRoundMode.Perks, policy.HasPerks);
         if (mode == CommunityRoundMode.Paravoz) Assert.Equal("Паравоз!", policy.Message);
     }
