@@ -19,6 +19,26 @@ public sealed class PerkRoundTests
         Assert.Equal(1, flips);
     }
 
+    [Theory]
+    [InlineData(ServerLanguage.English, "Vanilla (almost)", "Блэкаут", " + perks")]
+    [InlineData(ServerLanguage.Ukrainian, "Ваніль (майже)", "Блэкаут", " + перки")]
+    [InlineData(ServerLanguage.Russian, "Ваниль (почти)", "Блэкаут", " + перки")]
+    public void LobbyAndRoundStartShowTheSelectedModifier(ServerLanguage language, string vanilla, string blackout, string suffix)
+    {
+        using var stream = typeof(PerkRoundTests).Assembly.GetManifestResourceStream("catalog.xml")!;
+        var catalog = LocalizationCatalog.Read(stream);
+        foreach (var (mode, name) in new[] { (CommunityRoundMode.Plain, vanilla), (CommunityRoundMode.Blackout, blackout) })
+        {
+            Assert.Equal(name, catalog.Translate(ModeVotePolicy.Label(mode), language));
+            var round = new PerkRoundPolicy();
+            round.BeginMode(() => mode, () => true);
+            Assert.Equal(name + suffix, catalog.Translate(ModeVotePolicy.Label(mode, true), language));
+            Assert.Equal(name + suffix, catalog.Translate(round.Message, language).Split('\n')[0]);
+        }
+        foreach (var mode in new[] { CommunityRoundMode.Paravoz, CommunityRoundMode.Escort })
+            Assert.Equal(ModeVotePolicy.Label(mode), ModeVotePolicy.Label(mode, true));
+    }
+
     [Fact]
     public void RestartAllowsAnIndependentNewChoice()
     {
@@ -36,7 +56,7 @@ public sealed class PerkRoundTests
     {
         var policy = new PerkRoundPolicy();
         policy.Begin(() => true);
-        Assert.Equal("Перки раскиданы по карте! Удачи выжить :)", policy.Message);
+        Assert.Equal("Vanilla (almost) + perks\nПерки раскиданы по карте! Удачи выжить :)", policy.Message);
         policy.Reset();
         policy.Begin(() => false);
         Assert.Equal("Можно пробовать выжить, ведь катка без перков!", policy.Message);

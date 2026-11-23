@@ -38,7 +38,7 @@ public sealed class ServerPlugin : Plugin<Config>
     public override string Name => "METHADRENALINE";
     public override string Author => "Wechirok";
     public override string Description => "Private community gameplay and temporary facility anomalies.";
-    public override Version Version => new(1, 26, 0);
+    public override Version Version => new(1, 26, 4);
     public override LabApi.Loader.Features.Plugins.Enums.LoadPriority Priority => LabApi.Loader.Features.Plugins.Enums.LoadPriority.Lowest;
     public override Version RequiredApiVersion => new(1, 1, 7);
 
@@ -149,9 +149,10 @@ public sealed class ServerPlugin : Plugin<Config>
         if (mode == Methadrenaline.Server.Core.CommunityRoundMode.Paravoz) Paravoz!.BeginRound();
         if (mode == Methadrenaline.Server.Core.CommunityRoundMode.Blackout) Blackout.Begin();
         if (mode == Methadrenaline.Server.Core.CommunityRoundMode.Escort) Paravoz!.RemoveSurfacePasses();
-        if (Coin.BeginRound(RestrictNavigationItems)) SiteMaps!.Reset();
-        else SiteMaps!.BeginRound();
         ConfigureRespawns();
+        var loot = SiteMaps!.PlanSpawns(!RestrictNavigationItems);
+        SiteMaps.BeginRound(loot.Maps);
+        Coin.BeginRound(loot.Coins);
     }
 
     private void WaveRespawned(WaveRespawnedEventArgs _) => Timing.CallDelayed(0.25f, () =>
@@ -280,7 +281,6 @@ public sealed class CommunityCommand : ICommand
             case "environmentcheck": response = ParavozEnvironmentDiagnostics.Run(plugin); return response == "Environment diagnostics started.";
             case "mapcheck": response = SiteMapOnlyDiagnostics.Run(plugin); return response == "Site map diagnostics started.";
             case "map":
-                if (plugin.Coin.Selected) { response = "Site-02 Maps are unavailable in a Fortune Coin round."; return false; }
                 if (arguments.Count != 2 || !int.TryParse(arguments.Array![arguments.Offset + 1], out int mapPlayerId))
                 { response = "Usage: md map <player ID>"; return false; }
                 var mapPlayer = Player.Get(mapPlayerId);

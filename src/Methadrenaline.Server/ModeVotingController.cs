@@ -108,7 +108,7 @@ internal sealed class ModeVotingController : IDisposable
             OnlineNames = players.Take(128).Select(p => ModeVoteNames.PlayerName(p.Nickname, p.DisplayName)).ToArray(),
             Phase = restarting ? "restarting" : players.Length == 0 ? "empty" : waiting ? policy.Open ? "voting" : "countdown" : ended ? "ended" : "round",
             Mode = selected.HasValue ? ModeVotePolicy.Id(selected.Value) : null,
-            ModeNameRu = selected.HasValue ? RussianName(selected.Value) + (perks ? " + перки" : "") : null,
+            ModeNameRu = selected.HasValue ? localization.Catalog.Translate(ModeVotePolicy.Label(selected.Value, perks), ServerLanguage.Russian) : null,
             AvailableModes = policy.Open && policy.VotingPerks ? PerkOptions : policy.Available.Select(m => new ModeVoteOption { Id = ModeVotePolicy.Id(m), NameRu = RussianName(m) }).ToArray(),
             Poll = new ModeVotePoll { Kind = policy.Open && policy.VotingPerks ? "perks" : "mode", Id = policy.PollId, Deadline = deadline, Open = policy.Open }
         });
@@ -153,7 +153,7 @@ internal sealed class ModeVotingController : IDisposable
         var language = localization.Language(player.ReferenceHub);
         string line = policy.Open
             ? string.Format(CultureInfo.InvariantCulture, localization.Catalog.Translate(ModeVotePolicy.VotingLabel, language), Math.Max(0, (int)Math.Ceiling(policy.Deadline - clock.Elapsed.TotalSeconds)))
-            : policy.Selected.HasValue ? localization.Catalog.Translate(ModeVotePolicy.Label(policy.Selected.Value), language) : "";
+            : policy.Selected.HasValue ? localization.Catalog.Translate(ModeVotePolicy.Label(policy.Selected.Value, policy.Perks == true), language) : "";
         return "<align=center><size=22>" + line + "</size></align>";
     }
 
