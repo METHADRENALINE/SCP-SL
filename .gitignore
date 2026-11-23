@@ -24,6 +24,8 @@
 !/tools/LocalizationCatalog/LocalizationCatalog.csproj
 !/tools/RepositoryPolicy/check.py
 !/tools/WarheadAudio/mix.py
+!/tools/FortuneCoin/voice.py
+!/tools/FortuneCoin/requirements.txt
 
 **/bin/**
 **/obj/**

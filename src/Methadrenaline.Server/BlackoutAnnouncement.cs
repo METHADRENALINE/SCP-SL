@@ -9,8 +9,14 @@ namespace Methadrenaline.Server;
 
 internal sealed class BlackoutAnnouncement : CassieAnnouncement
 {
-    internal const string Spoken = "DANGER . SCP 0 7 9 HAS DISABLED MAIN POWER . IT IS NOW IN CHARGE . EMERGENCY POWER IS AVAILABLE FOR THIS ANNOUNCEMENT ONLY . TURN ON YOUR LIGHT AND PROCEED TO THE NEAREST EXIT .";
-    internal const string Caption = "Danger. SCP-079 has disabled main power.<split>It is now in charge.<split>Emergency power is available for this announcement only.<split>Turn on your light and proceed to the nearest exit.";
+    internal const string Spoken = "$SLEEP_0.12 DANGER $SLEEP_0 SCP 0 7 9 HAS DISABLED MAIN POWER . " +
+        "CONTROL OF FACILITY SYSTEMS HAS BEEN LOST . " +
+        "EMERGENCY POWER IS AVAILABLE ONLY FOR THIS ANNOUNCEMENT AND FOR DOOR AND ELEVATOR OPERATION . " +
+        "USE AN EXTERNAL LIGHT SOURCE AND PROCEED TO THE NEAREST EXIT .";
+    internal const string Caption = "Danger, SCP-079 has disabled main power.<split>" +
+        "Control of facility systems has been lost.<split>" +
+        "Emergency power is available only for this announcement and for door and elevator operation.<split>" +
+        "Use an external light source and proceed to the nearest exit.";
     private readonly Action<float> finished;
     private readonly float intermission;
 

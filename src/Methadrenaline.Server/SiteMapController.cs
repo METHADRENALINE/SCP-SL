@@ -63,28 +63,38 @@ internal sealed class SiteMapController : IDisposable
             foreach (var layout in layouts.Values) layout.Prepare(Localizer.Current);
             sublevels.Prepare(rooms, Localizer.Current);
 
-            var locations = new Dictionary<RoomIdentifier, Vector3>();
-            foreach (var pose in SafeLocationFinder.GetLocations(null, null))
-            {
-                Vector3 forward = pose.rotation * Vector3.forward;
-                AddLocation(locations, pose.position + forward * 1.2f);
-                AddLocation(locations, pose.position - forward * 1.2f);
-            }
-            foreach (var room in rooms.Where(r => SpawnZones.Contains(r.Zone) && !locations.ContainsKey(r)))
-                AddLocation(locations, room.transform.position);
-            foreach (var zone in SpawnZones)
-            {
-                var selected = locations.Where(location => location.Key.Zone == zone)
-                    .OrderBy(_ => random.Next()).Take(MapsPerZone).ToArray();
-                foreach (var location in selected) Spawn(location.Value);
-                if (selected.Length != MapsPerZone)
-                    Logger.Warn($"[METHADRENALINE] Site-02 Map found {selected.Length} valid rooms in {zone}; expected {MapsPerZone}.");
-            }
+            foreach (var position in NavigationSpawnPositions(random)) Spawn(position);
         }
         catch (Exception error)
         {
             Reset();
             Logger.Error("[METHADRENALINE] Site-02 Map setup failed: " + error);
+        }
+    }
+
+    internal static IEnumerable<Vector3> NavigationSpawnPositions(System.Random random, bool preferWalkways = false)
+    {
+        var locations = new Dictionary<RoomIdentifier, Vector3>();
+        foreach (var pose in SafeLocationFinder.GetLocations(null, null))
+        {
+            Vector3 forward = pose.rotation * Vector3.forward;
+            AddLocation(locations, pose.position + forward * 1.2f);
+            AddLocation(locations, pose.position - forward * 1.2f);
+        }
+        foreach (var room in RoomIdentifier.AllRoomIdentifiers)
+            if (room && SpawnZones.Contains(room.Zone) && !locations.ContainsKey(room))
+                AddLocation(locations, room.transform.position);
+        foreach (var zone in SpawnZones)
+        {
+            var candidates = locations.Where(location => location.Key.Zone == zone).OrderBy(_ => random.Next()).ToArray();
+            var selected = (preferWalkways
+                    ? candidates.Where(location => location.Key.Shape is RoomShape.Straight or RoomShape.TShape or RoomShape.XShape)
+                        .Take(3).Concat(candidates).Distinct()
+                    : candidates)
+                .Take(MapsPerZone).ToArray();
+            if (selected.Length != MapsPerZone)
+                Logger.Warn($"[METHADRENALINE] Found {selected.Length} valid navigation item spawns in {zone}; expected {MapsPerZone}.");
+            foreach (var location in selected) yield return location.Value;
         }
     }
 

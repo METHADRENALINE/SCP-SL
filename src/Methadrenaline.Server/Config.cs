@@ -7,6 +7,10 @@ public sealed class Config
     public string WarheadAudioDirectory { get; set; } = "";
     public string ParavozTracksDirectory { get; set; } = "";
     public string BlackoutEffectsDirectory { get; set; } = "";
+    public string BlackoutPrivateAmbienceFile { get; set; } = "";
+    public string FortuneCoinVoiceCommand { get; set; } = "";
+    public int FortuneCoinVoicePort { get; set; } = 18791;
+    public string FortuneCoinMisfortuneFile { get; set; } = "";
     public bool ModeVotingEnabled { get; set; } = false;
     public string ModeVotingBindAddress { get; set; } = "127.0.0.1";
     public int ModeVotingPort { get; set; } = 8790;
@@ -32,6 +36,8 @@ public sealed class Config
 
     public void Validate()
     {
+        if (FortuneCoinVoicePort is < 1024 or > 65535)
+            throw new ArgumentOutOfRangeException(nameof(FortuneCoinVoicePort));
         if (ModeVotingEnabled && (ModeVotingPort < 1024 || ModeVotingPort > 65535 || !Voting.ModeVoteHttpService.PrivateAddress(ModeVotingBindAddress)))
             throw new ArgumentException("Mode voting requires a specific private IPv4 address and an unprivileged port.");
         SmallServerRespawnLimit = Finite(SmallServerRespawnLimit, 90, 60, 180);

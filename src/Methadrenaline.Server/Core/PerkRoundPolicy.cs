@@ -10,26 +10,36 @@ public sealed class PerkRoundPolicy
     public const string WithoutPerksMessage = "Можно пробовать выжить, ведь катка без перков!";
     public const string ParavozMessage = "Паравоз!";
     public CommunityRoundMode? Mode { get; private set; }
-    public bool? HasPerks => Mode.HasValue ? Mode == CommunityRoundMode.Perks : null;
+    public bool? HasPerks { get; private set; }
     public string Message => Mode switch
     {
         CommunityRoundMode.Escort => "Escort",
         CommunityRoundMode.Blackout => "Blackout",
         CommunityRoundMode.Paravoz => ParavozMessage,
-        CommunityRoundMode.Perks => WithPerksMessage,
+        _ when HasPerks == true => WithPerksMessage,
         _ => WithoutPerksMessage
     };
 
     public bool Begin(Func<bool> fairCoin)
     {
-        return BeginMode(() => fairCoin() ? CommunityRoundMode.Perks : CommunityRoundMode.Plain) == CommunityRoundMode.Perks;
+        BeginMode(() => CommunityRoundMode.Plain, fairCoin);
+        return HasPerks == true;
     }
 
-    public CommunityRoundMode BeginMode(Func<CommunityRoundMode> choose)
+    public CommunityRoundMode BeginMode(Func<CommunityRoundMode> choose, Func<bool>? perks = null)
     {
-        if (!Mode.HasValue) Mode = choose();
+        if (!Mode.HasValue)
+        {
+            var choice = choose();
+            Mode = choice == CommunityRoundMode.Perks ? CommunityRoundMode.Plain : choice;
+            HasPerks = choice == CommunityRoundMode.Perks || ModeVotePolicy.AllowsPerks(choice) && perks?.Invoke() == true;
+        }
         return Mode.Value;
     }
 
-    public void Reset() => Mode = null;
+    public void Reset()
+    {
+        Mode = null;
+        HasPerks = null;
+    }
 }

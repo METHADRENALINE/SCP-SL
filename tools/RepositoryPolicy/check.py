@@ -60,7 +60,7 @@ def allowed(path: str) -> bool:
         return True
     if path in {'.gitignore', '.github/workflows/verify.yml', 'LICENSE', 'README.md', 'tools/RepositoryPolicy/check.py',
                 'tools/LocalizationCatalog/Program.cs', 'tools/LocalizationCatalog/LocalizationCatalog.csproj',
-                'tools/WarheadAudio/mix.py',
+                'tools/WarheadAudio/mix.py', 'tools/FortuneCoin/voice.py', 'tools/FortuneCoin/requirements.txt',
                 'src/Methadrenaline.Server/Localization/catalog.json'}:
         return True
     if path in {'src/SecretAPI/LICENSE', 'src/ScpProximityChat/LICENSE',
@@ -135,7 +135,8 @@ def template_problems(path: str, text: str) -> list[str]:
         expected = {'basic_asn_exempt_user_ids': '[]', 'mode_voting_enabled': 'false',
                     'mode_voting_bind_address': '127.0.0.1', 'mode_voting_token_file': "''"}
         for key in ('warhead_audio_directory', 'paravoz_tracks_directory',
-                    'blackout_effects_directory', 'blackout_private_ambience_file'):
+                    'blackout_effects_directory', 'blackout_private_ambience_file',
+                    'fortune_coin_voice_command', 'fortune_coin_misfortune_file'):
             if re.search(r'^' + key + r':', text, re.M):
                 expected[key] = "''"
     elif path == 'configs/plugins/InventoryControl/config.yml':

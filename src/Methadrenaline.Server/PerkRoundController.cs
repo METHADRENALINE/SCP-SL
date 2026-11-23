@@ -51,12 +51,17 @@ internal sealed class PerkRoundController : IDisposable
     }
 
     private CommunityRoundMode? prepared;
+    private bool preparedPerks;
     internal CommunityRoundMode PrepareMode()
     {
         if (Policy.Mode is { } activeMode) return activeMode;
         if (prepared is { } pending) return pending;
         var count = EventDirector.Participants.Count();
-        var mode = ServerPlugin.Instance?.ModeVoting?.SelectedMode() ?? NextMode ?? ModeVotePolicy.RandomMode(count, random.Next);
+        var voting = ServerPlugin.Instance?.ModeVoting;
+        var mode = voting?.SelectedMode() ?? NextMode ?? ModeVotePolicy.RandomMode(count, random.Next);
+        preparedPerks = voting?.SelectedPerks ?? (mode == CommunityRoundMode.Perks ||
+            !NextMode.HasValue && ModeVotePolicy.AllowsPerks(mode) && random.Next(2) == 1);
+        if (mode == CommunityRoundMode.Perks) mode = CommunityRoundMode.Plain;
         NextMode = null;
         if (mode == CommunityRoundMode.Paravoz && count < 2 ||
             mode == CommunityRoundMode.Escort && EventDirector.Participants.Count(p => PlayerRoles.RoleAssign.RoleAssigner.CheckPlayer(p.ReferenceHub)) < ModeVotePolicy.EscortMinimum)
@@ -69,9 +74,8 @@ internal sealed class PerkRoundController : IDisposable
     {
         if (disposed || Policy.HasPerks.HasValue) return;
         Epoch++;
-        var mode = Policy.BeginMode(PrepareMode);
-        bool chosen = mode == CommunityRoundMode.Perks;
-        if (chosen) Resume(); else Suspend();
+        var mode = Policy.BeginMode(PrepareMode, () => preparedPerks);
+        if (Policy.HasPerks == true) Resume(); else Suspend();
         Logger.Info("[METHADRENALINE] Round mode=" + ModeVotePolicy.Label(mode) + "; discord_voting=" + (ServerPlugin.Instance?.ModeVoting != null) + "; " + Status);
     }
 

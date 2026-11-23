@@ -4,6 +4,7 @@ using System.IO;
 using LabApi.Features.Wrappers;
 using MapGeneration;
 using MEC;
+using Methadrenaline.Server.Core;
 using Logger = LabApi.Features.Console.Logger;
 
 namespace Methadrenaline.Server;
@@ -11,16 +12,19 @@ namespace Methadrenaline.Server;
 internal sealed class BlackoutAudio : IDisposable
 {
     private const int Rate = 48000;
+    private const int AmbienceSeconds = 60;
+    private const int FadeSamples = 3 * Rate;
     internal const float SpeakerWarmup = .15f;
     private readonly string prefix = "md-blackout-" + Guid.NewGuid().ToString("N") + "-";
     private readonly List<string> intrusions = new();
-    private AudioPlayer? outagePlayer, intrusionPlayer;
+    private AudioPlayer? outagePlayer, ambiencePlayer, intrusionPlayer;
     private int previousIntrusion = -1;
     internal bool HasIntrusions => intrusions.Count != 0;
     internal float OpeningSpeechSeconds { get; private set; }
 
-    internal void Load(string effectsDirectory)
+    internal void Load(string ambienceFile, string effectsDirectory)
     {
+        LoadAmbience(ambienceFile);
         if (string.IsNullOrWhiteSpace(effectsDirectory)) return;
         LoadClip(prefix + "power-trip", Path.Combine(effectsDirectory, "power-trip.ogg"));
         string openingSpeech = prefix + "079-speech";
@@ -32,6 +36,29 @@ internal sealed class BlackoutAudio : IDisposable
             string name = "079-" + i;
             if (LoadClip(prefix + name, Path.Combine(effectsDirectory, name + ".ogg")))
                 intrusions.Add(prefix + name);
+        }
+    }
+
+    private void LoadAmbience(string path)
+    {
+        string name = prefix + "lcz";
+        if (!LoadClip(name, path)) return;
+        try
+        {
+            var loop = ParavozPresentationPolicy.LoopSamples(AudioClipStorage.AudioClips[name].Samples);
+            var samples = new float[AmbienceSeconds * Rate];
+            for (int i = 0; i < samples.Length; i++)
+            {
+                float fadeIn = Math.Min(1f, i / (Rate * .25f));
+                float fadeOut = Math.Min(1f, (samples.Length - 1 - i) / (float)FadeSamples);
+                samples[i] = loop[i % loop.Length] * fadeIn * fadeOut;
+            }
+            AudioClipStorage.AudioClips[name] = new AudioClipData(name, Rate, 1, samples);
+        }
+        catch (ArgumentException e)
+        {
+            AudioClipStorage.DestroyClip(name);
+            Logger.Warn("Blackout ambience unavailable: " + e.Message);
         }
     }
 
@@ -56,7 +83,11 @@ internal sealed class BlackoutAudio : IDisposable
     }
 
     internal void PlayOutage()
-        => outagePlayer = PlayClip(prefix + "power-trip", .95f, InFacility);
+    {
+        outagePlayer = PlayClip(prefix + "power-trip", .95f, InFacility);
+        ambiencePlayer = PlayClip(prefix + "lcz", .72f,
+            hub => Player.Get(hub)?.IsAlive == true && hub.GetCurrentZone() == FacilityZone.LightContainment);
+    }
 
     internal void PlayOpeningSpeech()
         => intrusionPlayer = PlayClip(prefix + "079-speech", .88f, HumanInFacility);
@@ -107,8 +138,9 @@ internal sealed class BlackoutAudio : IDisposable
     internal void Stop()
     {
         if (outagePlayer != null) outagePlayer.Destroy();
+        if (ambiencePlayer != null) ambiencePlayer.Destroy();
         if (intrusionPlayer != null) intrusionPlayer.Destroy();
-        outagePlayer = intrusionPlayer = null;
+        outagePlayer = ambiencePlayer = intrusionPlayer = null;
         previousIntrusion = -1;
     }
 
@@ -117,7 +149,7 @@ internal sealed class BlackoutAudio : IDisposable
         Stop();
         foreach (var name in intrusions) AudioClipStorage.DestroyClip(name);
         intrusions.Clear();
-        foreach (var name in new[] { prefix + "power-trip", prefix + "079-speech" })
+        foreach (var name in new[] { prefix + "lcz", prefix + "power-trip", prefix + "079-speech" })
             if (AudioClipStorage.AudioClips.ContainsKey(name)) AudioClipStorage.DestroyClip(name);
     }
 }

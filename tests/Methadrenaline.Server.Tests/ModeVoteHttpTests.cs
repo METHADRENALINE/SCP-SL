@@ -32,13 +32,13 @@ public sealed class ModeVoteHttpTests
             Client = new HttpClient { BaseAddress = new Uri($"http://127.0.0.1:{port}"), Timeout = TimeSpan.FromSeconds(6) };
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
-        public Task<HttpResponseMessage> Vote(string? boot = null, string? poll = null, string mode = "perks") => Client.PostAsync("/vote", new ByteArrayContent(ModeVoteJson.Write(new ModeVoteRequest { BootId = boot ?? Boot, PollId = poll ?? Policy.PollId!, UserId = "123456789012345678", Mode = mode })) { Headers = { ContentType = new MediaTypeHeaderValue("application/json") } });
-        public async Task<string> VoteAndPump(string? boot = null, string? poll = null, string mode = "perks")
+        public Task<HttpResponseMessage> Vote(string? boot = null, string? poll = null, string mode = "plain") => Client.PostAsync("/vote", new ByteArrayContent(ModeVoteJson.Write(new ModeVoteRequest { BootId = boot ?? Boot, PollId = poll ?? Policy.PollId!, UserId = "123456789012345678", Mode = mode })) { Headers = { ContentType = new MediaTypeHeaderValue("application/json") } });
+        public async Task<string> VoteAndPump(string? boot = null, string? poll = null, string mode = "plain")
         {
             var responseTask = Vote(boot, poll, mode);
             for (int i = 0; i < 200 && !responseTask.IsCompleted; i++)
             {
-                Bridge.Drain(v => v.BootId == Boot ? Policy.Vote(v.PollId, v.UserId, ModeVotePolicy.TryMode(v.Mode, out var chosen) ? chosen : throw new Exception(), 101) : "closed");
+                Bridge.Drain(v => v.BootId == Boot ? Policy.Vote(v.PollId, v.UserId, v.Mode, 101) : "closed");
                 await Task.Delay(5);
             }
             using var response = await responseTask;
@@ -63,6 +63,20 @@ public sealed class ModeVoteHttpTests
         Assert.Equal("duplicate", await service.VoteAndPump(mode: "plain"));
         Assert.Equal("closed", await service.VoteAndPump(boot: Guid.NewGuid().ToString("D")));
         Assert.Equal("closed", await service.VoteAndPump(poll: Guid.NewGuid().ToString("D")));
+    }
+
+    [Fact]
+    public async Task OldDiscordButtonsCannotCastASecondStageVote()
+    {
+        using var service = new Service();
+        var first = service.Policy.PollId;
+        Assert.Equal("accepted", await service.VoteAndPump(mode: "blackout"));
+        service.Policy.Tick(2, true, 130, _ => 0);
+        Assert.Equal("closed", await service.VoteAndPump(poll: first, mode: "perks_on"));
+        Assert.Equal("accepted", await service.VoteAndPump(mode: "perks_on"));
+        Assert.Equal("duplicate", await service.VoteAndPump(mode: "perks_off"));
+        service.Policy.Tick(2, true, 160, _ => 0);
+        Assert.True(service.Policy.Perks);
     }
 
     [Theory]

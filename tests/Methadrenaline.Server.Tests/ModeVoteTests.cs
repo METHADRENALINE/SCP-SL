@@ -7,14 +7,99 @@ namespace Methadrenaline.Server.Tests;
 
 public sealed class ModeVoteTests
 {
+    [Theory]
+    [InlineData(CommunityRoundMode.Plain, true)]
+    [InlineData(CommunityRoundMode.Blackout, true)]
+    [InlineData(CommunityRoundMode.Blackout, false)]
+    public void EligibleModeOpensIndependentBallotAndRoundKeepsBothChoices(CommunityRoundMode mode, bool enabled)
+    {
+        var policy = Lobby(3);
+        string first = policy.PollId!;
+        Assert.DoesNotContain(CommunityRoundMode.Perks, policy.Available);
+        Assert.Equal("closed", policy.Vote(first, "1", ModeVotePolicy.PerksOn, 101));
+        Assert.Equal("accepted", policy.Vote(first, "1", mode, 102));
+        policy.Tick(3, true, 130, _ => 0);
+        string second = policy.PollId!;
+        Assert.NotEqual(first, second);
+        Assert.True(policy.Open && policy.VotingPerks);
+        Assert.Equal(160, policy.Deadline);
+        Assert.Equal("closed", policy.Vote(first, "1", ModeVotePolicy.PerksOn, 131));
+        Assert.Equal("closed", policy.Vote(second, "1", mode, 131));
+        Assert.Equal("accepted", policy.Vote(second, "1", enabled ? ModeVotePolicy.PerksOn : ModeVotePolicy.PerksOff, 131));
+        Assert.Equal("duplicate", policy.Vote(second, "1", ModeVotePolicy.PerksOff, 132));
+        policy.Tick(3, true, 160, _ => throw new Exception("Clear majority"));
+        Assert.False(policy.Open);
+        var round = new PerkRoundPolicy();
+        Assert.Equal(mode, round.BeginMode(() => policy.Finish(_ => throw new Exception()), () => policy.Perks == true));
+        Assert.Equal(enabled, round.HasPerks);
+    }
+
+    [Theory]
+    [InlineData(CommunityRoundMode.Escort)]
+    [InlineData(CommunityRoundMode.Paravoz)]
+    public void ForbiddenModesSkipSecondBallotAndCannotEnableArcade(CommunityRoundMode mode)
+    {
+        var policy = Lobby(3);
+        policy.Vote(policy.PollId, "1", mode, 101);
+        policy.Tick(3, true, 130, _ => 0);
+        Assert.False(policy.Open);
+        Assert.False(policy.Perks);
+        var round = new PerkRoundPolicy();
+        round.BeginMode(() => mode, () => true);
+        Assert.False(round.HasPerks);
+    }
+
+    [Theory]
+    [InlineData(false, 0)]
+    [InlineData(false, 1)]
+    [InlineData(true, 0)]
+    [InlineData(true, 1)]
+    public void TiedAndEmptyPerkVotesDrawOnce(bool tied, int draw)
+    {
+        var policy = Lobby();
+        policy.Vote(policy.PollId, "1", CommunityRoundMode.Plain, 101);
+        policy.Tick(2, true, 130, _ => 0);
+        if (tied)
+        {
+            policy.Vote(policy.PollId, "1", ModeVotePolicy.PerksOff, 131);
+            policy.Vote(policy.PollId, "2", ModeVotePolicy.PerksOn, 132);
+        }
+        int draws = 0;
+        policy.Tick(2, true, 160, n => { Assert.Equal(2, n); draws++; return draw; });
+        policy.Finish(_ => throw new Exception("Already decided"));
+        Assert.Equal(1, draws);
+        Assert.Equal(draw == 1, policy.Perks);
+    }
+
+    [Fact]
+    public void PerkBallotRestartsAfterPopulationDipAndCanBeFinishedEarly()
+    {
+        var policy = Lobby();
+        policy.Vote(policy.PollId, "1", CommunityRoundMode.Blackout, 101);
+        policy.Tick(2, true, 130, _ => 0);
+        var old = policy.PollId;
+        policy.Vote(old, "1", ModeVotePolicy.PerksOff, 131);
+        policy.Tick(1, true, 132, _ => 0);
+        Assert.False(policy.Open);
+        Assert.Equal(CommunityRoundMode.Blackout, policy.Selected);
+        policy.Tick(2, true, 150, _ => 0);
+        Assert.NotEqual(old, policy.PollId);
+        Assert.Equal(180, policy.Deadline);
+        Assert.Equal("accepted", policy.Vote(policy.PollId, "1", ModeVotePolicy.PerksOn, 151));
+        policy.ForceFinish(_ => throw new Exception());
+        policy.Tick(2, true, 152, _ => throw new Exception());
+        Assert.False(policy.Open);
+        Assert.True(policy.Perks);
+    }
+
     [Fact]
     public void AdminCanReplaceVotingResultThroughoutCountdownAndResetForNextRound()
     {
         var policy = Lobby();
         string poll = policy.PollId!;
-        policy.Vote(poll, "123", CommunityRoundMode.Perks, 101);
+        policy.Vote(poll, "123", CommunityRoundMode.Blackout, 101);
         policy.Tick(2, true, 130, _ => 0);
-        Assert.Equal(CommunityRoundMode.Perks, policy.Selected);
+        Assert.Equal(CommunityRoundMode.Blackout, policy.Selected);
         policy.Override(CommunityRoundMode.Paravoz);
         policy.Tick(2, true, 131, _ => throw new Exception("Admin selection must not reroll"));
         Assert.Equal("closed", policy.Vote(poll, "124", CommunityRoundMode.Plain, 131));
@@ -38,7 +123,8 @@ public sealed class ModeVoteTests
         policy.Tick(2, true, 101, _ => 0);
         Assert.False(policy.Open);
         Assert.Equal("closed", policy.Vote(poll, "123", CommunityRoundMode.Plain, 102));
-        Assert.Equal(CommunityRoundMode.Perks, policy.Finish(_ => throw new Exception("No reroll")));
+        Assert.Equal(CommunityRoundMode.Plain, policy.Finish(_ => throw new Exception("No reroll")));
+        Assert.True(policy.Perks);
     }
 
     [Fact]
@@ -76,7 +162,7 @@ public sealed class ModeVoteTests
         Assert.True(policy.Open);
         Assert.Equal(135, policy.Deadline);
         Assert.True(Guid.TryParseExact(policy.PollId, "D", out _));
-        Assert.Equal(new[] { CommunityRoundMode.Plain, CommunityRoundMode.Perks, CommunityRoundMode.Paravoz, CommunityRoundMode.Blackout }, policy.Available);
+        Assert.Equal(new[] { CommunityRoundMode.Plain, CommunityRoundMode.Paravoz, CommunityRoundMode.Blackout }, policy.Available);
     }
 
     [Theory]
@@ -112,10 +198,10 @@ public sealed class ModeVoteTests
     public void FirstVoteIsAuthoritativeEvenWhenUserChangesMode()
     {
         var policy = Lobby();
-        Assert.Equal("accepted", policy.Vote(policy.PollId, "123456789012345678", CommunityRoundMode.Perks, 101));
+        Assert.Equal("accepted", policy.Vote(policy.PollId, "123456789012345678", CommunityRoundMode.Blackout, 101));
         Assert.Equal("duplicate", policy.Vote(policy.PollId, "123456789012345678", CommunityRoundMode.Plain, 102));
         policy.Tick(2, true, 130, _ => 0);
-        Assert.Equal(CommunityRoundMode.Perks, policy.Selected);
+        Assert.Equal(CommunityRoundMode.Blackout, policy.Selected);
         Assert.Equal("closed", policy.Vote(policy.PollId, "223456789012345678", CommunityRoundMode.Plain, 130));
     }
 
@@ -129,7 +215,7 @@ public sealed class ModeVoteTests
         Assert.Equal(id, policy.PollId);
         Assert.Equal(130, policy.Deadline);
         Assert.False(policy.Open);
-        Assert.Equal(CommunityRoundMode.Perks, policy.Selected);
+        Assert.Equal(CommunityRoundMode.Paravoz, policy.Selected);
         policy.Reset();
         policy.Tick(2, true, 700, _ => 0);
         Assert.NotEqual(id, policy.PollId);
@@ -143,15 +229,15 @@ public sealed class ModeVoteTests
     {
         var policy = Lobby();
         string id = policy.PollId!;
-        policy.Vote(id, "123", CommunityRoundMode.Perks, 101);
+        policy.Vote(id, "123", CommunityRoundMode.Blackout, 101);
         policy.Tick(remaining, true, 102, _ => 0);
         Assert.Null(policy.PollId);
         Assert.Null(policy.Selected);
         Assert.False(policy.Open);
-        Assert.Equal("closed", policy.Vote(id, "123", CommunityRoundMode.Perks, 103));
+        Assert.Equal("closed", policy.Vote(id, "123", CommunityRoundMode.Blackout, 103));
         policy.Tick(2, true, 104, _ => 0);
         Assert.NotEqual(id, policy.PollId);
-        Assert.Equal("closed", policy.Vote(id, "123", CommunityRoundMode.Perks, 105));
+        Assert.Equal("closed", policy.Vote(id, "123", CommunityRoundMode.Blackout, 105));
         Assert.Equal("accepted", policy.Vote(policy.PollId, "123", CommunityRoundMode.Plain, 105));
         Assert.Equal(134, policy.Deadline);
         policy.Tick(2, true, 134, _ => 0);
@@ -171,23 +257,22 @@ public sealed class ModeVoteTests
 
     [Theory]
     [InlineData(0, CommunityRoundMode.Plain)]
-    [InlineData(1, CommunityRoundMode.Perks)]
-    [InlineData(2, CommunityRoundMode.Paravoz)]
-    [InlineData(3, CommunityRoundMode.Blackout)]
+    [InlineData(1, CommunityRoundMode.Paravoz)]
+    [InlineData(2, CommunityRoundMode.Blackout)]
     public void NoVotesDrawsFromAllAvailableModes(int index, CommunityRoundMode expected)
     {
         var policy = Lobby();
-        policy.Tick(2, true, 130, count => { Assert.Equal(4, count); return index; });
+        policy.Tick(2, true, 130, count => { Assert.Equal(3, count); return index; });
         Assert.Equal(expected, policy.Selected);
     }
 
     [Theory]
-    [InlineData(0, CommunityRoundMode.Perks)]
-    [InlineData(1, CommunityRoundMode.Paravoz)]
+    [InlineData(0, CommunityRoundMode.Paravoz)]
+    [InlineData(1, CommunityRoundMode.Blackout)]
     public void TieRandomizesOnlyTheWinners(int index, CommunityRoundMode expected)
     {
         var policy = Lobby();
-        policy.Vote(policy.PollId, "1", CommunityRoundMode.Perks, 101);
+        policy.Vote(policy.PollId, "1", CommunityRoundMode.Blackout, 101);
         policy.Vote(policy.PollId, "2", CommunityRoundMode.Paravoz, 101);
         policy.Tick(2, true, 130, count => { Assert.Equal(2, count); return index; });
         Assert.Equal(expected, policy.Selected);
@@ -200,7 +285,7 @@ public sealed class ModeVoteTests
         policy.Vote(policy.PollId, "1", CommunityRoundMode.Paravoz, 101);
         policy.Tick(1, true, 102, _ => 0);
         Assert.Equal("closed", policy.Vote(policy.PollId, "2", CommunityRoundMode.Paravoz, 103));
-        Assert.Equal("closed", policy.Vote(policy.PollId, "2", CommunityRoundMode.Perks, 103));
+        Assert.Equal("closed", policy.Vote(policy.PollId, "2", CommunityRoundMode.Blackout, 103));
         Assert.Equal("closed", policy.Vote(policy.PollId, "2", CommunityRoundMode.Plain, 103));
         Assert.Empty(policy.Available);
         Assert.Null(policy.Selected);
@@ -220,22 +305,45 @@ public sealed class ModeVoteTests
         policy.Tick(2, true, 140, _ => 0);
         Assert.True(policy.Open);
         Assert.Equal(170, policy.Deadline);
-        Assert.Equal("accepted", policy.Vote(policy.PollId, "1", CommunityRoundMode.Perks, 141));
+        Assert.Equal("accepted", policy.Vote(policy.PollId, "1", CommunityRoundMode.Blackout, 141));
         policy.Tick(2, true, 170, _ => 0);
-        Assert.Equal(CommunityRoundMode.Perks, policy.Finish(_ => throw new Exception("Round must not reroll.")));
+        policy.Tick(2, true, 200, _ => 0);
+        Assert.Equal(CommunityRoundMode.Blackout, policy.Finish(_ => throw new Exception("Round must not reroll.")));
         var perks = new PerkRoundPolicy();
-        Assert.Equal(CommunityRoundMode.Perks, perks.BeginMode(() => policy.Selected!.Value));
-        Assert.Equal(CommunityRoundMode.Perks, perks.BeginMode(() => CommunityRoundMode.Plain));
+        Assert.Equal(CommunityRoundMode.Blackout, perks.BeginMode(() => policy.Selected!.Value));
+        Assert.Equal(CommunityRoundMode.Blackout, perks.BeginMode(() => CommunityRoundMode.Plain));
+    }
+
+    [Theory]
+    [InlineData(CommunityRoundMode.Plain)]
+    [InlineData(CommunityRoundMode.Blackout)]
+    public void EligibleWinnerStaysSelectedWithOnePlayer(CommunityRoundMode mode)
+    {
+        var policy = Lobby();
+        string poll = policy.PollId!;
+        Assert.Equal("accepted", policy.Vote(poll, "1", mode, 101));
+        policy.Tick(2, true, 130, _ => 0);
+        policy.Tick(2, true, 160, _ => 0);
+        poll = policy.PollId!;
+        policy.Tick(1, true, 161, _ => throw new Exception("No reroll."));
+        Assert.Equal(mode, policy.Selected);
+        Assert.False(policy.Open);
+        Assert.Empty(policy.Available);
+
+        policy.Tick(2, true, 170, _ => throw new Exception("No reroll."));
+        Assert.Equal(poll, policy.PollId);
+        Assert.Equal(mode, policy.Selected);
+        Assert.False(policy.Open);
     }
 
     [Fact]
     public void VotesAtTheDeadlineAreRejectedEvenBeforeTheNextTick()
     {
         var policy = Lobby();
-        Assert.Equal("closed", policy.Vote(policy.PollId, "1", CommunityRoundMode.Perks, 130));
-        Assert.Equal("closed", policy.Vote(Guid.NewGuid().ToString("D"), "1", CommunityRoundMode.Perks, 101));
+        Assert.Equal("closed", policy.Vote(policy.PollId, "1", CommunityRoundMode.Blackout, 130));
+        Assert.Equal("closed", policy.Vote(Guid.NewGuid().ToString("D"), "1", CommunityRoundMode.Blackout, 101));
         policy.Tick(2, false, 110, _ => 0);
-        Assert.Equal("closed", policy.Vote(policy.PollId, "1", CommunityRoundMode.Perks, 111));
+        Assert.Equal("closed", policy.Vote(policy.PollId, "1", CommunityRoundMode.Blackout, 111));
     }
 
     [Theory]
@@ -318,9 +426,9 @@ public sealed class ModeVoteTests
         using var bridge = new ModeVoteBridge();
         var policy = Lobby();
         bridge.Publish(new ModeVoteStatus());
-        var votes = Enumerable.Range(0, 64).AsParallel().Select(_ => bridge.Enqueue(new ModeVoteRequest { PollId = policy.PollId!, UserId = "123", Mode = "perks" })!).ToArray();
+        var votes = Enumerable.Range(0, 64).AsParallel().Select(_ => bridge.Enqueue(new ModeVoteRequest { PollId = policy.PollId!, UserId = "123", Mode = "blackout" })!).ToArray();
         Assert.Null(bridge.Enqueue(new ModeVoteRequest()));
-        bridge.Drain(v => policy.Vote(v.PollId, v.UserId, CommunityRoundMode.Perks, 101));
+        bridge.Drain(v => policy.Vote(v.PollId, v.UserId, CommunityRoundMode.Blackout, 101));
         var results = await Task.WhenAll(votes.Select(v => v.Completion));
         Assert.Equal(1, results.Count(r => r == "accepted"));
         Assert.Equal(63, results.Count(r => r == "duplicate"));

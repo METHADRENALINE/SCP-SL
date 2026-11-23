@@ -30,7 +30,7 @@ internal sealed class WarheadAudio : IDisposable
     private double cutoff;
     private double lightsOffset;
     private bool nativeFinale;
-    private bool cancelled;
+    private bool oneShot;
     private bool enabled;
 
     internal bool OverridesCountdown(AlphaWarheadController warhead) => ReferenceEquals(controller, warhead);
@@ -62,7 +62,6 @@ internal sealed class WarheadAudio : IDisposable
         {
             musicCues.Clear();
             Logger.Warn("[METHADRENALINE] Cannot load warhead music cues: " + e.Message);
-            return;
         }
         enabled = true;
         WarheadEvents.Started += Started;
@@ -90,8 +89,8 @@ internal sealed class WarheadAudio : IDisposable
                 _ => throw new InvalidOperationException("Unknown warhead scenario.")
             };
             string variant = prefix + "-" + scenario.TimeToDetonate.ToString(CultureInfo.InvariantCulture);
-            CreateTrack(variant, scenario.TotalTime + MusicTail);
             lightsOffset = musicCues[variant];
+            CreateTrack(variant, scenario.TotalTime + MusicTail);
             var state = warhead.Info;
             state.StartTime = warmUntil;
             warhead.NetworkInfo = state;
@@ -112,22 +111,33 @@ internal sealed class WarheadAudio : IDisposable
         if (controller == null) return;
         bool playCancellation = !BlackoutWarnings.Muted && controller.Info.ScenarioType != WarheadScenarioType.DeadmanSwitch;
         Reset();
-        if (!playCancellation) return;
+        if (playCancellation) PlayOneShot("cancel");
+    }
+
+    private void PlayOneShot(string variant)
+    {
         try
         {
-            CreateTrack("cancel", null);
-            cancelled = true;
+            CreateTrack(variant, null);
+            oneShot = true;
             cutoff = warmUntil + trackLength;
         }
         catch (Exception error)
         {
             ClearTrack();
-            Logger.Warn("[METHADRENALINE] Warhead cancellation audio unavailable: " + error.Message);
+            Logger.Warn($"[METHADRENALINE] Warhead {variant} audio unavailable: {error.Message}");
         }
     }
 
     private void Detonated(WarheadDetonatedEventArgs _)
     {
+        if (BlackoutWarnings.Muted)
+        {
+            if (oneShot) return;
+            Reset();
+            PlayOneShot("blast");
+            return;
+        }
         if (controller == null) return;
         RevealFinale();
         SetEmergencyLights(true);
@@ -177,7 +187,7 @@ internal sealed class WarheadAudio : IDisposable
 
         double playAt;
         bool retimed = false;
-        if (cancelled) playAt = warmUntil;
+        if (oneShot) playAt = warmUntil;
         else
         {
             if (controller == null) { Reset(); return; }
@@ -233,7 +243,7 @@ internal sealed class WarheadAudio : IDisposable
         SetEmergencyLights(false);
         if (old != null) old.SetSyncVarDirtyBit(1UL);
         ClearTrack();
-        nativeFinale = cancelled = false;
+        nativeFinale = oneShot = false;
         cutoff = fadeUntil = 0;
     }
 

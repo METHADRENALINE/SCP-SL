@@ -121,6 +121,12 @@ internal static class GameplayDiagnostics
                     Check("chaos_has_schedule_in_" + mode, !plugin.Director.Status.Contains("next_chaos_in=none"));
                 }
                 bool eventWasActive = plugin.Director.TryStart("blackout", true, out _);
+                plugin.Director.BeginRound(CommunityRoundMode.Escort);
+                Check("escort_chaos_has_no_schedule_and_restores_active_events", eventWasActive && plugin.Director.Status.StartsWith("event=none;") &&
+                    plugin.Director.Status.Contains("next_chaos_in=none"));
+                Check("escort_rejects_manual_facility_events", AnomalyPolicy.Names.Concat(new[] { "chaos" })
+                    .All(name => !plugin.Director.TryStart(name, false, out string result) && result == "Facility events are disabled in Escort rounds."));
+                eventWasActive = plugin.Director.TryStart("blackout", true, out _);
                 plugin.Director.BeginRound(CommunityRoundMode.Paravoz);
                 Check("paravoz_chaos_has_no_schedule_and_restores_active_events", eventWasActive &&
                     plugin.Director.Status.StartsWith("event=none;") && plugin.Director.Status.Contains("next_chaos_in=none"));
