@@ -157,7 +157,11 @@ public sealed class ModeVotePolicy
     }
 
     public static string Id(CommunityRoundMode mode) => mode.ToString().ToLowerInvariant();
-    public static string Label(CommunityRoundMode mode) => mode == CommunityRoundMode.Plain ? "Vanilla (almost)" : mode.ToString();
+    public static string Label(CommunityRoundMode mode, bool withPerks = false)
+    {
+        string name = mode == CommunityRoundMode.Plain ? "Vanilla (almost)" : mode.ToString();
+        return withPerks && AllowsPerks(mode) ? name + " + perks" : name;
+    }
     public static bool TryMode(string? value, out CommunityRoundMode mode)
     {
         mode = CommunityRoundMode.Plain;

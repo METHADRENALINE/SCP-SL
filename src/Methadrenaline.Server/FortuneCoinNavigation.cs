@@ -8,6 +8,7 @@ using InventorySystem;
 using LabApi.Features.Enums;
 using LabApi.Features.Wrappers;
 using MapGeneration;
+using Methadrenaline.Server.Core;
 using PlayerRoles;
 using UnityEngine;
 using NativeKeycard = InventorySystem.Items.Keycards.KeycardItem;
@@ -179,7 +180,7 @@ internal sealed class FortuneCoinNavigation
         if (room >= 0) fights[room] = Time.unscaledTime + 9f;
     }
 
-    internal Guidance NextStep(Player viewer, Room currentRoom, bool includeSituation)
+    internal Guidance NextStep(Player viewer, Room currentRoom, bool includeSituation, Pickup? preferred = null)
     {
         int start = Index(currentRoom, viewer.Position);
         if (start < 0) return new Guidance("Я потеряла тебя. Вернись в комплекс.");
@@ -202,7 +203,7 @@ internal sealed class FortuneCoinNavigation
             for (int i = 0; i < rooms.Length; i++)
                 if (rooms[i].Name == MapGeneration.RoomName.HczTesla) danger[i] += 18;
 
-        var plan = Plan(viewer, start, danger, scps);
+        var plan = Plan(viewer, start, danger, scps, preferred);
         if (plan.Warning != null) return new Guidance(plan.Warning + " " + plan.Step, plan.Target);
         if (!includeSituation) return new Guidance(plan.Step, plan.Target);
         var threat = scps.Where(scp => rooms[scp.Room].Zone == currentRoom.Zone)
@@ -216,7 +217,7 @@ internal sealed class FortuneCoinNavigation
     }
 
     private (string Step, Pickup? Target, string? Warning) Plan(Player viewer, int start, float[] danger,
-        List<(int Room, Vector3 Position, string Role)> scps)
+        List<(int Room, Vector3 Position, string Role)> scps, Pickup? preferred)
     {
         if (surface < 0 || AlphaWarheadController.Detonated && start != surface)
             return ("Здесь выхода уже нет.", null, null);
@@ -241,7 +242,7 @@ internal sealed class FortuneCoinNavigation
         if (!viewer.IsDisarmed)
         {
             var loot = ReadLoot();
-            var selected = ChooseLoot(viewer, current, access, danger, scps, loot);
+            var selected = ChooseLoot(viewer, current, access, danger, scps, loot, preferred);
             if (selected != null)
             {
                 var card = selected.First;
@@ -275,7 +276,7 @@ internal sealed class FortuneCoinNavigation
     }
 
     private Goal? ChooseLoot(Player viewer, Search current, Access held, float[] danger,
-        List<(int Room, Vector3 Position, string Role)> scps, List<Card> loot)
+        List<(int Room, Vector3 Position, string Role)> scps, List<Card> loot, Pickup? preferred)
     {
         Goal? best = null, fallback = null;
         float bestCost = float.PositiveInfinity, bestProgress = 0;
@@ -290,7 +291,10 @@ internal sealed class FortuneCoinNavigation
                         (permissions & card.Permissions) == card.Permissions)))
                 .Select(card => (Card: card, State: path.Best(card.Room), Risk: LootThreat(card, scps) == null ? 0 : 140))
                 .Where(entry => !float.IsPositiveInfinity(path.Costs[entry.State]))
-                .OrderBy(entry => path.Costs[entry.State] + entry.Risk);
+                .Select(entry => (entry.Card, entry.State, Cost: FortuneCoinPolicy.LootCost(
+                    path.Costs[entry.State] + Vector3.Distance(path.Arrival[entry.State], entry.Card.Position),
+                    entry.Risk, previous == null && entry.Card.Pickup == preferred)))
+                .OrderBy(entry => entry.Cost).ThenBy(entry => entry.Card.Pickup.Serial);
             int expanded = 0;
             foreach (var entry in candidates)
             {
@@ -308,7 +312,7 @@ internal sealed class FortuneCoinNavigation
                 expanded++;
                 searches++;
                 var remaining = Find(card.Room, card.Position, viewer, after, danger);
-                float cost = (previous?.Cost ?? 0) + path.Costs[entry.State] + entry.Risk + 6;
+                float cost = (previous?.Cost ?? 0) + entry.Cost + 6;
                 var candidate = new Goal(previous?.First ?? card, previous == null ? path.First[entry.State] : previous.FirstStep,
                     after, remaining, cost, card);
                 float finish = cost + remaining.Costs[remaining.Best(surface)];

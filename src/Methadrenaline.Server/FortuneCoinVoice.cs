@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -8,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using LabApi.Features.Wrappers;
+using Methadrenaline.Server.Core;
 using UnityEngine;
 using Logger = LabApi.Features.Console.Logger;
 
@@ -108,35 +108,45 @@ internal sealed class FortuneCoinVoice : IDisposable
         MisfortuneClip = null;
     }
 
-    internal sealed class Listener : IDisposable
+    internal sealed class SpeechPlayer(Player source) : IDisposable
     {
         internal const float Warmup = .25f;
-        internal const float AudibleRange = 10000f;
-        internal const float MisfortuneRange = 40f;
-        private readonly Player recipient;
+        private SpeakerToy? speaker;
         private readonly string name = "md-coin-" + Guid.NewGuid().ToString("N");
         private AudioPlayer? audio;
         private float readyAt;
         private bool ownsClip;
 
-        internal Listener(Player recipient) => this.recipient = recipient;
         internal float ReadyIn => UnityEngine.Mathf.Max(0, readyAt - UnityEngine.Time.unscaledTime);
 
         internal bool Prepare()
         {
             if (audio != null) return true;
             audio = AudioPlayer.Create(name, destroyWhenAllClipsPlayed: false, sendSoundGlobally: false,
-                owners: new List<ReferenceHub> { recipient.ReferenceHub });
+                condition: CanHear);
             if (audio == null) return false;
-            var speaker = audio.AddSpeaker("coin", recipient.Position, volume: 1f, isSpatial: false, maxDistance: AudibleRange);
-            if (speaker != null)
-            {
-                readyAt = UnityEngine.Time.unscaledTime + Warmup;
-                return true;
-            }
-            Dispose();
-            return false;
+            speaker = SpeakerToy.Create(Vector3.zero, source.ReferenceHub.transform, networkSpawn: false);
+            speaker.ControllerId = audio.ControllerID;
+            speaker.Volume = 1f;
+            speaker.IsSpatial = true;
+            speaker.MinDistance = 5f;
+            speaker.MaxDistance = FortuneCoinPolicy.VoiceRange;
+            speaker.Position = Vector3.zero;
+            speaker.Base.NetworkPosition = Vector3.zero;
+            speaker.Spawn();
+            readyAt = Time.unscaledTime + Warmup;
+            return true;
         }
+
+        private bool CanHear(ReferenceHub hub)
+        {
+            if (source.IsDestroyed || hub == null) return false;
+            if (hub == source.ReferenceHub) return true;
+            return Player.Get(hub) is { IsAlive: true } listener &&
+                FortuneCoinPolicy.InEarshot((listener.Position - source.Position).sqrMagnitude);
+        }
+
+        internal void PlayCue(string clip) => audio?.AddClip(clip, loop: false);
 
         internal float Play(float[] samples)
         {
@@ -147,8 +157,6 @@ internal sealed class FortuneCoinVoice : IDisposable
             audio.AddClip(name, loop: false);
             return (float)samples.Length / SampleRate;
         }
-
-        internal void Stop() => Clear();
 
         private void Clear()
         {
@@ -161,57 +169,13 @@ internal sealed class FortuneCoinVoice : IDisposable
         public void Dispose()
         {
             Clear();
+            if (speaker is { IsDestroyed: false }) speaker.Destroy();
+            speaker = null;
             if (audio == null) return;
             audio.Condition = null;
             audio.Owners.Clear();
             audio.Destroy();
             audio = null;
-        }
-    }
-
-    internal sealed class MisfortuneEmitter : IDisposable
-    {
-        private readonly AudioPlayer playback;
-        private readonly Speaker speaker;
-        private readonly Player source;
-
-        private MisfortuneEmitter(AudioPlayer playback, Speaker speaker, Player source)
-        {
-            this.playback = playback;
-            this.speaker = speaker;
-            this.source = source;
-            speaker.Base.NetworkIsStatic = false;
-        }
-
-        internal static MisfortuneEmitter? Create(Player source)
-        {
-            var audio = AudioPlayer.Create("md-coin-curse-" + Guid.NewGuid().ToString("N"),
-                destroyWhenAllClipsPlayed: false, sendSoundGlobally: false,
-                condition: hub => hub != null && (hub == source.ReferenceHub ||
-                    Player.Get(hub) is { IsAlive: true } listener &&
-                    (listener.Position - source.Position).sqrMagnitude <= Listener.MisfortuneRange * Listener.MisfortuneRange));
-            if (audio == null) return null;
-            var speaker = audio.AddSpeaker("curse", source.Position + Vector3.up, volume: 1f, isSpatial: true,
-                minDistance: 9f, maxDistance: Listener.MisfortuneRange);
-            if (speaker != null) return new MisfortuneEmitter(audio, speaker, source);
-            audio.Destroy();
-            return null;
-        }
-
-        internal void Play(string clip) => playback.AddClip(clip, loop: false);
-
-        internal void Follow()
-        {
-            if (speaker == null || source.IsDestroyed) return;
-            speaker.Position = source.Position + Vector3.up;
-            speaker.Base.NetworkPosition = speaker.Position;
-        }
-
-        public void Dispose()
-        {
-            if (playback == null) return;
-            playback.Condition = _ => false;
-            playback.Destroy();
         }
     }
 

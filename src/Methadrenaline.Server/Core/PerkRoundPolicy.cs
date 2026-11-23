@@ -14,9 +14,9 @@ public sealed class PerkRoundPolicy
     public string Message => Mode switch
     {
         CommunityRoundMode.Escort => "Escort",
-        CommunityRoundMode.Blackout => "Blackout",
+        CommunityRoundMode.Blackout => ModeVotePolicy.Label(CommunityRoundMode.Blackout, HasPerks == true),
         CommunityRoundMode.Paravoz => ParavozMessage,
-        _ when HasPerks == true => WithPerksMessage,
+        CommunityRoundMode.Plain when HasPerks == true => ModeVotePolicy.Label(CommunityRoundMode.Plain, true) + "\n" + WithPerksMessage,
         _ => WithoutPerksMessage
     };
 

@@ -26,7 +26,6 @@ internal sealed class SiteMapController : IDisposable
 {
     internal const string CardName = "Site-02 Map";
     internal const ItemType CardType = ItemType.KeycardCustomTaskForce;
-    internal const int MapsPerZone = 5;
     private static readonly Tag HudTag = new("methadrenaline.site-map");
     private static readonly FacilityZone[] SpawnZones =
         { FacilityZone.LightContainment, FacilityZone.HeavyContainment, FacilityZone.Entrance };
@@ -50,7 +49,7 @@ internal sealed class SiteMapController : IDisposable
         Scp914Events.ProcessingPickup += ProcessingPickup;
     }
 
-    internal void BeginRound()
+    internal void BeginRound(IReadOnlyList<Vector3>? positions = null)
     {
         Reset();
         if (ServerPlugin.Instance?.RestrictNavigationItems == true) return;
@@ -63,7 +62,7 @@ internal sealed class SiteMapController : IDisposable
             foreach (var layout in layouts.Values) layout.Prepare(Localizer.Current);
             sublevels.Prepare(rooms, Localizer.Current);
 
-            foreach (var position in NavigationSpawnPositions(random)) Spawn(position);
+            foreach (var position in positions ?? PlanSpawns(true).Maps) Spawn(position);
         }
         catch (Exception error)
         {
@@ -72,7 +71,7 @@ internal sealed class SiteMapController : IDisposable
         }
     }
 
-    internal static IEnumerable<Vector3> NavigationSpawnPositions(System.Random random, bool preferWalkways = false)
+    internal (List<Vector3> Coins, List<Vector3> Maps) PlanSpawns(bool allowMaps)
     {
         var locations = new Dictionary<RoomIdentifier, Vector3>();
         foreach (var pose in SafeLocationFinder.GetLocations(null, null))
@@ -84,18 +83,32 @@ internal sealed class SiteMapController : IDisposable
         foreach (var room in RoomIdentifier.AllRoomIdentifiers)
             if (room && SpawnZones.Contains(room.Zone) && !locations.ContainsKey(room))
                 AddLocation(locations, room.transform.position);
+        var coins = new List<Vector3>();
+        var maps = new List<Vector3>();
         foreach (var zone in SpawnZones)
         {
-            var candidates = locations.Where(location => location.Key.Zone == zone).OrderBy(_ => random.Next()).ToArray();
-            var selected = (preferWalkways
-                    ? candidates.Where(location => location.Key.Shape is RoomShape.Straight or RoomShape.TShape or RoomShape.XShape)
-                        .Take(3).Concat(candidates).Distinct()
-                    : candidates)
-                .Take(MapsPerZone).ToArray();
-            if (selected.Length != MapsPerZone)
-                Logger.Warn($"[METHADRENALINE] Found {selected.Length} valid navigation item spawns in {zone}; expected {MapsPerZone}.");
-            foreach (var location in selected) yield return location.Value;
+            int required = NavigationLootRooms.PerZone * (allowMaps ? 2 : 1);
+            if (locations.Keys.Count(room => room.Zone == zone) < required)
+            {
+                foreach (var room in RoomIdentifier.AllRoomIdentifiers.Where(r => r && r.Zone == zone))
+                {
+                    if (locations.ContainsKey(room)) continue;
+                    foreach (var offset in new[] { Vector3.left, Vector3.right, Vector3.forward, Vector3.back })
+                    {
+                        AddLocation(locations, room.transform.TransformPoint(offset * 2f));
+                        if (locations.ContainsKey(room)) break;
+                    }
+                }
+            }
+            var rooms = locations.Keys.Where(room => room.Zone == zone).OrderBy(_ => random.Next()).ToArray();
+            var selected = NavigationLootRooms.Allocate(rooms,
+                room => room.Shape is RoomShape.Straight or RoomShape.TShape or RoomShape.XShape, allowMaps);
+            coins.AddRange(selected.Coins.Select(room => locations[room]));
+            maps.AddRange(selected.Maps.Select(room => locations[room]));
+            if (rooms.Length < required)
+                Logger.Warn($"[METHADRENALINE] {zone} has only {rooms.Length} safe rooms for navigation loot.");
         }
+        return (coins, maps);
     }
 
     private static void AddLocation(Dictionary<RoomIdentifier, Vector3> locations, Vector3 candidate)
